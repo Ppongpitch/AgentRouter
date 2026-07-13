@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pydantic
+sentence-transformers
+scikit-learn
+numpy
+langchain-core
+langchain-openai
