@@ -1,0 +1,90 @@
+[
+  {
+    "capability": "General Assistant",
+    "model": "openai/gpt-4o-mini-search-preview",
+    "description": "Handles general conversations, Q&A, recommendations, explanations, and everyday assistance across many topics.",
+    "seeds": [
+      "วันนี้อากาศดีไหม แล้วควรเตรียมตัวยังไงถ้าจะออกไปข้างนอก",
+      "ช่วยแนะนำกิจกรรมสำหรับวันหยุดนี้หน่อย",
+      "What are some healthy breakfast ideas for busy people?",
+      "Explain quantum computing in simple terms."
+    ]
+  },
+  {
+    "capability": "Code Agent",
+    "model": "anthropic/claude-opus-4.8-fast",
+    "description": "Generates, debugs, reviews, explains, and refactors code.",
+    "seeds": [
+      "ช่วย debug Python code นี้ให้หน่อย",
+      "อธิบายว่า function นี้ทำงานอย่างไร",
+      "Refactor this JavaScript function.",
+      "Find the bug in this C++ implementation."
+    ]
+  },
+  {
+    "capability": "Translation / Multilingual Agent",
+    "model": "google/gemini-3.5-flash",
+    "description": "Translates and localizes multilingual content.",
+    "seeds": [
+      "แปลอีเมลนี้เป็นภาษาอังกฤษแบบสุภาพ",
+      "ช่วยแปลบทความนี้เป็นภาษาไทย",
+      "Translate this contract into Thai.",
+      "Rewrite this paragraph in natural American English."
+    ]
+  },
+  {
+    "capability": "Research & Long-document Agent",
+    "model": "perplexity/sonar-deep-research",
+    "description": "Searches and summarizes long documents.",
+    "seeds": [
+      "สรุปรายงานวิจัยนี้ให้เหลือ 10 ประเด็น",
+      "ช่วยค้นคว้าเปรียบเทียบงานวิจัยล่าสุด",
+      "Summarize this 50-page report.",
+      "Compare recent papers on RAG."
+    ]
+  },
+  {
+    "capability": "Reasoning Agent",
+    "model": "deepseek/deepseek-r1",
+    "description": "Performs complex reasoning and planning.",
+    "seeds": [
+      "ช่วยวางแผนแก้ปัญหานี้ทีละขั้นตอน",
+      "อธิบายเหตุผลว่าทำไมคำตอบนี้ถึงถูก",
+      "Solve this logic puzzle step by step.",
+      "Find the optimal strategy for this scheduling problem."
+    ]
+  },
+  {
+    "capability": "Vision / OCR Agent",
+    "model": "google/gemma-4-31b-it",
+    "description": "Extracts text and understands images.",
+    "seeds": [
+      "อ่านข้อความทั้งหมดจากรูปนี้",
+      "ช่วยอธิบายกราฟในภาพนี้",
+      "Extract all text from this receipt.",
+      "Describe the objects in this image."
+    ]
+  },
+  {
+    "capability": "Image Generation Agent",
+    "model": "google/gemini-3.1-flash-image",
+    "description": "Creates and edits images from prompts.",
+    "seeds": [
+      "สร้างภาพแมวสไตล์อนิเมะกำลังอ่านหนังสือ",
+      "ออกแบบโลโก้สำหรับร้านกาแฟ",
+      "Generate a futuristic cyberpunk city.",
+      "Create a watercolor illustration of a mountain village."
+    ]
+  },
+  {
+    "capability": "Creative Writing Agent",
+    "model": "anthropic/claude-sonnet-4",
+    "description": "Produces creative writing with tone control.",
+    "seeds": [
+      "ช่วยแต่งเรื่องสั้นแนวไซไฟ",
+      "เขียนโพสต์โปรโมตสินค้าให้น่าสนใจ",
+      "Write a fantasy story about a lost kingdom.",
+      "Create a persuasive product launch announcement."
+    ]
+  }
+]

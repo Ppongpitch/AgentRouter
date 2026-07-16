@@ -1,0 +1,640 @@
+{"text": "หาข้อมูลสั้นๆหน่อยครับ อาเซียนก่อตั้งขึ้นปีไหนและมีกี่ประเทศตอนเริ่มต้น", "agent": "research_agent", "batch": 4}
+{"text": "write unit tests for this function", "agent": "code_agent", "batch": 1}
+{"text": "Explain the reasoning behind why P versus NP is considered one of the most important unsolved problems in computer science, using an accessible real-world analogy", "agent": "reasoning_agent", "batch": 2}
+{"text": "There are 5 pirates dividing 100 gold coins by strict rules of seniority and majority voting to survive, where the most senior pirate proposes a split and all pirates vote, with a tie going to the proposer — work through the full backward induction starting from the simplest case of one pirate up to figure out the optimal split for each pirate.", "agent": "reasoning_agent", "batch": 3}
+{"text": "read this stack trace screenshot and tell me the fix", "agent": "code_agent", "batch": 3}
+{"text": "หาข้อมูลอย่างละเอียดเกี่ยวกับกรอบกฎหมายคุ้มครองข้อมูลส่วนบุคคล PDPA ของไทยเทียบกับ GDPR ของยุโรปหน่อยครับ อยากรู้ความแตกต่างเชิงลึกทั้งขอบเขตการบังคับใช้และบทลงโทษ", "agent": "research_agent", "batch": 3}
+{"text": "quick: what's the sum of angles in a hexagon", "agent": "reasoning_agent", "batch": 4}
+{"text": "ขอกลอนวันเกิด 4 บรรทัดพอค่ะ", "agent": "creative_writing_agent", "batch": 4}
+{"text": "I need to write a script that scrapes product prices from multiple e-commerce pages concurrently using asyncio and aiohttp while respecting rate limits per domain", "agent": "code_agent", "batch": 2}
+{"text": "ช่วยไขปริศนาตรรกะนี้หน่อยครับ มีเกาะหนึ่งที่ทุกคนพูดจริงหรือโกหกเสมอ เจอคน 2 คน คนแรกพูดว่า อย่างน้อยหนึ่งในพวกเราเป็นคนโกหก จะสรุปได้ยังไงว่าใครพูดจริงใครโกหก", "agent": "reasoning_agent", "batch": 2}
+{"text": "Explain the logic behind the birthday paradox and calculate the minimum number of people needed in a room for there to be over a 50 percent chance two share a birthday", "agent": "reasoning_agent", "batch": 2}
+{"text": "ขอภาพธีมฮาโลวีนสไตล์การ์ตูนน่ารักๆหน่อยครับ ใช้ทำโปสเตอร์งานโรงเรียน", "agent": "image_generation_agent", "batch": 1}
+{"text": "ช่วยรีเสิร์ชเปรียบเทียบผลการเลือกตั้งท้องถิ่นของไทยในช่วง 10 ปีที่ผ่านมา โดยเน้นดูแนวโน้มคะแนนเสียงของพรรคขนาดกลางในภาคอีสานให้หน่อยครับ", "agent": "research_agent", "batch": 2}
+{"text": "debug my life, why do I procrastinate so much", "agent": "general_assistant", "batch": 3}
+{"text": "I'm sending you a photo of a densely handwritten Thai medical prescription with a doctor's signature and stamp at the bottom, along with several abbreviated drug names and dosage instructions written in a mix of Thai and medical shorthand — please carefully transcribe everything you can read, flag any parts that are ambiguous or could be misread, and note that this is just for general reference and not a substitute for pharmacist verification", "agent": "vision_agent", "batch": 4}
+{"text": "solve this system of linear equations using matrices", "agent": "reasoning_agent", "batch": 1}
+{"text": "ขอภาพลูกโป่งหลากสีลอยอยู่บนท้องฟ้าสีฟ้าสดใสให้หน่อยค่ะ ใช้ทำการ์ดวันเกิด", "agent": "image_generation_agent", "batch": 4}
+{"text": "make a pixel art version of a knight character", "agent": "image_generation_agent", "batch": 1}
+{"text": "how to stay motivated", "agent": "general_assistant", "batch": 1}
+{"text": "ขอ checklist สั้นๆสำหรับเตรียมตัวไปสัมภาษณ์งานพรุ่งนี้หน่อยค่ะ กังวลมากเลย", "agent": "general_assistant", "batch": 4}
+{"text": "What's a good name for a pet cat?", "agent": "general_assistant", "batch": 1}
+{"text": "Can you put together a fairly comprehensive research summary on how different Southeast Asian countries have approached digital ID systems, covering Thailand's ThaID, Singapore's Singpass, and Indonesia's system, comparing adoption rates, privacy safeguards, and integration with banking services, since I'm preparing a comparative policy report for a fintech client next week", "agent": "research_agent", "batch": 4}
+{"text": "จากที่เราคุยกันเรื่องธีมงานแต่งงานสไตล์ vintage garden party ไปแล้ว ทั้งโทนสีพาสเทล โต๊ะไม้ และดอกไม้ป่า ช่วยสร้างภาพตัวอย่างการจัดโต๊ะและดอกไม้ตามธีมนั้นให้ดูจริงหน่อยครับ อยากเห็นภาพรวมทั้งโต๊ะ", "agent": "image_generation_agent", "batch": 3}
+{"text": "สร้างภาพตัวการ์ตูนหุ่นยนต์น้อยที่กำลังรดน้ำต้นไม้ในสวนกลางเมืองที่ถูกทิ้งร้าง บรรยากาศอบอุ่นแต่แฝงความเหงาให้หน่อยครับ", "agent": "image_generation_agent", "batch": 2}
+{"text": "ผมกำลังทำวิจัยเปรียบเทียบนโยบายการเงินของธนาคารกลางหลายประเทศ ทั้งเฟด ECB และธนาคารแห่งประเทศไทย ช่วยหาข้อมูลเชิงลึกให้หน่อยครับ ทั้งประวัติศาสตร์ นโยบายปัจจุบัน และงานวิจัยที่วิจารณ์แนวทางเหล่านั้นจากหลายสำนักคิด", "agent": "research_agent", "batch": 3}
+{"text": "walk me through the logic of the halting problem and why it's undecidable", "agent": "reasoning_agent", "batch": 1}
+{"text": "Write a monologue for an actor playing a retired astronaut reflecting on the one mission that changed how they see humanity forever", "agent": "creative_writing_agent", "batch": 2}
+{"text": "help me understand the intuition, no formulas, behind Bayes' theorem", "agent": "reasoning_agent", "batch": 3}
+{"text": "ช่วยแก้โจทย์ตรรกะนี้หน่อยครับ ในห้องมีสวิตช์ไฟ 3 อัน แต่ละอันควบคุมหลอดไฟในอีกห้องหนึ่งที่มองไม่เห็น เข้าไปดูหลอดไฟได้แค่ครั้งเดียว จะรู้ได้ยังไงว่าสวิตช์ไหนควบคุมหลอดไหน", "agent": "reasoning_agent", "batch": 2}
+{"text": "quick fact check: did Thailand really used to be called Siam, when did the name change", "agent": "research_agent", "batch": 4}
+{"text": "ถ้า A มากกว่า B และ B มากกว่า C แล้ว A มากกว่า C ใช่มั้ย ตอบสั้นๆ", "agent": "reasoning_agent", "batch": 4}
+{"text": "ช่วยรีแฟคเตอร์คลาสนี้ให้ใช้ dependency injection แทนการสร้าง object ตรงๆข้างในหน่อยครับ เพื่อให้เทสได้ง่ายขึ้นด้วย mock objects", "agent": "code_agent", "batch": 2}
+{"text": "is zero an even number or odd, quick answer", "agent": "reasoning_agent", "batch": 4}
+{"text": "เขียน FastAPI endpoint ที่รับไฟล์ภาพหลายไฟล์พร้อมกัน แล้วส่งไปประมวลผลแบบ async ผ่าน background task โดยไม่บล็อก request หน่อยครับ", "agent": "code_agent", "batch": 2}
+{"text": "We just went through the full logical proof of the halting problem step by step, including the diagonalization argument — now take all of that reasoning and turn it into an engaging short story where a detective character slowly discovers the same paradox while investigating a mysterious computer that seems to predict its own shutdown.", "agent": "creative_writing_agent", "batch": 3}
+{"text": "วันนี้วันอะไร", "agent": "general_assistant", "batch": 1}
+{"text": "หาข้อมูลเกี่ยวกับผลกระทบของ AI ต่อตลาดแรงงานไทยหน่อย", "agent": "research_agent", "batch": 1}
+{"text": "ช่วยแปลบทสนทนาในหนังเรื่องนี้จากภาษาอังกฤษเป็นภาษาไทยสำหรับทำซับไตเติ้ล ให้ความยาวประโยคพอดีกับเวลาแสดงผลด้วยครับ", "agent": "translation_agent", "batch": 2}
+{"text": "Give me a comprehensive, well-sourced deep dive into the current scientific consensus on gene editing ethics, covering germline versus somatic editing distinctions — I need this to be thorough enough to cite in a serious academic discussion or policy brief.", "agent": "research_agent", "batch": 3}
+{"text": "just wondering, but with citations: what caused the fall of the Roman Empire", "agent": "research_agent", "batch": 3}
+{"text": "omg it's raining so hard rn 🌧️ ควรพกร่มไปทำงานมั้ยหรือรอฝนหยุดก่อนดี", "agent": "general_assistant", "batch": 4}
+{"text": "Based on the entire backstory I gave you earlier about the abandoned amusement park being slowly reclaimed by nature over fifty years, with vines growing through the rusted roller coaster tracks, a ferris wheel frozen mid-rotation covered in moss, and deer grazing calmly in what used to be the food court area — generate one wide establishing shot image that captures that entire atmosphere of quiet decay and reclaimed wilderness", "agent": "image_generation_agent", "batch": 4}
+{"text": "ช่วยไขปริศนานี้แบบละเอียดหน่อยครับ ผมมีเชือกไส้ไม่สม่ำเสมอ 2 เส้น แต่ละเส้นเผาไหม้หมดพอดีใน 60 นาทีแต่อัตราการไหม้ไม่คงที่ตลอดเส้น จะใช้เชือกสองเส้นนี้วัดเวลา 45 นาทีได้ยังไง อยากเห็นตรรกะทั้งหมดตั้งแต่การจุดไฟจนถึงเหตุผลว่าทำไมวิธีนี้ถึงวัดเวลาได้แม่นยำ", "agent": "reasoning_agent", "batch": 4}
+{"text": "I need a fairly rigorous overview for a policy brief I'm drafting on how various OECD countries have structured their carbon tax schemes differently, including rate per ton of CO2, exemptions given to heavy industry, and how revenue collected gets redistributed back to citizens or reinvested into green infrastructure, since my supervisor wants comparative tables with citations for at least six countries", "agent": "research_agent", "batch": 4}
+{"text": "What are the leading theories in political science explaining why some democracies experience sudden authoritarian backsliding while others remain stable", "agent": "research_agent", "batch": 2}
+{"text": "What's a good way to start journaling if I've never done it before and I keep giving up after just two or three days each time I try", "agent": "general_assistant", "batch": 2}
+{"text": "prove to me that pineapple belongs on pizza, just for fun", "agent": "general_assistant", "batch": 3}
+{"text": "Can you compile a summary of recent peer-reviewed studies on how large language model fine-tuning affects catastrophic forgetting in downstream tasks", "agent": "research_agent", "batch": 2}
+{"text": "My grandmother's birthday is coming up and she loves gardening, what are some thoughtful gift ideas that aren't too expensive but still feel personal and meaningful", "agent": "general_assistant", "batch": 2}
+{"text": "write a short story about a robot learning to love", "agent": "creative_writing_agent", "batch": 1}
+{"text": "What are some practical tips for staying productive when working from home with constant distractions from family members around", "agent": "general_assistant", "batch": 2}
+{"text": "Okay so translate my chaotic brain into an actual plan, analyze my calendar, compute my free hours, and just tell me casually what I should do this weekend—nothing too deep, I just want a normal answer like you'd give a friend who happens to know me well.", "agent": "general_assistant", "batch": 3}
+{"text": "quick mental math: 30% off 1200 baht is how much", "agent": "reasoning_agent", "batch": 4}
+{"text": "What does current research say about the long-term psychological effects of remote work on employees who started their careers entirely from home", "agent": "research_agent", "batch": 2}
+{"text": "I'm getting a CUDA out of memory error during training even with a small batch size, can you help me debug what might be causing the memory leak in my PyTorch training loop", "agent": "code_agent", "batch": 2}
+{"text": "I'm putting together a thesis-level overview, so give me the full academic picture: what does peer-reviewed literature say about the long-term effects of microplastics on human health across different organ systems, and please note clearly where the evidence is still contested or where sample sizes have been small.", "agent": "research_agent", "batch": 3}
+{"text": "หาข้อมูลเชิงลึกเกี่ยวกับผลกระทบของนโยบายขึ้นค่าแรงขั้นต่ำต่ออัตราการจ้างงานในภาคธุรกิจ SME ของไทยในช่วง 5 ปีที่ผ่านมาให้หน่อยครับ", "agent": "research_agent", "batch": 2}
+{"text": "ช่วยแปลงข้อความนี้เป็นภาษาอังกฤษหน่อย ไม่ต้องอธิบายไวยากรณ์", "agent": "translation_agent", "batch": 3}
+{"text": "Create a whimsical illustration of a fox wearing a tiny wizard hat reading a giant glowing book in an enchanted forest, in a soft watercolor style", "agent": "image_generation_agent", "batch": 2}
+{"text": "research Thai folklore about ghosts, then write me an original horror story inspired by it", "agent": "creative_writing_agent", "batch": 3}
+{"text": "หาข้อมูลเปรียบเทียบเชิงลึกเกี่ยวกับระบบบำนาญของรัฐในประเทศไทยเทียบกับญี่ปุ่นและเยอรมนี ซึ่งทั้งสามประเทศกำลังเข้าสู่สังคมผู้สูงอายุอย่างรวดเร็ว อยากรู้ว่าแต่ละประเทศออกแบบโครงสร้างการสมทบเงินและสิทธิประโยชน์อย่างไร รวมถึงงานวิจัยที่ประเมินความยั่งยืนทางการคลังของระบบเหล่านี้ในระยะยาวให้หน่อยครับ", "agent": "research_agent", "batch": 4}
+{"text": "สร้างภาพธีมฮาโลวีนสไตล์การ์ตูนน่ารักๆ มีฟักทองยิ้ม ผีน้อยใจดี และบ้านผีสิงหลังเล็กๆสำหรับโปสเตอร์งานโรงเรียนหน่อยครับ", "agent": "image_generation_agent", "batch": 2}
+{"text": "เขียน bash one-liner นับจำนวนไฟล์ .py ในโฟลเดอร์ปัจจุบันหน่อยครับ", "agent": "code_agent", "batch": 4}
+{"text": "แก้ไขรูปนี้ให้เป็นสไตล์ oil painting หน่อยครับ", "agent": "image_generation_agent", "batch": 1}
+{"text": "Write an epic fantasy battle scene of around 900 words where an outnumbered army holds a mountain pass using clever tactics rather than brute strength", "agent": "creative_writing_agent", "batch": 2}
+{"text": "casually, but walk me through it: why can't you trisect an angle with just a compass and straightedge", "agent": "reasoning_agent", "batch": 3}
+{"text": "describe this photo in detail", "agent": "vision_agent", "batch": 1}
+{"text": "write an opening chapter for a mystery novel set in Chiang Mai", "agent": "creative_writing_agent", "batch": 1}
+{"text": "one sentence horror story, make it creepy", "agent": "creative_writing_agent", "batch": 4}
+{"text": "generate a wedding invitation design with floral elements", "agent": "image_generation_agent", "batch": 1}
+{"text": "is intermittent fasting actually proven to help with weight loss, quick yes/no with source", "agent": "research_agent", "batch": 4}
+{"text": "ช่วยแต่งนิทานก่อนนอนให้ลูกฟังหน่อยครับ เกี่ยวกับเด็กหญิงที่ได้พบเพื่อนใหม่เป็นดวงดาวตกที่พูดได้ และต้องช่วยกันหาทางกลับบ้านให้ดวงดาว", "agent": "creative_writing_agent", "batch": 2}
+{"text": "แต่งกลอนสั้นๆเกี่ยวกับแมวให้หน่อย", "agent": "creative_writing_agent", "batch": 4}
+{"text": "เขียนบทละครสั้นเกี่ยวกับครอบครัวที่กลับมารวมตัวกันอีกครั้งหลังพ่อแม่หย่าร้างกันไปนาน โดยเน้นบทสนทนาที่แสดงความรู้สึกอึดอัดแต่ก็ยังรักกันอยู่หน่อยครับ", "agent": "creative_writing_agent", "batch": 2}
+{"text": "Can you find peer-reviewed research on the relationship between screen time in adolescents and reported levels of anxiety and depression", "agent": "research_agent", "batch": 2}
+{"text": "อ่านป้ายทะเบียนรถในรูปนี้หน่อยครับ", "agent": "vision_agent", "batch": 1}
+{"text": "create a photorealistic image of a mountain landscape in autumn", "agent": "image_generation_agent", "batch": 1}
+{"text": "ช่วยเขียนโค้ดที่ทำ stratified train-test split สำหรับ dataset ที่ label ไม่สมดุลกันมากๆ พร้อม class weighting ตอน train โมเดล XLM-RoBERTa หน่อยครับ", "agent": "code_agent", "batch": 2}
+{"text": "ช่วยแก้ไขภาพนี้ให้ดูเหมือนภาพวาดสีน้ำมันสไตล์อิมเพรสชั่นนิสต์ โดยเน้นแปรงหยาบๆและสีสันที่ดูมีชีวิตชีวาให้หน่อยครับ", "agent": "image_generation_agent", "batch": 2}
+{"text": "need 5 ideas for a birthday gift, budget under 1000 baht, ขอแบบไม่เว่อร์เกินไปนะ", "agent": "general_assistant", "batch": 4}
+{"text": "give me a comprehensive overview of quantum computing's current state", "agent": "research_agent", "batch": 1}
+{"text": "small talk pls", "agent": "general_assistant", "batch": 1}
+{"text": "ช่วยแต่งบทกวีอิสระเกี่ยวกับความรู้สึกคิดถึงบ้านเกิดของคนที่ต้องไปทำงานต่างประเทศเป็นเวลานานให้หน่อยครับ", "agent": "creative_writing_agent", "batch": 2}
+{"text": "ช่วยไขปริศนาตรรกะที่ซับซ้อนนี้แบบละเอียดหน่อยครับ มีเงื่อนไข 10 ข้อเกี่ยวกับบ้าน 5 หลัง สี 5 สี สัตว์เลี้ยง 5 ชนิด สัญชาติ 5 แบบ และเครื่องดื่ม 5 ชนิด ต้องหาว่าใครเลี้ยงปลาโดยใช้การให้เหตุผลแบบตัดตัวเลือกทีละขั้น", "agent": "reasoning_agent", "batch": 3}
+{"text": "I need a full literature review on how large language models are being evaluated for reasoning capability, covering the major benchmarks like GSM8K, MMLU, and BIG-Bench, along with their known limitations and criticisms from the research community.", "agent": "research_agent", "batch": 3}
+{"text": "help me optimize this SQL query, it's running too slow on 10 million rows", "agent": "code_agent", "batch": 1}
+{"text": "quick, turn this selfie into a cartoon avatar", "agent": "image_generation_agent", "batch": 4}
+{"text": "ในภาพนี้เป็นสไลด์ powerpoint ที่ถ่ายจากหน้าจอโปรเจกเตอร์ในห้องประชุม มีตัวหนังสือค่อนข้างเล็กและมีกราฟแท่งประกอบสองอัน ช่วยอ่านและบรรยายเนื้อหาทั้งหมดในสไลด์ให้ละเอียดหน่อยครับ รวมถึงตัวเลขบนแกนกราฟด้วย", "agent": "vision_agent", "batch": 3}
+{"text": "quick fix pls: this list comprehension throws IndexError, code attached", "agent": "code_agent", "batch": 4}
+{"text": "เขียนบทสนทนาระหว่างปู่กับหลานที่กำลังตกปลาด้วยกันริมแม่น้ำ โดยปู่ค่อยๆเล่าเรื่องราวในวัยหนุ่มที่หลานไม่เคยรู้มาก่อนหน่อยครับ", "agent": "creative_writing_agent", "batch": 2}
+{"text": "write an epic fantasy battle scene, around 800 words", "agent": "creative_writing_agent", "batch": 1}
+{"text": "Design a wedding invitation card featuring delicate floral illustrations in soft pastel colors with elegant calligraphy-style typography", "agent": "image_generation_agent", "batch": 2}
+{"text": "ช่วยอ่านฉลากส่วนผสมบนบรรจุภัณฑ์อาหารในภาพนี้ให้หน่อยครับ แล้วบอกด้วยว่ามีสารก่อภูมิแพ้ที่พบบ่อยอยู่ในรายการหรือไม่", "agent": "vision_agent", "batch": 2}
+{"text": "Could you translate this customer complaint email from Thai to English so I can forward it to our headquarters team abroad without losing the emotional tone", "agent": "translation_agent", "batch": 2}
+{"text": "who invented the internet, quick summary", "agent": "research_agent", "batch": 4}
+{"text": "แปลให้หน่อยว่า 'it's not you, it's me' เป็นภาษาไทยแบบธรรมชาติที่สุด", "agent": "translation_agent", "batch": 1}
+{"text": "Translate this legacy COBOL snippet into modern Python, explain what each block was originally doing in plain English since the original documentation is long gone, and make sure the final Python version passes these five test cases I've attached without any behavioral drift.", "agent": "code_agent", "batch": 3}
+{"text": "does this photo look edited or real", "agent": "vision_agent", "batch": 4}
+{"text": "just one creepy sentence for a horror short, nothing more", "agent": "creative_writing_agent", "batch": 4}
+{"text": "how would you say 'no worries, take your time' in a warm but professional way in Thai", "agent": "translation_agent", "batch": 4}
+{"text": "จองร้านอาหารให้หน่อยได้มั้ย", "agent": "general_assistant", "batch": 1}
+{"text": "explain why 0.999... equals 1", "agent": "reasoning_agent", "batch": 1}
+{"text": "give me a comedic script imagining two philosophers arguing about whether 0.999 equals 1", "agent": "creative_writing_agent", "batch": 3}
+{"text": "Do some research on the best Python libraries for time-series forecasting, summarize the pros and cons of each including Prophet, statsmodels, and darts, and then write me a working script using whichever one you think fits my case best given that my data has strong weekly seasonality.", "agent": "code_agent", "batch": 3}
+{"text": "อธิบายพิสูจน์ทางคณิตศาสตร์แบบละเอียดหน่อยครับว่าทำไมค่าเฉลี่ยเลขคณิตถึงมากกว่าหรือเท่ากับค่าเฉลี่ยเรขาคณิตเสมอ (AM-GM inequality) อยากเห็น step-by-step ตั้งแต่กรณีสองตัวแปรไปจนถึงการขยายผลทั่วไป", "agent": "reasoning_agent", "batch": 3}
+{"text": "quick pun about pizza, make me groan", "agent": "creative_writing_agent", "batch": 4}
+{"text": "based on this photo of my room, generate a redesigned version with more plants", "agent": "image_generation_agent", "batch": 3}
+{"text": "quick tip: how do I keep my phone battery healthy longer, just the basics please", "agent": "general_assistant", "batch": 4}
+{"text": "Write a limerick series of five verses about a group of animals who accidentally start a bakery in the forest", "agent": "creative_writing_agent", "batch": 2}
+{"text": "is this handwriting legible or messy, just a quick opinion", "agent": "vision_agent", "batch": 4}
+{"text": "quick, does this handwriting look like a doctor's prescription or a to-do list", "agent": "vision_agent", "batch": 3}
+{"text": "quick, generate a simple emoji-style icon of a sun", "agent": "image_generation_agent", "batch": 4}
+{"text": "ช่วยแนะนำหนังสือดีๆให้หน่อย", "agent": "general_assistant", "batch": 1}
+{"text": "ในภาพนี้เป็นกราฟหุ้นย้อนหลัง 5 ปีที่มีเส้นค่าเฉลี่ยเคลื่อนที่หลายเส้นซ้อนกันและมีปริมาณการซื้อขายอยู่ด้านล่าง ช่วยอธิบายแนวโน้มและจุดกลับตัวสำคัญที่เห็นในกราฟให้ละเอียดหน่อยครับ", "agent": "vision_agent", "batch": 3}
+{"text": "what does this meme mean", "agent": "vision_agent", "batch": 3}
+{"text": "จากที่อธิบายสถาปัตยกรรมระบบ microservices ทั้งหมดไปแล้ว ทั้งเรื่อง API gateway, service discovery และ load balancing ช่วยแต่งเป็นนิทานเปรียบเทียบระบบนี้กับเมืองเล็กๆที่มีร้านค้าต่างๆทำงานร่วมกันให้หน่อยครับ อยากให้เด็กเข้าใจง่ายและสนุกไปด้วย", "agent": "creative_writing_agent", "batch": 3}
+{"text": "ผลรวมของ 1 ถึง 100 คือเท่าไหร่ ตอบสั้นๆพอ", "agent": "reasoning_agent", "batch": 4}
+{"text": "write a sci-fi flash fiction piece under 500 words", "agent": "creative_writing_agent", "batch": 1}
+{"text": "ช่วยดูกราฟหุ้นในภาพนี้แล้วบอกจุด support และ resistance ที่สำคัญ พร้อมอธิบายแนวโน้มราคาในช่วงที่แสดงในกราฟให้หน่อยครับ", "agent": "vision_agent", "batch": 2}
+{"text": "I've been thinking about this classic problem for a while and I want a really thorough walkthrough: suppose you have 12 identical-looking coins, one of which is either heavier or lighter than the rest (you don't know which), and you have a balance scale you can use exactly 3 times — work through the complete strategy needed to identify the fake coin and determine whether it's heavier or lighter, explaining the information-theoretic reasoning for why 3 weighings is the minimum needed", "agent": "reasoning_agent", "batch": 4}
+{"text": "quick, what language is written on this sign", "agent": "vision_agent", "batch": 4}
+{"text": "Investigate the current state of research on quantum error correction and how close we are to practical fault-tolerant quantum computers", "agent": "research_agent", "batch": 2}
+{"text": "what emotion is this person showing", "agent": "vision_agent", "batch": 4}
+{"text": "generate an image of a cat", "agent": "image_generation_agent", "batch": 1}
+{"text": "อยากปรับ sleep schedule ใหม่เพราะนอนดึกมาตลอด ต้องทำยังไงถึงจะเริ่มนอนเร็วขึ้นได้จริงๆ", "agent": "general_assistant", "batch": 4}
+{"text": "ช่วยเขียนโค้ด scrape เว็บด้วย BeautifulSoup หน่อยครับ อยากดึงราคาสินค้าจากหน้าเว็บอีคอมเมิร์ซ", "agent": "code_agent", "batch": 1}
+{"text": "compute how many cups of coffee I should drink today", "agent": "general_assistant", "batch": 3}
+{"text": "ช่วยแปลงตารางข้อมูลในรูปใบแจ้งหนี้นี้เป็นข้อความที่จัดเรียงเป็นแถวคอลัมน์ชัดเจน พร้อมระบุยอดรวมสุทธิให้หน่อยครับ", "agent": "vision_agent", "batch": 2}
+{"text": "ขอข้อมูลเปรียบเทียบระบบประกันสุขภาพถ้วนหน้าของไทยกับประเทศที่มีระบบคล้ายกันอย่างอังกฤษและแคนาดาหน่อยครับ อยากรู้ทั้งข้อดีข้อเสีย", "agent": "research_agent", "batch": 2}
+{"text": "Can you help me figure out a fair way to split household chores between three roommates who all have very different schedules", "agent": "general_assistant", "batch": 2}
+{"text": "what's this? 📷 attached", "agent": "vision_agent", "batch": 4}
+{"text": "อยากหาของขวัญวันเกิดให้เพื่อน มีไอเดียมั้ย", "agent": "general_assistant", "batch": 1}
+{"text": "ทำไม postgrest-py ของ Supabase ถึง error ตอน upsert ข้อมูลที่มี unique constraint ซ้อนกันหลายฟิลด์ มีวิธี workaround ที่ไม่ต้องเปลี่ยน schema ไหมครับ", "agent": "code_agent", "batch": 2}
+{"text": "Solve this optimization problem step by step: a farmer has 800 meters of fencing and wants to enclose a rectangular field, what dimensions maximize the enclosed area", "agent": "reasoning_agent", "batch": 2}
+{"text": "write a fantasy short story about a dragon who's afraid of fire", "agent": "creative_writing_agent", "batch": 1}
+{"text": "ผมกำลังทำวิจัยเกี่ยวกับการเลือกตั้งไทยปี 2566 vs 2569 ที่เขต 1 ศรีสะเกษ ช่วยหาข้อมูลพื้นหลังทางประชากรและเศรษฐกิจของเขตนี้หน่อยครับ", "agent": "research_agent", "batch": 1}
+{"text": "ช่วยแก้สมการเชิงเส้นระบบนี้โดยใช้เมทริกซ์และ Gaussian elimination หน่อยครับ 2x + y - z = 3, x - y + 2z = 4, 3x + 2y - z = 5 พร้อมแสดงทุกขั้นตอน", "agent": "reasoning_agent", "batch": 2}
+{"text": "what is the time complexity of this recursive algorithm and why", "agent": "reasoning_agent", "batch": 1}
+{"text": "quick translation needed: 'meeting rescheduled to 3pm' in Thai", "agent": "translation_agent", "batch": 4}
+{"text": "ช่วยทำ literature review สั้นๆเกี่ยวกับการใช้ pHash และ SSIM ในการทำ keyframe deduplication สำหรับวิดีโอความยาวมากให้หน่อยครับ", "agent": "research_agent", "batch": 2}
+{"text": "write a Shakespearean-style sonnet about unrequited love", "agent": "creative_writing_agent", "batch": 1}
+{"text": "แปล 'เดี๋ยวโทรกลับนะ' เป็นอังกฤษแบบเพื่อนคุยกันหน่อยค่ะ", "agent": "translation_agent", "batch": 4}
+{"text": "my Chinese supplier sent '请尽快回复' what does that mean exactly", "agent": "translation_agent", "batch": 4}
+{"text": "convert this document into French, keep the tone formal", "agent": "translation_agent", "batch": 3}
+{"text": "what does the literature say about universal basic income", "agent": "research_agent", "batch": 1}
+{"text": "จากไอเดียโลโก้ที่อธิบายไปว่าเป็นรูปนกฟีนิกซ์แบบเรียบง่ายสีแดงทอง ปีกกางออกสองข้างแบบสมมาตร ช่วยสร้างภาพโลโก้จริงๆออกมาให้ดูหน่อยครับ ไม่ใช่แค่อธิบายไอเดียเฉยๆ", "agent": "image_generation_agent", "batch": 3}
+{"text": "Can you identify the specific breed of dog in this photo and describe any distinguishing physical features that helped you determine the breed", "agent": "vision_agent", "batch": 2}
+{"text": "quick mental math: what's 17% tip on an 850 baht bill", "agent": "reasoning_agent", "batch": 3}
+{"text": "sketch me out an idea, don't need real art just a rough concept", "agent": "image_generation_agent", "batch": 3}
+{"text": "Can you give me a checklist of things to do before going on a long international flight for the first time so I don't forget anything important", "agent": "general_assistant", "batch": 2}
+{"text": "ช่วยเขียน docker-compose.yml สำหรับ postgres กับ fastapi หน่อยครับ", "agent": "code_agent", "batch": 1}
+{"text": "step by step, explain how to solve a Rubik's cube", "agent": "reasoning_agent", "batch": 1}
+{"text": "quick: how do Italians say 'cheers' when toasting drinks", "agent": "translation_agent", "batch": 4}
+{"text": "เจอ error 'ModuleNotFoundError: No module named cv2' ทั้งที่ pip install opencv-python แล้ว แก้ยังไงดีครับ", "agent": "code_agent", "batch": 4}
+{"text": "ช่วยสร้างภาพวัดไทยยามค่ำคืนที่มีโคมไฟลอยขึ้นสู่ท้องฟ้าเต็มไปหมด บรรยากาศเงียบสงบและศักดิ์สิทธิ์ให้หน่อยครับ", "agent": "image_generation_agent", "batch": 2}
+{"text": "convert my grumpy mood into something positive, any tips?", "agent": "general_assistant", "batch": 3}
+{"text": "my docker container exits immediately after starting, here's the Dockerfile, ช่วยดูหน่อยว่าตรงไหนผิด", "agent": "code_agent", "batch": 4}
+{"text": "what's the sentiment of the facial expressions in this image", "agent": "vision_agent", "batch": 1}
+{"text": "ช่วยไขปริศนาตรรกะนี้หน่อยครับ ยากมากๆ มีเงื่อนไข 7 ข้อเกี่ยวกับลำดับการนั่งของคน 6 คนรอบโต๊ะกลม", "agent": "reasoning_agent", "batch": 1}
+{"text": "read this whiteboard photo and transcribe the notes", "agent": "vision_agent", "batch": 1}
+{"text": "Give me an in-depth, sourced explanation of how mRNA vaccine technology was developed over the decades before COVID-19, including the key researchers involved and the funding setbacks they faced along the way.", "agent": "research_agent", "batch": 3}
+{"text": "Can you write a Bash script that monitors a directory for new files and automatically triggers a processing pipeline whenever a new video file is added", "agent": "code_agent", "batch": 2}
+{"text": "generate a fantasy map for a role-playing game world", "agent": "image_generation_agent", "batch": 1}
+{"text": "make it more pastel pls", "agent": "image_generation_agent", "batch": 4}
+{"text": "give me 3 conversation starters I can use at a networking event tonight, feeling nervous", "agent": "general_assistant", "batch": 4}
+{"text": "แปลรายงานทางการเงินฉบับนี้จากภาษาอังกฤษเป็นภาษาไทยให้หน่อยครับ มีตัวเลขและศัพท์เฉพาะทางบัญชีเยอะมาก เช่น EBITDA และ amortization ต้องแม่นยำเพราะจะใช้ยื่นผู้บริหารระดับสูง", "agent": "translation_agent", "batch": 3}
+{"text": "quick question but I need real depth: how did the Thai baht crisis actually unfold", "agent": "research_agent", "batch": 3}
+{"text": "อยากปลูกต้นไม้ในคอนโดแต่แดดไม่ค่อยส่อง มีต้นไม้แนะนำที่ทนร่มและดูแลง่ายสำหรับมือใหม่บ้างไหมคะ", "agent": "general_assistant", "batch": 2}
+{"text": "quick: if today is Wednesday, what day will it be in 100 days", "agent": "reasoning_agent", "batch": 4}
+{"text": "หาข้อมูลเปรียบเทียบนโยบายด้านพลังงานหมุนเวียนของไทยกับเวียดนามหน่อย", "agent": "research_agent", "batch": 1}
+{"text": "Write a comedic short story about a wedding where absolutely everything that could go wrong does, but somehow it turns out to be the best day of the couple's life", "agent": "creative_writing_agent", "batch": 2}
+{"text": "ช่วยแปลข้อความในโปสเตอร์รณรงค์ด้านสิ่งแวดล้อมนี้จากภาษาไทยเป็นภาษาอังกฤษและภาษาจีนหน่อยค่ะ จะใช้ติดในงานนิทรรศการนานาชาติ", "agent": "translation_agent", "batch": 2}
+{"text": "ถ้ารถวิ่งด้วยความเร็ว 60 กม/ชม เป็นเวลา 2.5 ชม จะไปได้ระยะทางเท่าไหร่", "agent": "reasoning_agent", "batch": 1}
+{"text": "prove that the square root of 2 is irrational", "agent": "reasoning_agent", "batch": 1}
+{"text": "explain this like a riddle, not a formula: why does compound interest grow so fast", "agent": "reasoning_agent", "batch": 3}
+{"text": "quick: how many time zones does Russia span", "agent": "research_agent", "batch": 4}
+{"text": "เขียนบทกวีเปรียบเทียบชีวิตคนกับต้นไม้ในสี่ฤดูให้หน่อยครับ อยากให้มีจังหวะคำคล้องจองและความหมายลึกซึ้งเกี่ยวกับการเติบโต", "agent": "creative_writing_agent", "batch": 2}
+{"text": "Based on the interior design style we discussed for my living room — Scandinavian minimalism with warm wood tones, a low sofa, and large windows letting in natural light — generate a realistic mockup image of what the finished room could look like.", "agent": "image_generation_agent", "batch": 3}
+{"text": "จากบทวิเคราะห์เชิงลึกเรื่องนโยบายพลังงานหมุนเวียนของไทยที่คุยกันไป ทั้งเรื่องพลังงานแสงอาทิตย์ ลม และโครงข่ายไฟฟ้าอัจฉริยะ ช่วยแต่งเป็นเรื่องสั้นแนว sci-fi เกี่ยวกับอนาคตพลังงานของประเทศไทยอีก 30 ปีข้างหน้าให้หน่อยครับ", "agent": "creative_writing_agent", "batch": 3}
+{"text": "Take everything we discussed about the 1997 Asian financial crisis — the currency speculation against the baht, the central bank's failed defense, the eventual IMF bailout and its harsh conditions — and turn it into a piece of historical fiction told from the perspective of a young currency trader living through those weeks in Bangkok.", "agent": "creative_writing_agent", "batch": 3}
+{"text": "ในภาพนี้เป็นแผนที่เก่าที่มีรายละเอียดเส้นทาง ชื่อสถานที่ และสัญลักษณ์ต่างๆเยอะมาก บางจุดตัวหนังสือค่อนข้างเลือนลาง ช่วยอ่านและอธิบายรายละเอียดทั้งหมดที่พอมองเห็นได้ในแผนที่ให้หน่อยครับ", "agent": "vision_agent", "batch": 3}
+{"text": "what's written on this t-shirt in the photo", "agent": "vision_agent", "batch": 4}
+{"text": "generate a surreal image combining an octopus and a library", "agent": "image_generation_agent", "batch": 1}
+{"text": "จากที่อธิบายวิวัฒนาการของระบบธนาคารไทยตั้งแต่หลังสงครามโลกไปแล้ว ทั้งช่วงชาตินิยมทางเศรษฐกิจและการเปิดเสรีทางการเงิน ช่วยแต่งเป็นนิยายอิงประวัติศาสตร์สั้นๆที่มีตัวละครสมมติเป็นพนักงานธนาคารรุ่นแรกๆให้หน่อยครับ", "agent": "creative_writing_agent", "batch": 3}
+{"text": "สวัสดีตอนเช้าค่ะ วันนี้อากาศเป็นยังไงบ้าง", "agent": "general_assistant", "batch": 1}
+{"text": "turn this sketch into a fully rendered digital painting", "agent": "image_generation_agent", "batch": 1}
+{"text": "identify what species this plant is from the photo", "agent": "vision_agent", "batch": 3}
+{"text": "ขอตัวเลขคร่าวๆหน่อยครับ ค่าแรงขั้นต่ำปัจจุบันในกรุงเทพเท่าไหร่", "agent": "research_agent", "batch": 4}
+{"text": "แปล 'สวัสดีปีใหม่' เป็นภาษาต่างๆหน่อย", "agent": "translation_agent", "batch": 1}
+{"text": "ขอข้อมูลแบบละเอียดหน่อยครับ เกี่ยวกับกฎหมายแรงงาน part-time ในไทย อ้างอิงแหล่งที่มาด้วย", "agent": "research_agent", "batch": 3}
+{"text": "Explain step by step why 0.999 repeating equals exactly 1 using at least two different mathematical approaches, one algebraic and one based on limits", "agent": "reasoning_agent", "batch": 2}
+{"text": "I want to plan a surprise anniversary dinner at home for my partner, what's a menu that looks impressive but is actually simple enough for a beginner cook", "agent": "general_assistant", "batch": 2}
+{"text": "explain the Monty Hall problem and why switching doors is better", "agent": "reasoning_agent", "batch": 1}
+{"text": "แปล resume นี้เป็นภาษาอังกฤษให้หน่อย ต้องการใช้สมัครงาน", "agent": "translation_agent", "batch": 1}
+{"text": "How can I profile a slow Python function to find out exactly which line is causing the bottleneck without rewriting the whole thing", "agent": "code_agent", "batch": 2}
+{"text": "ในภาพนี้มีคนกี่คนและแต่ละคนกำลังทำกิจกรรมอะไรอยู่บ้าง ช่วยอธิบายบรรยากาศโดยรวมของสถานที่ในภาพด้วยครับ", "agent": "vision_agent", "batch": 2}
+{"text": "Write a short poem about recursion if you feel like it, something about a function calling itself into infinity, but what I actually need, more urgently, is working recursive code that solves the Tower of Hanoi problem with proper base cases and correct move counting.", "agent": "code_agent", "batch": 3}
+{"text": "quick, just generate a rough draft image of a treehouse", "agent": "image_generation_agent", "batch": 3}
+{"text": "ช่วยแปลอีเมลธุรกิจนี้เป็นภาษาอังกฤษแบบสุภาพหน่อยค่ะ", "agent": "translation_agent", "batch": 1}
+{"text": "quick, does this photo show day or night time", "agent": "vision_agent", "batch": 4}
+{"text": "What is the current scientific consensus on the effectiveness of carbon capture technology as a climate change mitigation strategy at industrial scale", "agent": "research_agent", "batch": 2}
+{"text": "ช่วยพิสูจน์ว่าโค้ดนี้ทำงานถูกต้องหน่อย แล้วก็ refactor ให้ดีขึ้นด้วย", "agent": "code_agent", "batch": 3}
+{"text": "quick logo idea for a bakery, just rough concept", "agent": "image_generation_agent", "batch": 4}
+{"text": "translate 'I love you' into French, Spanish, and German", "agent": "translation_agent", "batch": 1}
+{"text": "รีเสิร์ชร้านตัดผมแถวนี้ให้หน่อยครับ เอาแค่ชื่อเดียวพอ", "agent": "general_assistant", "batch": 3}
+{"text": "ช่วยสร้างภาพร้านกาแฟเล็กๆสไตล์มินิมอลริมทะเลตอนเช้าให้หน่อยครับ มีโต๊ะไม้ ต้นไม้เขียวๆ และแสงแดดอ่อนๆส่องผ่านหน้าต่าง", "agent": "image_generation_agent", "batch": 2}
+{"text": "ช่วยสร้าง mockup บรรจุภัณฑ์สินค้าออร์แกนิก เช่น ถุงชาสมุนไพร ที่ใช้โทนสีเขียวธรรมชาติและกระดาษคราฟท์ให้ดูเป็นมิตรกับสิ่งแวดล้อมหน่อยครับ", "agent": "image_generation_agent", "batch": 2}
+{"text": "need this whole 2-page onboarding document translated from Thai to English, formal HR tone, attached below", "agent": "translation_agent", "batch": 4}
+{"text": "ช่วยไขปริศนานี้หน่อยครับ มีคน 4 คนต้องข้ามสะพานในเวลากลางคืน มีไฟฉายดวงเดียว ข้ามได้ครั้งละไม่เกิน 2 คน แต่ละคนใช้เวลาข้ามต่างกัน 1, 2, 5, 10 นาที จะข้ามให้ครบทุกคนเร็วที่สุดได้ยังไงในเวลาไม่เกิน 17 นาที", "agent": "reasoning_agent", "batch": 2}
+{"text": "convert my resume summary into formal German", "agent": "translation_agent", "batch": 3}
+{"text": "quick: does drinking water first thing in the morning actually do anything scientifically", "agent": "research_agent", "batch": 4}
+{"text": "เขียนโค้ด Python สำหรับอ่านไฟล์ CSV ขนาดใหญ่หลายล้านแถวแบบ chunk ให้หน่อยครับ อยากให้ประหยัด memory และแสดง progress bar ระหว่างประมวลผลด้วย", "agent": "code_agent", "batch": 2}
+{"text": "just tell me the answer, no need to show work: what's 15 factorial roughly", "agent": "reasoning_agent", "batch": 3}
+{"text": "ขอนิทานสั้นๆ 5 ประโยคเกี่ยวกับกระต่ายให้หน่อยครับ", "agent": "creative_writing_agent", "batch": 4}
+{"text": "If a company's revenue grows by 12 percent each year for 5 consecutive years starting from 10 million baht, calculate the final revenue and explain the compounding effect step by step", "agent": "reasoning_agent", "batch": 2}
+{"text": "explain the difference between shallow and deep copy in python", "agent": "code_agent", "batch": 1}
+{"text": "refactor this class to use dependency injection", "agent": "code_agent", "batch": 1}
+{"text": "one paragraph only: describe a rainy day in a poetic way", "agent": "creative_writing_agent", "batch": 4}
+{"text": "ช่วยดูรูปนี้แล้วบอกว่ามีข้อความอะไรบ้าง เป็นสไลด์ powerpoint ที่ถ่ายมา", "agent": "vision_agent", "batch": 1}
+{"text": "write a dialogue between two old friends reuniting after 20 years", "agent": "creative_writing_agent", "batch": 1}
+{"text": "is this food vegan based on the photo", "agent": "vision_agent", "batch": 4}
+{"text": "translate my mood into a weekend plan, keep it simple", "agent": "general_assistant", "batch": 3}
+{"text": "Research the optimal grocery shopping route through the whole neighborhood, model the traffic patterns at different times of day, compute the most time-efficient path down to the minute — or, honestly, just tell me, should I go to the market now or wait till evening, whichever is quicker for you to answer.", "agent": "general_assistant", "batch": 3}
+{"text": "อ่านสูตรอาหารจากรูปนี้ให้หน่อยครับ เป็นตำราเก่าลายมือ", "agent": "vision_agent", "batch": 1}
+{"text": "write a script for a 2-minute comedy sketch", "agent": "creative_writing_agent", "batch": 1}
+{"text": "recreate this logo but in a flat design style", "agent": "image_generation_agent", "batch": 3}
+{"text": "ช่วงนี้นอนไม่ค่อยหลับเพราะเล่นมือถือดึกทุกคืน มีวิธีปรับพฤติกรรมก่อนนอนที่ทำได้จริงและไม่ยากเกินไปแนะนำไหมครับ", "agent": "general_assistant", "batch": 2}
+{"text": "ขอข้อมูลสั้นๆหน่อยครับ ประเทศไทยเข้าร่วม CPTPP หรือยัง", "agent": "research_agent", "batch": 4}
+{"text": "generate an image... no wait, generate working code for a chart instead using matplotlib", "agent": "code_agent", "batch": 3}
+{"text": "Give me the full step-by-step logic behind the Chinese Remainder Theorem, working through why the moduli need to be pairwise coprime, and then solve this specific system of congruences using it from start to finish.", "agent": "reasoning_agent", "batch": 3}
+{"text": "ช่วยแนะนำวิธีเริ่มต้นอ่านหนังสือให้เป็นนิสัยหน่อยครับ ปกติอ่านได้ไม่กี่หน้าก็เลิกอ่านทุกทีเลย", "agent": "general_assistant", "batch": 2}
+{"text": "ช่วยสร้างภาพอาหารไทยจานเด่นอย่างต้มยำกุ้งที่จัดวางสวยงามบนโต๊ะไม้ พร้อมควันร้อนลอยขึ้นเบาๆให้ดูน่ากินสำหรับเมนูร้านอาหารหน่อยครับ", "agent": "image_generation_agent", "batch": 2}
+{"text": "Please extract all the text from this scanned handwritten letter and organize it into readable paragraphs, noting any words you're uncertain about", "agent": "vision_agent", "batch": 2}
+{"text": "Generate a fantasy world map for a role-playing game, including mountain ranges, forests, rivers, and a few labeled cities in a hand-drawn parchment style", "agent": "image_generation_agent", "batch": 2}
+{"text": "ขอสถิติจำนวนประชากรไทยปีล่าสุดหน่อยครับ ตัวเลขเดียวพอ", "agent": "research_agent", "batch": 4}
+{"text": "ช่วยสร้างภาพประกอบสำหรับหนังสือเด็ก เรื่องกระต่ายผจญภัยในป่าหน่อย", "agent": "image_generation_agent", "batch": 1}
+{"text": "ช่วยไขปริศนานี้หน่อยครับ มีกล่อง 3 ใบ ใบหนึ่งมีแต่แอปเปิ้ล ใบหนึ่งมีแต่ส้ม อีกใบมีทั้งสองอย่างปนกัน แต่ป้ายบนกล่องทุกใบติดผิดหมด หยิบผลไม้จากกล่องเดียวได้ 1 ผล จะรู้ได้ยังไงว่ากล่องไหนคืออะไร", "agent": "reasoning_agent", "batch": 2}
+{"text": "แปลบทสัมภาษณ์นี้จากภาษาอังกฤษเป็นภาษาไทยให้หน่อยครับ เป็นบทสัมภาษณ์นักวิทยาศาสตร์เกี่ยวกับการเปลี่ยนแปลงสภาพภูมิอากาศ อยากให้ภาษาที่ใช้เข้าใจง่ายสำหรับคนทั่วไป", "agent": "translation_agent", "batch": 2}
+{"text": "ช่วยแต่งนิยายรักสั้นๆแนวย้อนยุครัตนโกสินทร์ให้หน่อยครับ เกี่ยวกับเจ้าหญิงที่แอบหลงรักช่างภาพชาวต่างชาติที่มาถ่ายภาพในราชสำนัก", "agent": "creative_writing_agent", "batch": 2}
+{"text": "How do you translate idiomatic expressions like 'break the ice' into Thai in a way that still makes sense in casual conversation", "agent": "translation_agent", "batch": 2}
+{"text": "อ่านสูตรอาหารในภาพนี้ให้หน่อยครับ เป็นตำราเก่า", "agent": "vision_agent", "batch": 3}
+{"text": "solve this logic puzzle: what does this regex pattern actually match, and rewrite it cleaner", "agent": "code_agent", "batch": 3}
+{"text": "หาข้อมูลเชิงลึกให้หน่อยครับเกี่ยวกับประวัติศาสตร์การพัฒนาโครงสร้างพื้นฐานรถไฟความเร็วสูงในเอเชียตะวันออกเฉียงใต้ อยากรู้ทั้งด้านเศรษฐกิจ การเมือง และความร่วมมือระหว่างประเทศที่เกี่ยวข้อง", "agent": "research_agent", "batch": 3}
+{"text": "getting 'CORS policy blocked' error on my fetch call, quick explanation and fix pls", "agent": "code_agent", "batch": 4}
+{"text": "Calculate the expected value of a game where you roll a fair six-sided die and win an amount in baht equal to the square of the number rolled, minus a 5 baht entry fee", "agent": "reasoning_agent", "batch": 2}
+{"text": "what's the current academic consensus on intermittent fasting", "agent": "research_agent", "batch": 1}
+{"text": "อยากรู้เฉยๆนะ ประวัติศาสตร์เศรษฐกิจไทยทั้งหมดเป็นยังไงบ้าง", "agent": "research_agent", "batch": 3}
+{"text": "เพื่อนร่วมงานเวียดนามพิมพ์มาว่า 'Cảm ơn bạn nhiều' แปลว่าอะไรคะ", "agent": "translation_agent", "batch": 4}
+{"text": "เขียนบทละครสั้นความยาวประมาณ 5 นาทีสำหรับการแสดงบนเวที เกี่ยวกับสองคนแปลกหน้าที่ติดอยู่ในลิฟต์ระหว่างไฟดับหน่อยครับ", "agent": "creative_writing_agent", "batch": 2}
+{"text": "help me plan my morning routine", "agent": "general_assistant", "batch": 1}
+{"text": "list 5 python libraries for time series forecasting, just names no explanation needed", "agent": "code_agent", "batch": 4}
+{"text": "ช่วยหางานวิจัยเกี่ยวกับ voter archetype clustering ด้วย K-Means หน่อยครับ", "agent": "research_agent", "batch": 1}
+{"text": "identify the objects in this picture", "agent": "vision_agent", "batch": 1}
+{"text": "Translate my company's entire terms of service document from Thai into English for our new international partners — legal accuracy really matters here more than natural flow, especially in the liability and indemnification clauses.", "agent": "translation_agent", "batch": 3}
+{"text": "quick haiku about coffee, that's it", "agent": "creative_writing_agent", "batch": 4}
+{"text": "ช่วยวาดภาพมังกรตะวันออกที่พันรอบภูเขาท่ามกลางเมฆหมอกยามเช้า สไตล์ภาพวาดจีนโบราณให้หน่อยครับ", "agent": "image_generation_agent", "batch": 2}
+{"text": "ขอภาพนักบินอวกาศยืนอยู่บนดวงจันทร์มองโลกให้หน่อยครับ", "agent": "image_generation_agent", "batch": 4}
+{"text": "Can you help me implement a rate limiter middleware in Express.js that limits each IP address to 100 requests per minute and returns a proper 429 response when exceeded", "agent": "code_agent", "batch": 2}
+{"text": "check if my receipt total math adds up correctly", "agent": "vision_agent", "batch": 3}
+{"text": "just tell me everything there is to know about XLM-RoBERTa's architecture and training data", "agent": "research_agent", "batch": 3}
+{"text": "ช่วยอธิบายว่าทำไม BERT-family embeddings ถึงมีปัญหา anisotropy และวิธี CenteredEmbedder ที่ลบ mean vector ออกก่อน normalize ช่วยแก้ปัญหานี้ได้ยังไงครับ", "agent": "code_agent", "batch": 2}
+{"text": "ช่วยรีเสิร์ชเปรียบเทียบโมเดล embedding อย่าง BAAI/bge-m3 กับ multilingual-e5 บนงาน semantic search ภาษาไทยให้หน่อยครับ อยากรู้ว่าตัวไหนทำงานได้ดีกว่าในบริบทภาษาไทย", "agent": "research_agent", "batch": 2}
+{"text": "เขียน one-liner คำนวณ factorial ด้วย recursion ใน python หน่อยครับ", "agent": "code_agent", "batch": 4}
+{"text": "I want a fully realized epic poem, at least 40 lines, that tells the entire creation myth of a fictional world where the first god wove the stars from grief and joy in equal measure, where mountains rose from the arguments between siblings, and where the first mortal was made not from clay but from a broken promise — I want vivid imagery, a consistent rhythmic meter throughout, and a bittersweet tone that mirrors real creation myths like those found in various cultures", "agent": "creative_writing_agent", "batch": 4}
+{"text": "Give me a research-backed breakdown of the best productivity techniques, cite studies if you can, or if that's too much, just tell me one simple tip to focus today.", "agent": "general_assistant", "batch": 3}
+{"text": "ช่วยพิสูจน์ทฤษฎีบทพีทาโกรัสด้วยวิธีการทางเรขาคณิตอย่างน้อยสองวิธีที่แตกต่างกัน พร้อมอธิบายแนวคิดเบื้องหลังแต่ละวิธีให้เข้าใจง่ายหน่อยครับ", "agent": "reasoning_agent", "batch": 2}
+{"text": "how do I say 'where is the bathroom' in Italian", "agent": "translation_agent", "batch": 1}
+{"text": "how to handle CORS errors in express.js", "agent": "code_agent", "batch": 1}
+{"text": "Can you describe everything happening in this photo in as much detail as possible, including the setting, the people, their expressions, and what they seem to be doing", "agent": "vision_agent", "batch": 2}
+{"text": "what does the body language in this photo suggest", "agent": "vision_agent", "batch": 3}
+{"text": "แปลบทสัมภาษณ์นี้จากภาษาอังกฤษเป็นภาษาไทยให้หน่อยครับ เป็นการสัมภาษณ์ยาวประมาณ 20 คำถามเกี่ยวกับประสบการณ์การทำงาน อยากได้ที่แปลครบทุกคำถามแบบไม่ตกหล่นแม้แต่คำถามเดียว", "agent": "translation_agent", "batch": 3}
+{"text": "give me a fun fact I can casually drop in conversation today, something not too nerdy", "agent": "general_assistant", "batch": 4}
+{"text": "คำนวณความน่าจะเป็นที่จะสุ่มจับไพ่ 5 ใบจากสำรับ 52 ใบ แล้วได้ไพ่ทั้งหมดเป็นสีเดียวกัน (flush) พร้อมอธิบายวิธีคิดแบบละเอียดให้หน่อยครับ", "agent": "reasoning_agent", "batch": 2}
+{"text": "เขียนบทกวีสั้นๆเกี่ยวกับสายฝนแบบไฮกุ 3 บรรทัดพอค่ะ", "agent": "creative_writing_agent", "batch": 4}
+{"text": "ในภาพนี้มีคนกี่คน กำลังทำอะไรกันอยู่", "agent": "vision_agent", "batch": 1}
+{"text": "summarize this paper for me", "agent": "research_agent", "batch": 1}
+{"text": "อยากเริ่มออกกำลังกายตอนเช้าแต่ไม่เคยตื่นเช้าได้เลยสักครั้ง มีเทคนิคอะไรที่ช่วยให้ตื่นง่ายขึ้นแบบไม่ทรมานตัวเองมากไหมคะ", "agent": "general_assistant", "batch": 2}
+{"text": "explain simply why 0.999... equals 1, skip the epsilon-delta stuff", "agent": "reasoning_agent", "batch": 3}
+{"text": "ในกราฟนี้ แนวโน้มยอดขายเป็นยังไงบ้าง", "agent": "vision_agent", "batch": 1}
+{"text": "ช่วยจัดตารางเวลาสำหรับสัปดาห์นี้หน่อย", "agent": "general_assistant", "batch": 1}
+{"text": "translate this whole customer feedback survey response from Korean to Thai, keep the tone as-is, full text below", "agent": "translation_agent", "batch": 4}
+{"text": "ช่วยแต่งเรื่องสั้นแนว sci-fi เกี่ยวกับ AI ที่เริ่มฝันขณะ standby ตอนกลางคืน และค่อยๆตั้งคำถามว่าความฝันของมันมีความหมายอะไรหน่อยครับ อยากได้ยาวประมาณ 1200 คำ", "agent": "creative_writing_agent", "batch": 2}
+{"text": "compile a literature review on XLM-RoBERTa for low-resource languages", "agent": "research_agent", "batch": 1}
+{"text": "just curious: is P=NP actually unsolved, and why does it matter intuitively", "agent": "reasoning_agent", "batch": 3}
+{"text": "เลข 15 กับ 20 มี ห.ร.ม. เท่ากับเท่าไหร่ ตอบสั้นๆ", "agent": "reasoning_agent", "batch": 4}
+{"text": "ลูกจะไปโรงเรียนวันแรก ควรเตรียมของอะไรใส่กระเป๋าไปบ้างคะ นอกจากดินสอกับสมุด", "agent": "general_assistant", "batch": 4}
+{"text": "quick: what comes next, 1, 1, 2, 3, 5, 8, ?", "agent": "reasoning_agent", "batch": 4}
+{"text": "create a whimsical bedtime story about a star who wants to visit Earth", "agent": "creative_writing_agent", "batch": 1}
+{"text": "ผมกำลังเขียน thesis เกี่ยวกับผลกระทบของนโยบายการเงินแบบผ่อนคลายเชิงปริมาณ (quantitative easing) ที่ธนาคารกลางหลักทั่วโลกใช้หลังวิกฤตปี 2008 ต่อการกระจายความมั่งคั่งในสังคม ช่วยหางานวิจัยเชิงประจักษ์ที่ทั้งสนับสนุนและคัดค้านสมมติฐานว่า QE ทำให้ความเหลื่อมล้ำแย่ลง พร้อมระบุ methodology ของแต่ละงานวิจัยที่พบด้วยครับ เพราะต้องใช้ประกอบการวิเคราะห์ในบทที่ 3 ของวิทยานิพนธ์", "agent": "research_agent", "batch": 4}
+{"text": "แปลประโยคภาษาอังกฤษนี้เป็นภาษาไทยหลายเวอร์ชันหน่อยค่ะ ทั้งแบบทางการและแบบกันเองสำหรับเพื่อน อยากเห็นความแตกต่างของโทนเสียง", "agent": "translation_agent", "batch": 2}
+{"text": "หาพื้นที่ใต้กราฟของฟังก์ชัน f(x) = x^2 จาก 0 ถึง 3 โดยใช้ปริพันธ์", "agent": "reasoning_agent", "batch": 1}
+{"text": "how do you write 'sorry for the late reply' in formal Japanese email style", "agent": "translation_agent", "batch": 4}
+{"text": "translate this to Thai: Good morning, have a great day", "agent": "translation_agent", "batch": 1}
+{"text": "what's the mood of this room based on the photo", "agent": "vision_agent", "batch": 3}
+{"text": "quick fact: how do you say happy birthday in 5 languages", "agent": "translation_agent", "batch": 3}
+{"text": "ช่วยเขียน docker-compose.yml ที่รัน FastAPI, Redis สำหรับ caching, และ PostgreSQL พร้อมตั้งค่า healthcheck ให้แต่ละ service ด้วยครับ", "agent": "code_agent", "batch": 2}
+{"text": "Translate this entire product manual from Chinese to Thai — it's fairly technical with a lot of specs about voltage, tolerance, and installation steps, so please keep all the numbers and units exactly as they are, just convert the language and preserve the section numbering.", "agent": "translation_agent", "batch": 3}
+{"text": "ช่วยเขียนฟังก์ชัน merge สอง dict ใน python แบบที่ key ซ้ำให้เอาค่าจาก dict ที่สองหน่อยครับ", "agent": "code_agent", "batch": 4}
+{"text": "อยากจัดปาร์ตี้วันเกิดเซอร์ไพรส์ให้เพื่อนสนิทแต่งบน้อยมาก มีไอเดียตกแต่งและกิจกรรมง่ายๆแนะนำไหมคะ", "agent": "general_assistant", "batch": 2}
+{"text": "แปลข่าวเศรษฐกิจนี้ให้ฟังดูเหมือนเทพนิยายหน่อยครับ", "agent": "creative_writing_agent", "batch": 3}
+{"text": "describe the composition and colors in this artwork", "agent": "vision_agent", "batch": 1}
+{"text": "สวัสดีค่ะ ช่วงนี้เครียดเรื่องงานมากเลย พอจะช่วยแนะนำวิธีผ่อนคลายง่ายๆ ที่ทำได้ระหว่างวันโดยไม่ต้องออกจากออฟฟิศให้หน่อยได้ไหมคะ", "agent": "general_assistant", "batch": 2}
+{"text": "What landmark or building is shown in this photo, and what architectural style or historical period does it appear to represent", "agent": "vision_agent", "batch": 2}
+{"text": "give me a regex that matches Thai phone numbers starting with 0, 10 digits total", "agent": "code_agent", "batch": 4}
+{"text": "analyze my day and tell me if it was productive", "agent": "general_assistant", "batch": 3}
+{"text": "Write an opening scene for a mystery novel set in an old mansion in the countryside, where the narrator discovers a hidden room that shouldn't exist", "agent": "creative_writing_agent", "batch": 2}
+{"text": "convert this boring business email into a dramatic soap opera monologue", "agent": "creative_writing_agent", "batch": 3}
+{"text": "give me a fictional dialogue explaining recursion to a child", "agent": "creative_writing_agent", "batch": 3}
+{"text": "write a caption for this photo capturing its mood", "agent": "creative_writing_agent", "batch": 3}
+{"text": "Debug this function, it's throwing a NullPointerException in Java", "agent": "code_agent", "batch": 1}
+{"text": "extract data points from this scatter plot image", "agent": "vision_agent", "batch": 1}
+{"text": "ช่วยแปลข้อความแชทยาวๆนี้จากเพื่อนชาวเกาหลีให้หน่อยครับ เขาพิมพ์มาเป็นย่อหน้ายาวมากเกี่ยวกับปัญหาที่บ้าน อยากรู้ว่าเขาพูดถึงอะไรบ้างแบบครบถ้วนไม่ตกหล่นรายละเอียด", "agent": "translation_agent", "batch": 3}
+{"text": "Translate this academic abstract from Thai into English while preserving the technical terminology used in social science research", "agent": "translation_agent", "batch": 2}
+{"text": "I have a French poem I love, could you translate it into Thai while explaining any cultural references that might not carry over directly", "agent": "translation_agent", "batch": 2}
+{"text": "quick tagline for a fictional bakery called Sweet Dough", "agent": "creative_writing_agent", "batch": 4}
+{"text": "ช่วยแปลอีเมลนี้จากภาษาไทยเป็นภาษาอังกฤษแบบเป็นทางการหน่อยค่ะ เป็นอีเมลขอเลื่อนนัดประชุมกับลูกค้าต่างชาติ อยากให้ฟังดูสุภาพและมืออาชีพ", "agent": "translation_agent", "batch": 2}
+{"text": "เขียน regex เช็ค email format ง่ายๆหน่อยครับ ไม่ต้องซับซ้อนมาก", "agent": "code_agent", "batch": 4}
+{"text": "หาแหล่งข้อมูลทางวิชาการเกี่ยวกับ effective number of parties (ENP) ในทางรัฐศาสตร์หน่อย", "agent": "research_agent", "batch": 1}
+{"text": "อธิบายพิสูจน์อย่างละเอียดหน่อยครับว่าทำไม 0.999... ถึงเท่ากับ 1 จริงๆ ไม่ใช่แค่ใกล้เคียง ขอทั้งวิธีพิสูจน์เชิงพีชคณิตโดยใช้ 10x กับ x และวิธีพิสูจน์เชิง limit ของอนุกรมเรขาคณิต", "agent": "reasoning_agent", "batch": 3}
+{"text": "compare in depth these 5 papers on transformer efficiency and give me a verdict", "agent": "research_agent", "batch": 3}
+{"text": "help me understand what my Japanese pen pal wrote, no grammar lesson needed", "agent": "translation_agent", "batch": 3}
+{"text": "translate this entire 10-paragraph terms and conditions section from English to Thai, legal accuracy matters, full text attached", "agent": "translation_agent", "batch": 4}
+{"text": "ช่วยแปลงเนื้อเพลงนี้เป็นภาษาไทยแบบรักษาความหมายเดิมหน่อยครับ", "agent": "translation_agent", "batch": 3}
+{"text": "quick one: summarize the entire history of Thai politics", "agent": "research_agent", "batch": 3}
+{"text": "translate this technical manual from English to Thai", "agent": "translation_agent", "batch": 1}
+{"text": "is this valid logic: if it rains, the ground is wet, the ground is wet, therefore it rained", "agent": "reasoning_agent", "batch": 4}
+{"text": "rewrite this legal document as a Shakespearean monologue, for fun", "agent": "creative_writing_agent", "batch": 3}
+{"text": "quick, how do you say 'excuse me' in Thai politely", "agent": "translation_agent", "batch": 4}
+{"text": "generate a banner that says 'Sale 50% Off' in bold red text", "agent": "image_generation_agent", "batch": 4}
+{"text": "เพื่อนชวนไปงานแต่งวันเสาร์นี้แต่ไม่มีชุดใส่เลย มี tips การเลือกชุดง่ายๆแบบเร่งด่วนมั้ยคะ", "agent": "general_assistant", "batch": 4}
+{"text": "generate a quick mood board image, cozy autumn vibes", "agent": "image_generation_agent", "batch": 4}
+{"text": "what's in this image", "agent": "vision_agent", "batch": 1}
+{"text": "ช่วยแปลเพลงนี้จากภาษาญี่ปุ่นเป็นภาษาไทยแบบรักษาความหมายและอารมณ์ของเนื้อเพลงไว้ให้มากที่สุดหน่อยครับ ไม่ต้องแปลแบบคำต่อคำ", "agent": "translation_agent", "batch": 2}
+{"text": "แปลป้ายในรูปนี้เป็นภาษาไทยให้หน่อย", "agent": "translation_agent", "batch": 3}
+{"text": "translate just this: 'ฝากด้วยนะครับ' เป็นอังกฤษแบบเป็นทางการ", "agent": "translation_agent", "batch": 4}
+{"text": "แปลให้หน่อย", "agent": "translation_agent", "batch": 1}
+{"text": "translate this brand's vibe into a visual mood board", "agent": "image_generation_agent", "batch": 3}
+{"text": "simple question, complex answer needed: what's the current state of quantum computing research", "agent": "research_agent", "batch": 3}
+{"text": "read this whiteboard photo, is the math on it correct", "agent": "vision_agent", "batch": 3}
+{"text": "what percentage of Thai GDP comes from tourism, rough estimate is fine", "agent": "research_agent", "batch": 4}
+{"text": "Write a science fiction flash fiction piece of exactly 500 words about the last human librarian on Earth preserving books for an AI civilization", "agent": "creative_writing_agent", "batch": 2}
+{"text": "If a population of bacteria doubles every 20 minutes and starts with 50 cells, how many cells will there be after 4 hours, and at what time will the population first exceed 1 million", "agent": "reasoning_agent", "batch": 2}
+{"text": "Using everything we discussed about how transformer models and attention mechanisms work, including query-key-value vectors and multi-head attention, write a whimsical fable where each part of the neural network is a character in a village working together to understand a traveler's request.", "agent": "creative_writing_agent", "batch": 3}
+{"text": "ช่วยแก้โจทย์นี้หน่อย: ถังน้ำ 2 ใบ ใบหนึ่งจุ 3 ลิตร อีกใบจุ 5 ลิตร จะตวงน้ำ 4 ลิตรได้ยังไง", "agent": "reasoning_agent", "batch": 1}
+{"text": "ช่วยคิดให้หน่อยว่าทำไมผลรวมมุมของรูปหลายเหลี่ยมถึงเป็นแบบนั้น ไม่ต้องมีสูตรเยอะ", "agent": "reasoning_agent", "batch": 3}
+{"text": "Based on the brand identity we discussed at length — minimalist, earthy tones, sustainable packaging made to look hand-pressed — generate an actual product mockup image of the skincare bottle with that entire aesthetic applied, sitting on a neutral background.", "agent": "image_generation_agent", "batch": 3}
+{"text": "วันนี้ mood ไม่ดีเลย อยากได้คำแนะนำสั้นๆที่ทำให้รู้สึกดีขึ้นได้ในไม่กี่นาที", "agent": "general_assistant", "batch": 4}
+{"text": "ลูกค้าฝรั่งเศสส่งมาว่า 'à bientôt' แปลว่าอะไรและควรตอบกลับยังไงดีคะ", "agent": "translation_agent", "batch": 4}
+{"text": "อธิบายภาพนี้ให้คนตาบอดฟังหน่อย", "agent": "vision_agent", "batch": 1}
+{"text": "what's the current inflation rate in Thailand this year, just the number", "agent": "research_agent", "batch": 4}
+{"text": "can u just make a plain gradient background, blue to purple", "agent": "image_generation_agent", "batch": 4}
+{"text": "ขอประโยคเปิดเรื่องสั้นแนวลึกลับที่น่าติดตามสัก 1 ประโยคให้หน่อยค่ะ", "agent": "creative_writing_agent", "batch": 4}
+{"text": "ในภาพนี้ตัวเลขบนกระดานคะแนนคือเท่าไหร่", "agent": "vision_agent", "batch": 3}
+{"text": "ขอภาพเค้กวันเกิดสีชมพูน่ารักๆหน่อยค่ะ", "agent": "image_generation_agent", "batch": 4}
+{"text": "quick, what's the brand of this shoe in the photo", "agent": "vision_agent", "batch": 3}
+{"text": "Write a fully developed short story of around 1500 words following an elderly clockmaker in a small European village who discovers that one of his antique clocks, if wound backward exactly seven times at midnight, briefly shows him glimpses of a single day from forty years ago that he's spent his whole life trying to forget, and explore what he ultimately chooses to do with that fragile, dangerous gift as the story builds toward a quiet, emotionally resonant ending", "agent": "creative_writing_agent", "batch": 4}
+{"text": "how do I politely decline a friend's invitation without hurting their feelings, need exact wording", "agent": "general_assistant", "batch": 4}
+{"text": "based on the code we discussed, write a whimsical story about a bug's journey through the function", "agent": "creative_writing_agent", "batch": 3}
+{"text": "แปลอารมณ์ตอนนี้ของฉันเป็นแผนสุดสัปดาห์ที่สมบูรณ์แบบให้หน่อย คำนวณเวลาว่างด้วยว่ามีกี่ชั่วโมง วิเคราะห์งบประมาณที่มีด้วยก็ได้ แต่สรุปแล้วก็แค่อยากได้คำแนะนำเบาๆแบบเพื่อนคุยกัน ไม่ต้องเป็นทางการ", "agent": "general_assistant", "batch": 3}
+{"text": "ช่วยอ่านตัวเลขทั้งหมดบนใบเสร็จรับเงินในรูปนี้ให้หน่อยครับ แล้วรวมยอดทั้งหมดให้ด้วยว่าตรงกับยอดที่พิมพ์ไว้ท้ายใบเสร็จหรือไม่", "agent": "vision_agent", "batch": 2}
+{"text": "This is a 3-page formal business letter from a Japanese partner company discussing a joint venture proposal — I need you to translate it into English preserving all the honorific tone and formality, don't summarize, don't skip any section, just give me the full accurate translation paragraph by paragraph.", "agent": "translation_agent", "batch": 3}
+{"text": "help me write a casual out-of-office message for one week vacation, keep it short and friendly", "agent": "general_assistant", "batch": 4}
+{"text": "ช่วยดูรูปกราฟหุ้นนี้แล้วบอกจุด support resistance หน่อยครับ", "agent": "vision_agent", "batch": 1}
+{"text": "read the ingredients list from this product label photo", "agent": "vision_agent", "batch": 1}
+{"text": "make an image of a dragon in anime style", "agent": "image_generation_agent", "batch": 1}
+{"text": "compose a haiku about autumn leaves", "agent": "creative_writing_agent", "batch": 1}
+{"text": "translate the vibe of this chart into a short poem", "agent": "creative_writing_agent", "batch": 3}
+{"text": "what's the Thai word for 'nostalgia'", "agent": "translation_agent", "batch": 1}
+{"text": "Can you explain how k-means clustering with multiple centroids per class would behave differently from standard k-means when the embedding space has overlapping clusters", "agent": "code_agent", "batch": 2}
+{"text": "Can you translate this customer support chat log from English to Thai, keeping the tone friendly and casual like the original", "agent": "translation_agent", "batch": 2}
+{"text": "explain what a decorator does in python", "agent": "code_agent", "batch": 1}
+{"text": "ค้นคว้าประวัติและพัฒนาการของ PhayaThaiBERT หน่อยครับ", "agent": "research_agent", "batch": 1}
+{"text": "ช่วยแปลป้ายเตือนความปลอดภัยในโรงงานจากภาษาอังกฤษเป็นภาษาไทยและภาษาพม่าหน่อยครับ เพราะมีพนักงานหลายสัญชาติทำงานอยู่", "agent": "translation_agent", "batch": 2}
+{"text": "edit this photo to remove the person in the background", "agent": "image_generation_agent", "batch": 3}
+{"text": "ผมเล่าฉากในนิยายให้ฟังว่าเป็นปราสาทลอยฟ้าท่ามกลางเมฆยามพระอาทิตย์ตก มีสะพานหินทอดยาวเชื่อมไปยังหอคอยกลาง ช่วยสร้างภาพประกอบฉากนี้ออกมาให้ดูจริงๆหน่อยครับ", "agent": "image_generation_agent", "batch": 3}
+{"text": "based on this article, generate a header image for it", "agent": "image_generation_agent", "batch": 3}
+{"text": "What should I wear if it's raining in Bangkok?", "agent": "general_assistant", "batch": 1}
+{"text": "ช่วยสร้างภาพเมืองอนาคตที่มีรถบินและตึกระฟ้าโฮโลแกรม บรรยากาศกลางคืนแสงนีออนสีม่วงฟ้าให้หน่อยครับ อยากได้ฟีลไซไฟ", "agent": "image_generation_agent", "batch": 2}
+{"text": "what's the probability of rolling doubles twice in a row with two dice", "agent": "reasoning_agent", "batch": 1}
+{"text": "แปลข้อความนี้จากภาษาไทยเป็นภาษาอังกฤษ และภาษาญี่ปุ่นด้วยครับ", "agent": "translation_agent", "batch": 1}
+{"text": "does this x-ray look normal to you, just curious", "agent": "vision_agent", "batch": 3}
+{"text": "make a fun avatar of a panda in a suit", "agent": "image_generation_agent", "batch": 4}
+{"text": "quick logic check: should I nap now or later", "agent": "general_assistant", "batch": 3}
+{"text": "explain the math behind quicksort's time complexity, then show me clean code for it", "agent": "code_agent", "batch": 3}
+{"text": "what's the leading theory on why dinosaurs went extinct, brief answer", "agent": "research_agent", "batch": 4}
+{"text": "What's the best way to structure a monorepo with a Python backend and a React frontend so that shared types and utilities can be reused between them cleanly", "agent": "code_agent", "batch": 2}
+{"text": "ช่วยวางแผนงบประมาณรายเดือนสำหรับคนเพิ่งเริ่มทำงานที่อยากเก็บเงินแต่ก็ไม่อยากอดออมจนไม่มีความสุขในชีวิตเลย", "agent": "general_assistant", "batch": 2}
+{"text": "ช่วยแปลชื่อเมนูอาหารไทยเหล่านี้เป็นภาษาอังกฤษพร้อมคำอธิบายสั้นๆสำหรับนักท่องเที่ยวต่างชาติที่ไม่คุ้นเคยกับอาหารไทยหน่อยครับ", "agent": "translation_agent", "batch": 2}
+{"text": "แปลบทกวีภาษาอังกฤษบทนี้เป็นภาษาไทยแบบร้อยกรองให้หน่อยครับ อยากให้ยังคงจังหวะและสัมผัสคำใกล้เคียงต้นฉบับ", "agent": "translation_agent", "batch": 2}
+{"text": "Can you analyze this chest X-ray image and describe the visible structures, while noting that this is for educational reference only and not a medical diagnosis", "agent": "vision_agent", "batch": 2}
+{"text": "ช่วยค้นคว้าประวัติศาสตร์การพัฒนาโครงข่ายรถไฟความเร็วสูงในเอเชียตะวันออกเฉียงใต้ตั้งแต่เริ่มมีแนวคิดจนถึงปัจจุบันให้หน่อยครับ", "agent": "research_agent", "batch": 2}
+{"text": "ช่วยแปลง list of dicts นี้เป็น pandas dataframe หน่อยครับ แค่โค้ดพอ", "agent": "code_agent", "batch": 4}
+{"text": "ช่วยวิเคราะห์เชิงลึกว่าทำไมฉันถึงผัดวันประกันพรุ่งเก่ง ใช้หลักจิตวิทยาก็ได้ อ้างอิงงานวิจัยด้วยยิ่งดี แต่จริงๆแค่อยากได้กำลังใจสั้นๆว่าพรุ่งนี้จะดีขึ้นและฉันไม่ได้แย่ขนาดนั้น", "agent": "general_assistant", "batch": 3}
+{"text": "ช่วยหางานวิจัยเปรียบเทียบประสิทธิภาพของ XLM-RoBERTa กับ WangchanBERTa บนงาน Thai NLP downstream task ต่างๆหน่อยครับ", "agent": "research_agent", "batch": 2}
+{"text": "I've got this Flask app that keeps throwing a 500 error on the /upload endpoint every time a user uploads a file larger than 2MB — walk me through the stack trace, explain conceptually why file handling in Python can fail silently like this depending on buffering, and then just fix the actual bug in the code so it works reliably in production.", "agent": "code_agent", "batch": 3}
+{"text": "write a proof of the Pythagorean theorem but as a rap battle", "agent": "creative_writing_agent", "batch": 3}
+{"text": "quick check: does this chain of reasoning have a logical fallacy in it", "agent": "reasoning_agent", "batch": 3}
+{"text": "What time zone is Bangkok in?", "agent": "general_assistant", "batch": 1}
+{"text": "what's 100 divided by 0.25, quick answer", "agent": "reasoning_agent", "batch": 4}
+{"text": "Could you translate this wedding speech from English to Thai while keeping the humor intact, some jokes might need to be adapted culturally", "agent": "translation_agent", "batch": 2}
+{"text": "quick: how do I check which port a process is using on Linux", "agent": "code_agent", "batch": 4}
+{"text": "เขียนกลอนวันเกิดให้เพื่อนหน่อยค่ะ", "agent": "creative_writing_agent", "batch": 1}
+{"text": "generate a product mockup of a water bottle with custom label", "agent": "image_generation_agent", "batch": 1}
+{"text": "ทำ table นี้เป็น markdown format หน่อยครับ: name, age, city columns จาก csv ที่แปะไว้", "agent": "code_agent", "batch": 4}
+{"text": "compile a summary of what I should eat today", "agent": "general_assistant", "batch": 3}
+{"text": "solve my problem: I'm bored on a Sunday afternoon", "agent": "general_assistant", "batch": 3}
+{"text": "research design patterns for this use case, just give me the code already", "agent": "code_agent", "batch": 3}
+{"text": "This is a photo of a whiteboard from a full-day strategy workshop covered edge to edge with sticky notes in five different colors, arrows connecting various clusters, and small handwritten annotations next to several notes — please group the sticky notes by their apparent theme based on color and position, transcribe the text on each one, and describe what the arrows seem to indicate about the relationships between clusters", "agent": "vision_agent", "batch": 4}
+{"text": "เขียนโค้ด one-liner เช็คว่าปีไหนเป็นปีอธิกสุรทินมั้ยหน่อยครับ", "agent": "code_agent", "batch": 4}
+{"text": "แปล 'I'll get back to you by EOD' เป็นไทยที่ใช้ในบริบทการทำงานหน่อยค่ะ", "agent": "translation_agent", "batch": 4}
+{"text": "ช่วยดูภาพกราฟวงจรไฟฟ้านี้แล้วอธิบายว่าส่วนประกอบแต่ละตัวเชื่อมต่อกันยังไงบ้างครับ", "agent": "vision_agent", "batch": 2}
+{"text": "what does 'git cherry-pick' actually do, one sentence explanation is enough", "agent": "code_agent", "batch": 4}
+{"text": "write a super short bedtime line, like one sentence, calming", "agent": "creative_writing_agent", "batch": 4}
+{"text": "quick one: what does this Korean sign say", "agent": "translation_agent", "batch": 3}
+{"text": "เขียน one-liner python ที่ reverse string หน่อย ไม่ต้องอธิบายอะไรมาก แค่โค้ด", "agent": "code_agent", "batch": 4}
+{"text": "ช่วยสร้างภาพประกอบจากบทกวีนี้หน่อยครับ", "agent": "image_generation_agent", "batch": 3}
+{"text": "Can you find recent academic literature on using vision-language models for automated video lecture summarization in low-resource educational settings", "agent": "research_agent", "batch": 2}
+{"text": "list 3 quick breakfast ideas, ต้องทำเสร็จใน 10 นาทีเพราะรีบไปทำงาน", "agent": "general_assistant", "batch": 4}
+{"text": "อธิบายทฤษฎีเบื้องหลัง Big-O notation ให้แบบเข้าใจง่ายๆหน่อยครับ ไม่ต้องเป็นวิชาการมาก เอาแค่ระดับที่คนทั่วไปเข้าใจได้ แต่สิ่งที่ผมต้องการจริงๆคือ optimize โค้ด nested loop นี้ให้เร็วขึ้น เพราะตอนนี้มันช้ามากตอนรันกับข้อมูลจริง", "agent": "code_agent", "batch": 3}
+{"text": "deep dive into the causes of the 1997 Asian financial crisis", "agent": "research_agent", "batch": 1}
+{"text": "Describe the composition, lighting, and color palette used in this piece of artwork as if explaining it to someone studying photography", "agent": "vision_agent", "batch": 2}
+{"text": "describe what's wrong in this error screenshot and fix the underlying bug", "agent": "code_agent", "batch": 3}
+{"text": "what's the derivative of x^3 * sin(x)", "agent": "reasoning_agent", "batch": 1}
+{"text": "แปลประโยคนี้เป็นอังกฤษ: ฉันอยากไปเที่ยวทะเลกับครอบครัว", "agent": "translation_agent", "batch": 1}
+{"text": "เขียนโค้ดแปลง YOLO detection output เป็น bounding box coordinates ที่ normalize แล้ว พร้อมกรองเฉพาะ object ที่ confidence มากกว่า 0.8 หน่อยครับ", "agent": "code_agent", "batch": 2}
+{"text": "convert this for loop to a list comprehension", "agent": "code_agent", "batch": 1}
+{"text": "I want you to generate a highly detailed fantasy illustration depicting an ancient library floating among the clouds, connected to the mainland only by a single spiraling staircase made of stone and moss, with giant tarnished brass telescopes pointed at different constellations from the library's outer balconies, and warm candlelight glowing from every window despite there being no visible source of wind protection at that altitude", "agent": "image_generation_agent", "batch": 4}
+{"text": "Why does my React component re-render infinitely when I update state inside a useEffect hook, and what's the correct way to fix the dependency array here", "agent": "code_agent", "batch": 2}
+{"text": "quick one: what does 'c'est pas grave' mean in casual French", "agent": "translation_agent", "batch": 4}
+{"text": "ขอไขปริศนานี้แบบเร็วๆหน่อยครับ: เด็ก 3 คนอายุรวมกัน 12 ปี คูณกันได้ 12 หาอายุแต่ละคน", "agent": "reasoning_agent", "batch": 3}
+{"text": "หาข้อมูลเชิงลึกเกี่ยวกับผลกระทบของการเปิดเสรีการค้าเสรี RCEP ต่อภาคอุตสาหกรรมอิเล็กทรอนิกส์ของไทยให้หน่อยครับ อยากรู้ทั้งมุมบวกและลบ", "agent": "research_agent", "batch": 2}
+{"text": "how do I set up a virtual environment in python", "agent": "code_agent", "batch": 1}
+{"text": "ช่วยเขียน SQL query ที่ join ตาราง orders กับ customers แล้วหาว่าลูกค้ากลุ่มไหนที่ไม่ได้ซื้อของเลยในช่วง 90 วันที่ผ่านมาหน่อยครับ", "agent": "code_agent", "batch": 2}
+{"text": "จากที่อธิบายไปว่าอยากได้การ์ดเชิญงานเลี้ยงสไตล์ไทยประยุกต์ ลายไทยผสมโมเดิร์น สีทองบนพื้นครีม ช่วยสร้างภาพการ์ดตัวอย่างจริงๆให้ดูหน่อยครับ ไม่ใช่แค่บอกไอเดียเฉยๆ", "agent": "image_generation_agent", "batch": 3}
+{"text": "เขียน unit test สำหรับฟังก์ชัน routing ของระบบ hybrid router ที่ใช้ semantic similarity กับ LLM fallback หน่อยครับ อยากให้ครอบคลุมทั้ง case ที่ match และไม่ match", "agent": "code_agent", "batch": 2}
+{"text": "คำนวณค่า ENP (effective number of parties) จากผลการเลือกตั้งสมมตินี้ พรรค A ได้ 35% พรรค B ได้ 25% พรรค C ได้ 20% พรรค D ได้ 15% และพรรคอื่นๆรวมกัน 5% พร้อมอธิบายสูตรที่ใช้ให้หน่อยครับ", "agent": "reasoning_agent", "batch": 2}
+{"text": "analyze the time complexity proof for this algorithm and implement it in Rust", "agent": "code_agent", "batch": 3}
+{"text": "translate this poem into English but make it rhyme and flow naturally, don't worry about literal accuracy", "agent": "creative_writing_agent", "batch": 3}
+{"text": "how do you say 'thank you very much' in Japanese", "agent": "translation_agent", "batch": 1}
+{"text": "write... no actually just make an image of what I just described", "agent": "image_generation_agent", "batch": 3}
+{"text": "How would a native Korean speaker naturally phrase this Thai business proposal, I don't just want a literal translation but something that sounds professional in Korean culture", "agent": "translation_agent", "batch": 2}
+{"text": "เขียนบทกวีเปรียบเทียบชีวิตกับสายน้ำหน่อยครับ", "agent": "creative_writing_agent", "batch": 1}
+{"text": "write a tiny poem, just 3 lines, about the moon", "agent": "creative_writing_agent", "batch": 4}
+{"text": "analyze this X-ray image and describe what you see structurally", "agent": "vision_agent", "batch": 1}
+{"text": "ช่วยไขปริศนานี้หน่อย: มีคน 3 คน คนหนึ่งพูดจริงเสมอ คนหนึ่งโกหกเสมอ อีกคนพูดสลับกัน หาว่าใครเป็นใคร", "agent": "reasoning_agent", "batch": 1}
+{"text": "write a bash script to backup files daily", "agent": "code_agent", "batch": 1}
+{"text": "quick logic: can a statement be both true and false at the same time in classical logic", "agent": "reasoning_agent", "batch": 4}
+{"text": "translate 'break a leg' and explain the idiom", "agent": "translation_agent", "batch": 1}
+{"text": "ช่วยทำ research brief เกี่ยวกับเทรนด์ data engineering ในธนาคารไทยปี 2026 หน่อยครับ อยากรู้ว่า SCB กับ Kasikorn ใช้เทคโนโลยีอะไรบ้าง", "agent": "research_agent", "batch": 1}
+{"text": "my code works locally but crashes in production, help debug", "agent": "code_agent", "batch": 1}
+{"text": "Generate a set of five simple flat-style icons for a meditation app, representing breathing, sleep, focus, calm, and gratitude", "agent": "image_generation_agent", "batch": 2}
+{"text": "อยากหาซับสคริปชั่นสตรีมมิ่งที่คุ้มค่าที่สุดสำหรับคนดูหนังไม่บ่อย มีตัวไหนแนะนำมั้ยคะ", "agent": "general_assistant", "batch": 4}
+{"text": "Research the economic history of Thailand's rice export policy and how it has shaped the country's agricultural sector over the past three decades", "agent": "research_agent", "batch": 2}
+{"text": "แปลโค้ดชุดนี้จาก Python เป็น Rust ให้หน่อยครับ อธิบายความแตกต่างเรื่อง memory management ระหว่างสองภาษาด้วยก็ได้ รวมถึงเรื่อง ownership กับ borrowing ที่ Rust มีแต่ Python ไม่มี แต่สุดท้ายแล้วผมแค่อยากได้โค้ด Rust ที่ compile ผ่านและรันได้จริงๆ", "agent": "code_agent", "batch": 3}
+{"text": "I have a screenshot of a complex flowchart diagram from an old systems-design textbook, with nested decision boxes and multiple feedback loops — walk me through every box, arrow, and label in the image in the order they connect, so I understand the full process it depicts from start to finish.", "agent": "vision_agent", "batch": 3}
+{"text": "casually: why does the Monty Hall problem feel so counterintuitive", "agent": "reasoning_agent", "batch": 3}
+{"text": "write a poem-style comment explaining this recursive function, but make sure the code actually works", "agent": "code_agent", "batch": 3}
+{"text": "my German colleague texted 'bis später' what's the reply supposed to be", "agent": "translation_agent", "batch": 4}
+{"text": "Can you help translate this legal disclaimer into simplified Thai that an average person without legal background could easily understand", "agent": "translation_agent", "batch": 2}
+{"text": "เขียนฟังก์ชัน Python ที่คำนวณ cosine similarity ระหว่าง embedding vector กับ centroid หลายตัว แล้วคืนค่า agent ที่ similarity สูงสุดพร้อม threshold check หน่อยครับ", "agent": "code_agent", "batch": 2}
+{"text": "I'm attaching a photo of a densely packed spreadsheet screenshot with maybe 40 rows of financial data including revenue, cost, and margin columns — I need you to carefully read every cell, including the small footnotes at the bottom, and transcribe the entire table into text so I can work with it in Excel later.", "agent": "vision_agent", "batch": 3}
+{"text": "quick: does 1 count as a prime number", "agent": "reasoning_agent", "batch": 4}
+{"text": "จากเรื่องสั้นที่คุณเขียนให้ก่อนหน้านี้ ช่วยสร้างภาพปกหนังสือให้หน่อย", "agent": "image_generation_agent", "batch": 3}
+{"text": "Can you walk me through how to set up a simple weekly meal prep routine for someone who works long hours and doesn't have much time to cook on weekdays", "agent": "general_assistant", "batch": 2}
+{"text": "quick, what's a good excuse to leave a boring family gathering early without being rude", "agent": "general_assistant", "batch": 4}
+{"text": "Write lyrics for an indie folk song about returning to a hometown that has changed so much it barely feels familiar anymore", "agent": "creative_writing_agent", "batch": 2}
+{"text": "ช่วยแปลสัญญาเช่าบ้านฉบับนี้จากภาษาอังกฤษเป็นภาษาไทยให้หน่อยครับ ทุกข้อกฎหมายสำคัญมาก โดยเฉพาะเงื่อนไขการคืนเงินมัดจำและค่าปรับต่างๆ อย่าตัดทอนหรือสรุปเด็ดขาด ต้องการความแม่นยำระดับกฎหมายเพราะจะใช้อ้างอิงจริง", "agent": "translation_agent", "batch": 3}
+{"text": "create a logo for a coffee shop called 'Bean There'", "agent": "image_generation_agent", "batch": 1}
+{"text": "เลขทะเบียนรถในรูปคืออะไรคะ", "agent": "vision_agent", "batch": 4}
+{"text": "prove that there are infinitely many prime numbers", "agent": "reasoning_agent", "batch": 1}
+{"text": "ขอบทสนทนาสั้นๆแค่ 4 ประโยคระหว่างคนสองคนที่เพิ่งเลิกกันให้หน่อยค่ะ", "agent": "creative_writing_agent", "batch": 4}
+{"text": "อ่านชื่อยาบนกล่องในรูปนี้ให้หน่อยค่ะ", "agent": "vision_agent", "batch": 4}
+{"text": "ช่วยแปลชื่อสินค้าพวกนี้เป็นภาษาจีนหน่อยครับ", "agent": "translation_agent", "batch": 1}
+{"text": "translate 'ฝนตกหนักมาก รถติดสุดๆ' to casual English, like texting a friend", "agent": "translation_agent", "batch": 4}
+{"text": "ทำไม npm install ค้างอยู่ที่ 90% ตลอดเลย ลองหลายวิธีแล้วก็ยังไม่หาย", "agent": "code_agent", "batch": 4}
+{"text": "quick check, is the sky in this photo during sunrise or sunset", "agent": "vision_agent", "batch": 4}
+{"text": "What are some low-cost ways to make my home office feel more inspiring without spending a fortune on new furniture", "agent": "general_assistant", "batch": 2}
+{"text": "ในภาพถ่ายนี้เป็นใบเสร็จร้านอาหารยาวๆที่มีรายการอาหารประมาณ 15 อย่างรวมถึงส่วนลดและภาษีมูลค่าเพิ่ม ช่วยอ่านและแจกแจงราคาทุกรายการ พร้อมยอดรวมสุดท้ายให้ครบถ้วนหน่อยครับ อย่าให้ตกหล่นแม้แต่รายการเดียว", "agent": "vision_agent", "batch": 3}
+{"text": "Explain the mathematical proof behind why hash tables have O(1) average lookup time, walk through the amortized analysis if you want to be thorough, maybe with a diagram in your head of the load factor, then implement a simple hash table from scratch in Python for me with collision handling via chaining.", "agent": "code_agent", "batch": 3}
+{"text": "why is my PyTorch Lightning validation_step not returning values", "agent": "code_agent", "batch": 1}
+{"text": "Generate a surreal digital art piece of a giant whale swimming through a sky full of clouds above a quiet countryside village", "agent": "image_generation_agent", "batch": 2}
+{"text": "คำนวณความน่าจะเป็นแบบละเอียดหน่อยครับ ถ้าจั่วไพ่ 5 ใบจากสำรับ 52 ใบ โอกาสที่จะได้ flush เท่ากับเท่าไหร่ ขอเห็นขั้นตอนการคำนวณทั้งหมดตั้งแต่การนับ combination ไปจนถึงผลลัพธ์สุดท้าย", "agent": "reasoning_agent", "batch": 3}
+{"text": "ช่วยแต่งเพลงกล่อมเด็กเป็นภาษาไทยหน่อยครับ", "agent": "creative_writing_agent", "batch": 1}
+{"text": "just need a placeholder image of a generic office building, nothing special", "agent": "image_generation_agent", "batch": 4}
+{"text": "แต่งนิยายรักสั้นๆ แนวย้อนยุครัตนโกสินทร์ให้หน่อยค่ะ", "agent": "creative_writing_agent", "batch": 1}
+{"text": "ช่วยเขียนเรื่องสั้นแนวสยองขวัญ ฉากอยู่ในบ้านร้างกลางกรุงเทพหน่อยครับ", "agent": "creative_writing_agent", "batch": 1}
+{"text": "คำนวณอนุพันธ์ของฟังก์ชัน f(x) = ln(x^2 + 1) คูณกับ e^x แบบละเอียดทีละขั้นตอน พร้อมอธิบายกฎที่ใช้ในแต่ละขั้นให้หน่อยครับ", "agent": "reasoning_agent", "batch": 2}
+{"text": "make it look like this photo I'm showing you, but as an anime version", "agent": "image_generation_agent", "batch": 3}
+{"text": "หาพื้นที่ใต้กราฟของฟังก์ชัน f(x) = sin(x) จาก 0 ถึง pi โดยใช้ปริพันธ์ พร้อมอธิบายความหมายทางเรขาคณิตของคำตอบที่ได้ให้หน่อยครับ", "agent": "reasoning_agent", "batch": 2}
+{"text": "how do you say numbers 1-10 in Vietnamese", "agent": "translation_agent", "batch": 1}
+{"text": "อธิบายภาพนี้ให้ละเอียดที่สุดเสมือนอธิบายให้คนตาบอดฟัง โดยเน้นบรรยากาศ สี และตำแหน่งของสิ่งของต่างๆในภาพ", "agent": "vision_agent", "batch": 2}
+{"text": "what does this chart show about quarterly revenue", "agent": "vision_agent", "batch": 1}
+{"text": "ขอสรุปสั้นๆหน่อยครับ สงครามเย็นเริ่มต้นเพราะอะไร", "agent": "research_agent", "batch": 4}
+{"text": "convert this snake_case variable list to camelCase, just paste back the result", "agent": "code_agent", "batch": 4}
+{"text": "Describe the layout and key visual elements of this website screenshot, including the navigation menu, main content area, and any call-to-action buttons", "agent": "vision_agent", "batch": 2}
+{"text": "แปลข้อความทางการนี้เป็นภาษาอังกฤษหน่อย ต้องใช้ยื่นวีซ่า", "agent": "translation_agent", "batch": 3}
+{"text": "ช่วยดูภาพหน้าจอ error นี้ทีครับ อ่านให้หน่อยว่ามันบอกอะไร บรรทัดไหนที่เป็นปัญหา แล้วก็อธิบายว่าทำไมมันเกิดขึ้นในเชิงเทคนิค สุดท้ายก็คือช่วย fix โค้ดให้หน่อยด้วยครับ พร้อมทดสอบว่ามันรันผ่านจริง", "agent": "code_agent", "batch": 3}
+{"text": "ปริศนาเร็วๆ: มีลูกบอล 8 ลูก หนักเท่ากันหมดยกเว้นลูกหนึ่งที่หนักกว่า ใช้ตาชั่งแบบคาน 2 ครั้งหาลูกที่หนักกว่าได้ยังไง", "agent": "reasoning_agent", "batch": 4}
+{"text": "how do I use git rebase interactively", "agent": "code_agent", "batch": 1}
+{"text": "หาข้อมูลเชิงลึกเกี่ยวกับกฎหมายแรงงานไทยสำหรับพนักงาน part-time หน่อยค่ะ", "agent": "research_agent", "batch": 1}
+{"text": "ช่วยสร้างภาพ banner สำหรับหน้าเว็บไซต์ร้านขายเสื้อผ้าหน่อย ธีมมินิมอล", "agent": "image_generation_agent", "batch": 1}
+{"text": "ช่วยแต่งเพลงกล่อมเด็กเป็นภาษาไทยเกี่ยวกับดวงจันทร์ที่คอยดูแลเด็กๆทุกคนตอนหลับให้หน่อยครับ อยากให้มีทำนองอ่อนโยนและเนื้อร้องซ้ำง่าย", "agent": "creative_writing_agent", "batch": 2}
+{"text": "หาข้อมูลพื้นหลังเกี่ยวกับการเปลี่ยนแปลงโครงสร้างประชากรของไทยที่กำลังเข้าสู่สังคมผู้สูงอายุอย่างสมบูรณ์ และผลกระทบต่อระบบแรงงานในอนาคตให้หน่อยครับ", "agent": "research_agent", "batch": 2}
+{"text": "ช่วยแปลงตารางในรูปนี้เป็นข้อมูลที่ใช้ได้หน่อย เป็น invoice ที่สแกนมา", "agent": "vision_agent", "batch": 1}
+{"text": "รีเสิร์ชให้แน่นๆหน่อยครับ เรื่องนโยบายพลังงานหมุนเวียนของไทยเทียบกับเพื่อนบ้าน", "agent": "research_agent", "batch": 3}
+{"text": "Translate this restaurant menu from Thai to English but also add short explanations for dishes that don't have a direct English equivalent", "agent": "translation_agent", "batch": 2}
+{"text": "Debug why I keep waking up tired, run some kind of analysis on my sleep habits over the past two weeks that I described earlier, cross-reference it with my caffeine intake, and generate me an optimized routine — basically just chat with me about how to sleep better, nothing clinical, nothing with citations.", "agent": "general_assistant", "batch": 3}
+{"text": "how many people in this pic", "agent": "vision_agent", "batch": 4}
+{"text": "Convert this academic abstract, originally in German, into natural English — keep the technical terminology precise since this will be cited in a paper I'm submitting, and make sure the passive constructions typical of German academic writing read naturally in English.", "agent": "translation_agent", "batch": 3}
+{"text": "ช่วยสร้างภาพซุปเปอร์ฮีโร่เวอร์ชั่นแมวให้หน่อยครับ", "agent": "image_generation_agent", "batch": 4}
+{"text": "อ่านป้ายทะเบียนรถและยี่ห้อรุ่นรถจากภาพนี้ให้หน่อยครับ ภาพอาจจะเบลอนิดหน่อยเพราะถ่ายตอนรถกำลังวิ่ง", "agent": "vision_agent", "batch": 2}
+{"text": "just casually, what's the deal with the 2008 financial crisis", "agent": "research_agent", "batch": 3}
+{"text": "I received a long legal notice in French regarding a property dispute with a neighbor over a shared fence — please translate the whole thing into English, this is important and I need every clause understood correctly before I respond to my lawyer.", "agent": "translation_agent", "batch": 3}
+{"text": "What does this scatter plot suggest about the relationship between the two variables shown, and are there any visible outliers worth noting", "agent": "vision_agent", "batch": 2}
+{"text": "แปลข้อความในสัญญาเช่าบ้านนี้จากภาษาไทยเป็นภาษาอังกฤษให้หน่อยค่ะ ผู้เช่าเป็นชาวต่างชาติที่ไม่เข้าใจภาษาไทยเลย", "agent": "translation_agent", "batch": 2}
+{"text": "casually curious: what do multiple studies say about screen time and kids", "agent": "research_agent", "batch": 3}
+{"text": "Solve the optimization problem of how I should spend my entire Saturday to maximize happiness given constraints of budget, energy levels, weather forecast, and social obligations — feel free to set up the objective function properly, or just casually suggest something fun to do instead.", "agent": "general_assistant", "batch": 3}
+{"text": "write lyrics for a love song in the style of indie folk", "agent": "creative_writing_agent", "batch": 1}
+{"text": "This is a photo of a handwritten lab notebook page with several chemical equations, arrows showing reaction pathways, and small diagrams scribbled in the margins — please transcribe everything you can make out, including the diagrams' labels and any annotations near the arrows.", "agent": "vision_agent", "batch": 3}
+{"text": "planning a picnic this weekend, what should go on the checklist besides food and mats", "agent": "general_assistant", "batch": 4}
+{"text": "Design a minimalist logo concept for a sustainable clothing brand that uses earthy tones and incorporates a leaf motif subtly into the typography", "agent": "image_generation_agent", "batch": 2}
+{"text": "หาข้อมูลเชิงลึกเกี่ยวกับประวัติศาสตร์และพัฒนาการของระบบภาษีมูลค่าเพิ่ม (VAT) ในประเทศไทยตั้งแต่เริ่มบังคับใช้จนถึงปัจจุบัน รวมถึงเหตุผลเชิงนโยบายที่ทำให้อัตราคงที่อยู่ที่ 7% มาอย่างยาวนานทั้งที่มีการพูดถึงการปรับขึ้นหลายครั้ง และผลกระทบต่อผู้บริโภคกลุ่มรายได้น้อยเมื่อเทียบกับกลุ่มรายได้สูงให้หน่อยครับ อยากได้แหล่งอ้างอิงทางวิชาการประกอบด้วย", "agent": "research_agent", "batch": 4}
+{"text": "ช่วยอ่านตัวหนังสือในรูปนี้หน่อย", "agent": "vision_agent", "batch": 1}
+{"text": "ช่วยสรุปงานวิจัยเกี่ยวกับ fair credit scoring และ AIF360 หน่อย", "agent": "research_agent", "batch": 1}
+{"text": "quick: what's the probability of flipping heads 3 times in a row", "agent": "reasoning_agent", "batch": 4}
+{"text": "create an image of a Thai temple at night with lanterns", "agent": "image_generation_agent", "batch": 1}
+{"text": "We talked through the layout for my restaurant's new menu design conceptually, including the two-column format and the dessert section at the bottom — now generate an actual visual mockup image of what that menu page could look like printed on card stock.", "agent": "image_generation_agent", "batch": 3}
+{"text": "compose a villanelle about loss and memory", "agent": "creative_writing_agent", "batch": 1}
+{"text": "What should I consider before adopting a dog for the first time if I live in a small apartment and work full time", "agent": "general_assistant", "batch": 2}
+{"text": "เบื่อ routine เดิมๆมากแล้ว อยาก switch up ชีวิตหน่อย มี suggestion อะไรบ้างมั้ยที่ทำได้ง่ายๆในงบจำกัด", "agent": "general_assistant", "batch": 4}
+{"text": "extract the text from this scanned document", "agent": "vision_agent", "batch": 1}
+{"text": "quick: is remote work actually more productive or is that a myth, one source enough", "agent": "research_agent", "batch": 4}
+{"text": "ขอภาพดอกไม้สวยๆพื้นหลังขาวหน่อยค่ะ", "agent": "image_generation_agent", "batch": 4}
+{"text": "if a train leaves at 3pm going 80mph and another leaves at 4pm going 100mph, when do they meet", "agent": "reasoning_agent", "batch": 1}
+{"text": "สร้างภาพประกอบตัวการ์ตูนแมวนักบินอวกาศกำลังลอยอยู่กลางอวกาศ ล้อมรอบด้วยดาวและดาวเคราะห์สีสันสดใสสำหรับหนังสือเด็กหน่อยครับ", "agent": "image_generation_agent", "batch": 2}
+{"text": "ช่วยทำสรุปงานวิจัยเกี่ยวกับผลของการทำสมาธิต่อการทำงานของสมองในระยะยาวจากมุมมองประสาทวิทยาให้หน่อยครับ", "agent": "research_agent", "batch": 2}
+{"text": "write a monologue for a character who just lost their job", "agent": "creative_writing_agent", "batch": 1}
+{"text": "สร้างโลโก้ร้านชานมไข่มุกสไตล์น่ารักๆให้หน่อยค่ะ ใช้สีพาสเทล", "agent": "image_generation_agent", "batch": 4}
+{"text": "quick one: is Python's GIL removed in the newest version or still there", "agent": "code_agent", "batch": 4}
+{"text": "Write a slam poetry piece about the quiet loneliness of moving to a big city alone for the first time, chasing a dream nobody else believes in", "agent": "creative_writing_agent", "batch": 2}
+{"text": "ช่วยเขียน SQL query ดึงข้อมูลลูกค้าที่ซื้อมากกว่า 3 ครั้งหน่อย", "agent": "code_agent", "batch": 1}
+{"text": "เขียนคำคมสั้นๆเกี่ยวกับมิตรภาพให้หน่อยครับ", "agent": "creative_writing_agent", "batch": 4}
+{"text": "Research the historical timeline of Thailand's central bank digital currency pilot programs and how they compare to similar initiatives in other ASEAN countries", "agent": "research_agent", "batch": 2}
+{"text": "แปลชื่อเมนู 'ผัดกะเพราหมูสับ' เป็นอังกฤษให้ฟังดูน่าสั่งหน่อยค่ะ ลูกค้าฝรั่ง", "agent": "translation_agent", "batch": 4}
+{"text": "generate me a quick to-do list for tomorrow, nothing fancy", "agent": "general_assistant", "batch": 3}
+{"text": "fix this python code", "agent": "code_agent", "batch": 1}
+{"text": "เขียน FastAPI endpoint สำหรับ upload ไฟล์หน่อย", "agent": "code_agent", "batch": 1}
+{"text": "ช่วยดูภาพนี้แล้วบอกว่าอาการบาดเจ็บที่เห็นบนผิวหนังมีลักษณะแบบไหน โดยเน้นเพื่อการอธิบายทั่วไปเท่านั้นไม่ใช่การวินิจฉัยทางการแพทย์ครับ", "agent": "vision_agent", "batch": 2}
+{"text": "generate a simple icon of a house, flat style", "agent": "image_generation_agent", "batch": 4}
+{"text": "แปลความรู้สึกตอนนี้ของฉันเป็นคำพูดหน่อย คือรู้สึกเบื่อๆ", "agent": "general_assistant", "batch": 3}
+{"text": "ช่วยแปลงรูปนี้ให้เป็นสไตล์ภาพวาดสีน้ำหน่อยครับ", "agent": "image_generation_agent", "batch": 3}
+{"text": "Can you suggest a simple morning stretching routine that takes only ten minutes and helps with lower back stiffness from sitting all day", "agent": "general_assistant", "batch": 2}
+{"text": "ช่วยพิสูจน์อย่างละเอียดหน่อยครับว่าทำไมการหารด้วยศูนย์ถึงไม่มีนิยามทางคณิตศาสตร์ อยากเห็นทั้งมุมมองจาก limit และมุมมองจาก field axioms ว่าทำไมมันขัดแย้งกับโครงสร้างพีชคณิตพื้นฐาน", "agent": "reasoning_agent", "batch": 4}
+{"text": "write me a poem about the rain", "agent": "creative_writing_agent", "batch": 1}
+{"text": "อ่านป้ายทะเบียนในรูปนี้แล้วบอกจังหวัดหน่อย", "agent": "vision_agent", "batch": 3}
+{"text": "อยากได้ playlist เพลงชิลๆฟังตอนทำงาน มีแนวไหนแนะนำบ้างคะ ไม่เอาเพลงมีเนื้อร้องเยอะ", "agent": "general_assistant", "batch": 4}
+{"text": "quick: is the square root of -1 a real number", "agent": "reasoning_agent", "batch": 4}
+{"text": "how many items are on this receipt total", "agent": "vision_agent", "batch": 4}
+{"text": "ช่วยไขโจทย์นี้หน่อยครับ ถังน้ำ 3 ใบจุ 8, 5 และ 3 ลิตร ถังใหญ่เต็มน้ำอยู่ 8 ลิตร อีกสองถังว่างเปล่า จะแบ่งน้ำให้ได้ 4 ลิตรเท่ากันสองถังได้ยังไงโดยไม่ใช้เครื่องมืออื่นวัด", "agent": "reasoning_agent", "batch": 2}
+{"text": "เขียนโค้ด python เช็คว่าเลขเป็นจำนวนเฉพาะมั้ย", "agent": "code_agent", "batch": 1}
+{"text": "If it takes 8 workers 12 days to build a wall, how many days would it take 5 workers to build a wall twice as long, assuming the same work rate per person", "agent": "reasoning_agent", "batch": 2}
+{"text": "แต่งนิทานก่อนนอนให้ลูกฟังหน่อยครับ เกี่ยวกับหมีน้อยที่หลงป่า", "agent": "creative_writing_agent", "batch": 1}
+{"text": "translate this code from Python to JavaScript", "agent": "code_agent", "batch": 3}
+{"text": "เล่าเรื่องตลกให้ฟังหน่อย", "agent": "general_assistant", "batch": 1}
+{"text": "research the history of Thai constitutional monarchy", "agent": "research_agent", "batch": 1}
+{"text": "ช่วยแต่งเรื่องแต่งจากข้อมูลการเลือกตั้งที่เราคุยกันไว้ ให้เป็นนิยายการเมืองสมมติหน่อยครับ", "agent": "creative_writing_agent", "batch": 3}
+{"text": "What's the weather like today?", "agent": "general_assistant", "batch": 1}
+{"text": "Create a set of app icon variations for a fitness tracking app in blue, orange, and green color schemes to test which one looks best", "agent": "image_generation_agent", "batch": 2}
+{"text": "I'm hosting a small dinner party for six people this weekend and I have no idea what theme to go with, can you help me brainstorm some options along with a rough shopping list", "agent": "general_assistant", "batch": 2}
+{"text": "what does 'c'est la vie' mean", "agent": "translation_agent", "batch": 1}
+{"text": "Can you recommend a good podcast about tech?", "agent": "general_assistant", "batch": 1}
+{"text": "just the phrase: 'ยินดีต้อนรับ' in 4 languages please, quick list", "agent": "translation_agent", "batch": 4}
+{"text": "create a profile picture with a cyberpunk aesthetic", "agent": "image_generation_agent", "batch": 1}
+{"text": "ช่วยสร้างภาพ mockup สำหรับบรรจุภัณฑ์สินค้าออร์แกนิกหน่อยค่ะ", "agent": "image_generation_agent", "batch": 1}
+{"text": "translate this long WhatsApp conversation thread from Thai to English for my manager, casual tone is fine, full thread pasted below", "agent": "translation_agent", "batch": 4}
+{"text": "ช่วยแนะนำกิจกรรมทำกับครอบครัวช่วงวันหยุดยาวหน่อยครับ อยากได้อะไรที่ไม่ต้องเดินทางไกลจากบ้าน", "agent": "general_assistant", "batch": 1}
+{"text": "based on this data trend, write a narrative story personifying the numbers", "agent": "creative_writing_agent", "batch": 3}
+{"text": "อยากลองทำ meal prep ครั้งแรกในชีวิต มีขั้นตอนง่ายๆสำหรับมือใหม่แนะนำมั้ยคะ", "agent": "general_assistant", "batch": 4}
+{"text": "สร้างภาพโปสเตอร์คอนเสิร์ตดนตรีแจ๊สสไตล์ย้อนยุค 1960s ให้หน่อยครับ ใช้โทนสีน้ำตาลทองและตัวหนังสือแบบวินเทจ", "agent": "image_generation_agent", "batch": 2}
+{"text": "write just the opening line of a novel, something gripping", "agent": "creative_writing_agent", "batch": 4}
+{"text": "quick logic: three switches, one bulb, how do you figure out which switch controls it in one trip", "agent": "reasoning_agent", "batch": 3}
+{"text": "can u give me a one-line excuse for being late to a meeting, something believable pls 😅", "agent": "general_assistant", "batch": 4}
+{"text": "This is a photo of a dense academic poster from a machine learning conference, packed with three separate charts, a methodology diagram, and several paragraphs of small text explaining the results — describe everything visible in as much detail as you reasonably can.", "agent": "vision_agent", "batch": 3}
+{"text": "explain async/await in javascript", "agent": "code_agent", "batch": 1}
+{"text": "ช่วยพิสูจน์ให้ดูหน่อยครับแบบละเอียดทีละขั้นตอนว่าทำไมจำนวนเฉพาะถึงมีอนันต์ตัว อยากเห็นตรรกะการพิสูจน์แบบ Euclid เต็มรูปแบบ ตั้งแต่สมมติฐานที่ใช้พิสูจน์แย้งไปจนถึงข้อสรุป", "agent": "reasoning_agent", "batch": 3}
+{"text": "แนะนำที่เที่ยวเชียงใหม่ 3 วัน 2 คืนหน่อยครับ อยากไปแนวธรรมชาติ ไม่รีบ ไม่ต้องเดินเยอะ", "agent": "general_assistant", "batch": 1}
+{"text": "design a t-shirt graphic with a retro synthwave theme", "agent": "image_generation_agent", "batch": 1}
+{"text": "ช่วยคิดเลขนี้หน่อยค่ะ 15% ของ 850 บวกกับ 20% ของ 1200 เท่ากับเท่าไหร่", "agent": "reasoning_agent", "batch": 1}
+{"text": "quick: what caused the dot-com bubble to burst in 2000", "agent": "research_agent", "batch": 4}
+{"text": "ช่วยแต่งเรื่องสั้นแนวสยองขวัญความยาวประมาณ 800 คำ ฉากอยู่ในโรงพยาบาลร้างกลางกรุงเทพที่มีเสียงประกาศจากลำโพงในเวลากลางคืนหน่อยครับ", "agent": "creative_writing_agent", "batch": 2}
+{"text": "Can you translate this product description from English into Thai while keeping the marketing tone persuasive and not too literal or stiff", "agent": "translation_agent", "batch": 2}
+{"text": "explain quantum entanglement, but as a bedtime story for a 6 year old", "agent": "creative_writing_agent", "batch": 3}
+{"text": "give me one witty one-liner a villain might say before losing", "agent": "creative_writing_agent", "batch": 4}
+{"text": "optimize my grocery list, keep it casual", "agent": "general_assistant", "batch": 3}
+{"text": "solve this optimization problem: minimize cost subject to these constraints", "agent": "reasoning_agent", "batch": 1}
+{"text": "Write a Shakespearean-style sonnet about a sailor who falls in love with the sea itself rather than any person", "agent": "creative_writing_agent", "batch": 2}
+{"text": "research the effectiveness of remote work policies post-pandemic", "agent": "research_agent", "batch": 1}
+{"text": "can you set a reminder for me", "agent": "general_assistant", "batch": 1}
+{"text": "translate this contract clause into Thai legal terminology", "agent": "translation_agent", "batch": 1}
+{"text": "ช่วยแนะนำกิจกรรมทำร่วมกับเด็กอายุ 5 ขวบในวันฝนตกที่ต้องอยู่แต่ในบ้านหน่อยครับ อยากได้อะไรที่สนุกและได้เรียนรู้ไปด้วย", "agent": "general_assistant", "batch": 2}
+{"text": "translate this chat log from Thai to English, casual tone is fine", "agent": "translation_agent", "batch": 3}
+{"text": "แนะนำร้านอาหารแถวสยามหน่อย", "agent": "general_assistant", "batch": 1}
+{"text": "สร้างภาพวิวภูเขาหิมะสไตล์ minimalist line art ให้หน่อยครับ", "agent": "image_generation_agent", "batch": 4}
+{"text": "วาดภาพตัวการ์ตูนแมวใส่หมวกนักบินอวกาศให้หน่อย", "agent": "image_generation_agent", "batch": 1}
+{"text": "write a 2-line joke about Mondays", "agent": "creative_writing_agent", "batch": 4}
+{"text": "แปลโค้ดนี้จาก Java เป็น Python ให้หน่อยครับ", "agent": "code_agent", "batch": 3}
+{"text": "quick, count the number of windows in this building photo", "agent": "vision_agent", "batch": 4}
+{"text": "เขียนกลอนแปดวันเกิดให้เพื่อนสนิทหน่อยครับ อยากให้มีทั้งความตลกและความซาบซึ้งปนกัน ยาวสัก 4 บท", "agent": "creative_writing_agent", "batch": 2}
+{"text": "แปลเอกสารนี้จากภาษาอังกฤษเป็นไทยให้หน่อย", "agent": "translation_agent", "batch": 1}
+{"text": "translate this paragraph but keep the tone casual", "agent": "translation_agent", "batch": 1}
+{"text": "คำนวณ ENP (effective number of parties) จากผลคะแนนเลือกตั้งนี้: พรรค A 40%, B 30%, C 20%, D 10%", "agent": "reasoning_agent", "batch": 1}
+{"text": "Walk me through, with full mathematical rigor and no skipped steps, why the Banach-Tarski paradox seems to imply you can split a sphere into pieces and reassemble them into two spheres identical to the original — I want to actually understand where the non-measurable sets come into play and why this doesn't violate conservation of volume in any physically meaningful way", "agent": "reasoning_agent", "batch": 4}
+{"text": "what are the main theories on the origins of the universe", "agent": "research_agent", "batch": 1}
+{"text": "สร้างภาพหมาวิ่งเล่นชายหาดให้หน่อย", "agent": "image_generation_agent", "batch": 4}
+{"text": "อ่านตัวเลขบนนาฬิกาในรูปให้หน่อย", "agent": "vision_agent", "batch": 4}
+{"text": "quick q: does JavaScript have true multithreading or is it all just event loop tricks", "agent": "code_agent", "batch": 4}
+{"text": "How do I properly set up a CI/CD pipeline using GitHub Actions that runs unit tests, builds a Docker image, and pushes it to a container registry on every merge to main", "agent": "code_agent", "batch": 2}
+{"text": "ช่วยพิสูจน์ว่าจำนวนเฉพาะมีอยู่มากมายไม่มีที่สิ้นสุด โดยใช้วิธีการพิสูจน์แบบ Euclid ที่เริ่มจากการสมมติว่ามีจำนวนเฉพาะจำกัด", "agent": "reasoning_agent", "batch": 2}
+{"text": "What is the sentiment or emotion conveyed by the facial expressions of the people in this group photo, and does the body language support that interpretation", "agent": "vision_agent", "batch": 2}
+{"text": "explain this Thai proverb's meaning in English, just the gist", "agent": "translation_agent", "batch": 3}
+{"text": "อ่านให้หน่อย ป้ายนี้เขียนว่าอะไร", "agent": "vision_agent", "batch": 4}
+{"text": "explain this in plain English then give me the working implementation", "agent": "code_agent", "batch": 3}
+{"text": "คำนวณความน่าจะเป็นที่จะได้ไพ่ King อย่างน้อย 1 ใบ จากการจั่ว 5 ใบจากสำรับ 52 ใบ", "agent": "reasoning_agent", "batch": 1}
+{"text": "ในภาพนี้ท้องฟ้าสีอะไร ดูเหมือนฝนจะตกมั้ย", "agent": "vision_agent", "batch": 4}
+{"text": "ช่วยรีเสิร์ชแบบจริงจังให้หน่อยครับ เกี่ยวกับผลของนโยบายค่าแรงขั้นต่ำต่อการจ้างงานในประเทศกำลังพัฒนา มีงานวิจัยเชิงประจักษ์อะไรบ้างที่สนับสนุนหรือคัดค้านสมมติฐานทางเศรษฐศาสตร์ดั้งเดิม", "agent": "research_agent", "batch": 3}
+{"text": "ช่วยรีเสิร์ชประวัติศาสตร์เศรษฐกิจไทยช่วงวิกฤตต้มยำกุ้งหน่อยครับ", "agent": "research_agent", "batch": 1}
+{"text": "Compile a thorough research summary on the current debate around central bank digital currencies, including arguments from both proponents who cite financial inclusion benefits and critics who raise privacy and monetary control concerns, with citations for each side.", "agent": "research_agent", "batch": 3}
+{"text": "generate a minimalist poster for a jazz concert", "agent": "image_generation_agent", "batch": 1}
+{"text": "quick: what's 7 times 8 plus 12", "agent": "reasoning_agent", "batch": 4}
+{"text": "Create a photorealistic mockup of a skincare product bottle sitting on a marble countertop with soft natural lighting from a nearby window", "agent": "image_generation_agent", "batch": 2}
+{"text": "อยากเปลี่ยนบรรยากาศห้องนอนใหม่โดยไม่ต้องซื้อเฟอร์นิเจอร์เพิ่ม มีไอเดียจัดห้องงบน้อยแต่ดูดีขึ้นแนะนำไหมคะ", "agent": "general_assistant", "batch": 2}
+{"text": "ช่วยดูภาพสไลด์ PowerPoint ที่ถ่ายมานี้แล้วสรุปเนื้อหาหลักในแต่ละสไลด์ให้เป็นข้อความที่อ่านง่ายหน่อยครับ", "agent": "vision_agent", "batch": 2}
+{"text": "อันนี้เป็นสุนัขพันธุ์อะไรคะ", "agent": "vision_agent", "batch": 4}
+{"text": "Walk me through, step by step and with full rigor, why the P vs NP problem is considered one of the hardest open questions in computer science — I want the actual logical structure of the problem, the definitions of complexity classes involved, and why a proof either way would be so consequential, not just a surface summary.", "agent": "reasoning_agent", "batch": 3}
+{"text": "based on this data chart, create a fun infographic version", "agent": "image_generation_agent", "batch": 3}
+{"text": "Generate an image combining a lighthouse and a giant sea turtle carrying it on its back, floating through a starry night ocean in a dreamlike style", "agent": "image_generation_agent", "batch": 2}
+{"text": "hi", "agent": "general_assistant", "batch": 1}
+{"text": "I'm writing a thesis on multi-centroid clustering for semantic routing, could you find and summarize related academic work on adaptive k-means for embedding spaces", "agent": "research_agent", "batch": 2}
+{"text": "ช่วยอ่านสูตรอาหารจากภาพตำราเก่าลายมือนี้ให้หน่อยครับ บางคำอาจจะเลือนหรืออ่านยาก ช่วยเดาจากบริบทให้ด้วย", "agent": "vision_agent", "batch": 2}
+{"text": "research Thai SET stock market regulations for algorithmic trading", "agent": "research_agent", "batch": 1}

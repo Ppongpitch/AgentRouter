@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+pydantic
+sentence-transformers
+scikit-learn
+numpy
+langchain-core
+langchain-openai
+torch
+transformers
+sentencepiece
+python-dotenv
+requests
+psycopg2-binary
