@@ -29,7 +29,7 @@ RUN pip install --no-cache-dir \
 # otherwise) — safetensors loading sidesteps it entirely regardless of
 # torch version.
 RUN python -c "from sentence_transformers import SentenceTransformer; \
-    SentenceTransformer('BAAI/bge-m3', model_kwargs={'use_safetensors': True})"
+    SentenceTransformer('BAAI/bge-m3', model_kwargs={'use_safetensors': False})"
 
 # Pre-download the XLM-R tokenizer too (small, and independent of whether
 # you actually have a trained checkpoint yet — see the best.ckpt download below).

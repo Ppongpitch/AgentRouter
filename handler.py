@@ -98,7 +98,7 @@ def _load_seeds_from_train_jsonl(agents_raw: list, train_path: str) -> None:
 
 
 print(f"[init] Loading embedder '{EMBED_MODEL}' ...")
-embedder = SentenceTransformer(EMBED_MODEL, model_kwargs={"use_safetensors": True})
+embedder = SentenceTransformer(EMBED_MODEL, model_kwargs={"use_safetensors": False})
 print("[init] Embedder ready.")
 
 print(f"[init] Loading agents from '{AGENTS_JSON_PATH}' ...")
