@@ -13,8 +13,8 @@ WORKDIR /app
 # torch & torchvision are already in the base image.
 # Only install what's missing for our workload.
 RUN pip install --no-cache-dir \
-    sentence-transformers \
-    transformers \
+    transformers==4.44.2 \
+    sentence-transformers==3.0.1 \
     sentencepiece \
     scikit-learn \
     numpy \
