@@ -4,3 +4,4 @@ model/
 oldcode/
 .env
 .env.*
+dbcode/

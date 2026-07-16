@@ -6,22 +6,15 @@ other module is a pure library (no side effects beyond what they're
 explicitly asked to do).
 
 Responsibilities:
-  1. Load config, embedder, agents once at startup.
-  2. Load seed embeddings from PostgreSQL into an in-memory dict (this
-     is now the ONLY persistence layer — the old local embedding_cache.pkl
-     file is gone). If the DB has nothing yet for a capability, bootstrap
-     it from capability_agents.json's inline seeds + train.jsonl, embed
-     them, then write them into Postgres so future runs load from there.
-  3. Build the AgentStore + LLM client.
-  4. Serve a simple HTML page (static/index.html).
-  5. Expose POST /api/route so the page's JS can call the router and get
+  1. Load config, embedder, agents, seeds (train.jsonl), and the
+     embedding cache once at startup.
+  2. Build the AgentStore + LLM client.
+  3. Serve a simple HTML page (static/index.html).
+  4. Expose POST /api/route so the page's JS can call the router and get
      a JSON result back (routing decision + tier + actual agent answer).
-  6. On every request: if a seed got appended (Tier 2 / LLM route), write
-     it into Postgres immediately, AND log the request (prompt, user's
-     stated expectation, what got routed, the answer) into query_log.
-  7. On shutdown: close the DB pool and clear the in-memory seed cache —
-     Postgres is the only thing that persists across restarts now.
-  8. Run locally via `python main.py` (uvicorn under the hood).
+  5. Persist the embedding cache to disk so seeds already embedded once
+     are never re-embedded on the next run.
+  6. Run locally via `python main.py` (uvicorn under the hood).
 """
 
 import os
@@ -35,9 +28,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 import config
-import db
 from agent_store import AgentStore, load_agents_json, load_seeds_from_train_jsonl
 from embedder import load_embedder
+from embedding_cache import load_cache
 from llm_router import build_llm_client
 from router import adaptive_route
 from xlmr_router import XLMRClassifier
@@ -47,10 +40,9 @@ print(f"Loading embedder: {config.EMBED_MODEL} ...")
 embedder = load_embedder(config.EMBED_MODEL)
 print("Embedder ready.")
 
-print(f"Connecting to PostgreSQL ...")
-db_pool = db.create_pool(config.POSTGRES_DSN)
-db.init_schema(db_pool)
-print("PostgreSQL connected, schema ready.")
+embedding_cache = load_cache(config.EMBEDDING_CACHE_PATH)
+print(f"Loaded embedding cache: {len(embedding_cache)} cached vectors "
+      f"from {config.EMBEDDING_CACHE_PATH}")
 
 if os.path.exists(config.AGENTS_JSON_PATH):
     agents_raw = load_agents_json(config.AGENTS_JSON_PATH)
@@ -61,57 +53,26 @@ else:
         f"Set AGENTS_JSON_PATH env var or place the file next to main.py."
     )
 
-# ── Load seeds from Postgres — this replaces the old local pickle cache ──
-db_seeds = db.load_all_seeds(db_pool, config.EMBED_MODEL)
-seed_embedding_cache: dict = {}
-already_in_db = set()
-
-for ag in agents_raw:
-    cap = ag["capability"]
-    rows = db_seeds.get(cap)
-    if rows:
-        # DB is the source of truth for this agent's seeds — replace the
-        # inline seeds from capability_agents.json entirely.
-        ag["seeds"] = [text for text, _ in rows]
-        for text, embedding in rows:
-            seed_embedding_cache[text] = embedding
-        already_in_db.add(cap)
-        print(f"   {cap:<40} loaded {len(rows)} seeds from Postgres")
-    else:
-        print(f"   {cap:<40} nothing in Postgres yet — will bootstrap")
-
-# For any capability NOT yet in Postgres, merge in train.jsonl seeds too
-# (matches the original bootstrap behavior) — but skip capabilities
-# already loaded from the DB, to avoid duplicating/re-merging seeds.
 if os.path.exists(config.TRAIN_JSONL_PATH):
-    stats = load_seeds_from_train_jsonl(
-        agents_raw, config.TRAIN_JSONL_PATH, skip_capabilities=already_in_db
-    )
+    stats = load_seeds_from_train_jsonl(agents_raw, config.TRAIN_JSONL_PATH)
     print(
-        f"Loaded seeds from {config.TRAIN_JSONL_PATH} for not-yet-bootstrapped agents: "
+        f"Loaded seeds from {config.TRAIN_JSONL_PATH}: "
         f"+{stats['added']} added, {stats['skipped']} skipped"
     )
+    for cap, n in stats["per_agent"].items():
+        print(f"   {cap:<40} seeds={n}")
 else:
-    print(f"No train.jsonl found at '{config.TRAIN_JSONL_PATH}' — bootstrapping from inline seeds only.")
+    print(f"No train.jsonl found at '{config.TRAIN_JSONL_PATH}' — using inline seeds only.")
 
 print("Building AgentStore (embedding any seeds not already in the cache)...")
-store = AgentStore(agents_raw, embedder, seed_embedding_cache)
+store = AgentStore(agents_raw, embedder, embedding_cache)
 print(f"AgentStore built with {len(store.agents)} agents.")
-print(f"Seed embedding cache now holds {store.cache_stats()['cached_embeddings']} vectors.")
+print(f"Embedding cache now holds {store.cache_stats()['cached_embeddings']} vectors.")
 
-# One-time bootstrap write: any capability that had nothing in Postgres
-# yet gets its freshly-embedded seeds written now, so next run loads them
-# straight from the DB instead of re-bootstrapping.
-bootstrap_rows = []
-for ag in store.agents:
-    if ag["capability"] not in already_in_db:
-        for seed_text in ag["seeds"]:
-            bootstrap_rows.append(
-                (ag["capability"], seed_text, seed_embedding_cache[seed_text])
-            )
-if bootstrap_rows:
-    db.insert_seeds_bulk(db_pool, bootstrap_rows, config.EMBED_MODEL)
-    print(f"Bootstrapped {len(bootstrap_rows)} seeds into Postgres for the first time.")
+# Persist immediately — the very first run pays the full embedding cost once;
+# every run after that reuses the cache and only embeds genuinely new seeds.
+store.save_embedding_cache(config.EMBEDDING_CACHE_PATH)
+print(f"Embedding cache saved to {config.EMBEDDING_CACHE_PATH}")
 
 llm_client = build_llm_client()
 print(f"LLM router ready -> {config.LLM_ROUTER_MODEL} (called only when semantic fails)")
@@ -146,7 +107,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 class RouteRequest(BaseModel):
     query: str
     mode: str = config.DEFAULT_ROUTING_MODE
-    user_expectation: str | None = None
     image_base64: str | None = None
     image_mime_type: str | None = None
 
@@ -188,44 +148,19 @@ def route_query(req: RouteRequest):
         print(f"[route] ERROR on query={req.query!r} mode={mode}: {e}")
         traceback.print_exc()
         return {"error": f"{type(e).__name__}: {e}"}
-
     print(f"[route] query={req.query!r} mode={mode} -> {result['capability']} "
           f"({result['tier_label']}, confident={result['confident']}, "
           f"routing={result['routing_time_ms']}ms, generation={result['generation_time_ms']}ms, "
           f"images_returned={len(result.get('answer_images', []))})")
 
-    # Only a Tier-2 (LLM-routed) query grows the seed bucket. When that
-    # happens, persist the new seed + its embedding into Postgres immediately
-    # (the in-memory cache was already updated inside adaptive_route/AgentStore).
+    # Only a Tier-2 (LLM-routed) query grows the seed bucket, and only then
+    # does the embedding cache actually change — so only save in that case.
     if result["seed_appended"]:
-        embedding = store.embedding_cache.get(req.query)
-        if embedding is not None:
-            db.insert_seed(db_pool, result["capability"], req.query, embedding, config.EMBED_MODEL)
-            print(f"[db] seed persisted to Postgres for capability={result['capability']!r}")
-
-    # Log every request: what was asked, what the user expected, what happened.
-    db.insert_query_log(
-        db_pool,
-        user_prompt=req.query,
-        user_expectation=req.user_expectation,
-        routed_capability=result["capability"],
-        routed_model=result["model"],
-        answer=result.get("answer", ""),
-        tier=result["tier"],
-        confidence=result["confident"],
-        mode=mode,
-    )
+        store.save_embedding_cache(config.EMBEDDING_CACHE_PATH)
+        print(f"[cache] embedding cache updated -> "
+              f"{store.cache_stats()['cached_embeddings']} vectors total")
 
     return result
-
-
-@app.on_event("shutdown")
-def on_shutdown():
-    """Close the DB pool and drop the in-memory seed cache. Postgres is the
-    only thing that persists — nothing local should remain after this."""
-    store.embedding_cache.clear()
-    db.close_pool(db_pool)
-    print("Shutdown: DB pool closed, in-memory seed cache cleared.")
 
 
 if __name__ == "__main__":
