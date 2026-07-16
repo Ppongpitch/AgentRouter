@@ -21,7 +21,8 @@ RUN pip install --no-cache-dir \
     langchain-core \
     langchain-openai \
     requests \
-    runpod
+    runpod \
+    huggingface_hub
 
 # Pre-download the embedding model at build time → zero cold-start model
 # download. model_kwargs={"use_safetensors": True} avoids transformers'
@@ -59,8 +60,8 @@ COPY train.jsonl /app/train.jsonl
 # If you don't have a checkpoint yet, comment out this line — the build
 # still succeeds, and handler.py just skips loading it at cold start
 # ('xlmr_classifier' mode will return a clean error if selected).
-RUN curl -L --retry 3 --retry-delay 5 \
-    -o /app/best.ckpt \
-    https://huggingface.co/tisismark/agent_router_plv3/resolve/main/best.ckpt
+RUN python -c "from huggingface_hub import hf_hub_download; \
+hf_hub_download(repo_id='tisismark/agent_router_plv3', filename='best.ckpt', local_dir='/app')"
+RUN ls -lh /app/best.ckpt
 
 CMD ["python", "/app/handler.py"]
