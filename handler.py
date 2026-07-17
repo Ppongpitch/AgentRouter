@@ -1,6 +1,8 @@
 import os
 import time
 import warnings
+import hashlib
+import pickle
 
 import numpy as np
 import requests
@@ -27,6 +29,14 @@ import runpod
 EMBED_MODEL = os.environ.get("EMBED_MODEL", "BAAI/bge-m3")
 AGENTS_JSON_PATH = os.environ.get("AGENTS_JSON_PATH", "capability_agents.json")
 TRAIN_JSONL_PATH = os.environ.get("TRAIN_JSONL_PATH", "train.jsonl")
+
+# Where the precomputed seed-embedding cache lives. Default is a relative
+# path (resolves to /app/embedding_cache.pkl given WORKDIR /app), which is
+# what the Dockerfile bakes into the image at BUILD time. If you attach a
+# RunPod Network Volume, point this at it instead (e.g. "/runpod-volume/
+# embedding_cache.pkl") so cache writes also survive across image rebuilds,
+# not just across cold starts of the same image.
+EMBEDDING_CACHE_PATH = os.environ.get("EMBEDDING_CACHE_PATH", "embedding_cache.pkl")
 
 XLMR_CHECKPOINT_PATH = os.environ.get("XLMR_CHECKPOINT_PATH", "best.ckpt")
 XLMR_TOKENIZER_NAME = os.environ.get("XLMR_TOKENIZER_NAME", "xlm-roberta-base")
@@ -97,6 +107,54 @@ def _load_seeds_from_train_jsonl(agents_raw: list, train_path: str) -> None:
                 cap_lookup[cap]["seeds"].append(row["text"])
 
 
+def _seeds_signature(agents_raw: list, embed_model: str) -> str:
+    """Fingerprint of (embedding model + every seed text), independent of
+    ordering. If this changes, any existing on-disk cache is stale and
+    must be ignored — this is what makes the cache safe to reuse blindly:
+    add/edit/remove a seed or swap EMBED_MODEL and it self-invalidates."""
+    all_seeds = sorted(s for ag in agents_raw for s in ag.get("seeds", []))
+    payload = f"{embed_model}::{len(all_seeds)}::" + "\x1f".join(all_seeds)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
+
+
+def _load_embedding_cache_from_disk(sig: str) -> dict:
+    if not os.path.exists(EMBEDDING_CACHE_PATH):
+        print(f"[init] No embedding cache at '{EMBEDDING_CACHE_PATH}' yet — "
+              f"will embed seeds from scratch this run.")
+        return {}
+    try:
+        with open(EMBEDDING_CACHE_PATH, "rb") as f:
+            payload = pickle.load(f)
+        if payload.get("signature") != sig:
+            print(f"[init] Embedding cache at '{EMBEDDING_CACHE_PATH}' is stale "
+                  f"(seeds or EMBED_MODEL changed since it was built) — ignoring, "
+                  f"will re-embed.")
+            return {}
+        cache = payload["embeddings"]
+        print(f"[init] Loaded {len(cache)} cached seed embeddings from "
+              f"'{EMBEDDING_CACHE_PATH}' — no re-embedding needed.")
+        return cache
+    except Exception as e:
+        print(f"[init] Could not read embedding cache ({type(e).__name__}: {e}) "
+              f"— will re-embed.")
+        return {}
+
+
+def _save_embedding_cache_to_disk(sig: str, cache: dict) -> None:
+    try:
+        tmp_path = EMBEDDING_CACHE_PATH + ".tmp"
+        with open(tmp_path, "wb") as f:
+            pickle.dump({"signature": sig, "embeddings": cache}, f)
+        os.replace(tmp_path, EMBEDDING_CACHE_PATH)  # atomic swap
+        print(f"[init] Saved {len(cache)} seed embeddings to "
+              f"'{EMBEDDING_CACHE_PATH}' for future cold starts.")
+    except Exception as e:
+        # Not fatal — e.g. read-only filesystem with no Network Volume
+        # mounted. Falls back to in-memory-only behavior for this worker.
+        print(f"[init] Could not write embedding cache ({type(e).__name__}: {e}) "
+              f"— continuing without persisting it.")
+
+
 print(f"[init] Loading embedder '{EMBED_MODEL}' ...")
 embedder = SentenceTransformer(EMBED_MODEL, model_kwargs={"use_safetensors": False})
 print("[init] Embedder ready.")
@@ -110,6 +168,8 @@ if os.path.exists(TRAIN_JSONL_PATH):
 else:
     print(f"[init] No '{TRAIN_JSONL_PATH}' found — using inline seeds only.")
 
+_SEEDS_SIG = _seeds_signature(AGENTS_RAW, EMBED_MODEL)
+
 
 # ─── 2. IN-MEMORY SEED STORE (AgentStore-lite) ─────────────────────────────
 # Keeps ONE mutable seed list per agent + all three representations
@@ -119,7 +179,8 @@ else:
 
 import copy
 
-embedding_cache: dict = {}  # seed_text -> np.ndarray. In-memory only, no disk/DB.
+embedding_cache: dict = _load_embedding_cache_from_disk(_SEEDS_SIG)  # seed_text -> np.ndarray
+_embedding_cache_loaded_size = len(embedding_cache)  # to detect if this run added anything new
 
 
 def _embed_texts(texts: list) -> np.ndarray:
@@ -185,10 +246,17 @@ def update_agent_seeds(agents: list, capability: str, new_seed: str) -> bool:
     return True
 
 
-print("[init] Building agent store (embedding all seeds once)...")
+print("[init] Building agent store...")
 AGENTS = build_agent_store(AGENTS_RAW)
 print(f"[init] Agent store built with {len(AGENTS)} agents, "
       f"{len(embedding_cache)} seed embeddings cached in memory.")
+
+# Only hits the disk if this run actually embedded something new (cache
+# miss / first-ever run for this seed signature) — a full cache hit is a
+# no-op here, so warm-but-cache-already-fresh cold starts don't re-write
+# the file every single time.
+if len(embedding_cache) != _embedding_cache_loaded_size:
+    _save_embedding_cache_to_disk(_SEEDS_SIG, embedding_cache)
 
 
 # ─── 3. LLM ROUTER (Tier 2 fallback) ────────────────────────────────────────

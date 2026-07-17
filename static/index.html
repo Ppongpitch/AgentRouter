@@ -348,19 +348,35 @@
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-//  BACKEND API URL — EDIT THIS BEFORE EVERY DEPLOY
+//  RUNPOD SERVERLESS CONFIG — EDIT THIS BEFORE EVERY DEPLOY
 // ══════════════════════════════════════════════════════════════════════
-// Paste your current tunnel URL here (e.g. from `ngrok http 8000`), with
-// no trailing slash. Example: "https://abcd-1234-5678.ngrok-free.app"
-// ══════════════════════════════════════════════════════════════════════
-//  BACKEND API URL — EDIT THIS BEFORE EVERY DEPLOY
-// ══════════════════════════════════════════════════════════════════════
-// For LOCAL testing (visiting http://localhost:8000 directly, served by
-// FastAPI itself), leave this as "" — same-origin relative requests,
-// no tunnel needed. Before deploying to a SEPARATE static host, change
-// this to your tunnel/pod URL, e.g. "https://abcd-1234.ngrok-free.app"
-// or "https://your-pod-id-8000.proxy.runpod.net" (no trailing slash).
-const API_BASE_URL = "";
+// Your RunPod Serverless endpoint ID — the segment right after "/v2/" in
+// your endpoint's API URL, shown on the endpoint's page in the RunPod
+// console. Leave this "" to hit a LOCAL test server instead (see below).
+const RUNPOD_ENDPOINT_ID = "";              // e.g. "abcd1234efgh5678"
+
+// Your RunPod API key: RunPod console → Settings → API Keys.
+//
+// ⚠️ SECURITY WARNING — read this before deploying anywhere public:
+// This is a static HTML file. If you publish it (GitHub Pages, S3,
+// Netlify, etc.) with a real key baked in here, anyone who views the
+// page source can copy your key and run (paid) jobs on YOUR account.
+// That's fine for local testing or a private/internal demo, but for a
+// real public deployment, put a small proxy server between the browser
+// and RunPod so the key lives server-side, never in client JS.
+const RUNPOD_API_KEY = "";                  // e.g. "rpa_XXXXXXXXXXXXXXXXXXXX"
+
+// Local testing: run `python handler.py` on your machine (no RunPod
+// account needed). The runpod Python SDK spins up a local mock server
+// that speaks the exact same /run + /status protocol as the real cloud
+// endpoint on this URL, so the SAME client code below works unchanged
+// whether you're testing locally or hitting the deployed endpoint.
+const LOCAL_TEST_URL = "http://localhost:8000";
+
+const USING_LOCAL = !RUNPOD_ENDPOINT_ID;
+const API_BASE_URL = USING_LOCAL
+  ? LOCAL_TEST_URL
+  : `https://api.runpod.ai/v2/${RUNPOD_ENDPOINT_ID}`;
 // ══════════════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════════
 
@@ -380,10 +396,12 @@ const attachmentRemoveBtn = document.getElementById('image-attachment-remove');
 let isSubmitting = false;
 let attachedImage = null; // { base64, mimeType, filename, dataUrl }
 
-if (API_BASE_URL.includes("YOUR-TUNNEL-URL-HERE")) {
-  chatEmpty.textContent = "⚠️ API_BASE_URL is not set — edit the constant near the top of the <script> tag in this file, then reload.";
+if (!USING_LOCAL && !RUNPOD_API_KEY) {
+  chatEmpty.textContent = "⚠️ RUNPOD_ENDPOINT_ID is set but RUNPOD_API_KEY is empty — edit the constants near the top of the <script> tag in this file, then reload.";
   chatEmpty.style.color = "#b3261e";
   submitBtn.disabled = true;
+} else if (USING_LOCAL) {
+  chatEmpty.textContent = "Using local test server at " + LOCAL_TEST_URL + " — make sure `python handler.py` is running. No queries yet — ask something below.";
 }
 
 function scrollToBottom() {
@@ -514,11 +532,63 @@ function renderResult(el, data, roundTripMs) {
 }
 
 function renderError(el, message) {
-  el.querySelector('.progress-wrap').remove();
+  const progressWrap = el.querySelector('.progress-wrap');
+  if (progressWrap) progressWrap.remove();
   const errDiv = document.createElement('div');
   errDiv.className = 'message-error';
   errDiv.textContent = `Error: ${message}`;
   el.appendChild(errDiv);
+}
+
+function setProgressLabel(el, text) {
+  const label = el.querySelector('.progress-label');
+  if (label) label.textContent = text;
+}
+
+// ── RunPod submit-then-poll helpers ─────────────────────────────────────
+// RunPod serverless jobs are async: POST /run returns a job id right away
+// (status IN_QUEUE), and you poll GET /status/{id} until it flips to
+// COMPLETED (or FAILED / CANCELLED / TIMED_OUT). This routing job takes a
+// few seconds (embedding + LLM generation), so we poll rather than assume
+// an instant response.
+async function submitJob(body, headers) {
+  const res = await fetch(`${API_BASE_URL}/run`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ input: body }),
+  });
+  if (!res.ok) {
+    let detail = '';
+    try { detail = JSON.stringify(await res.json()); } catch (_) {}
+    throw new Error(`Submit failed (${res.status}) ${detail}`);
+  }
+  return res.json();
+}
+
+async function pollJob(jobId, headers, el) {
+  const maxAttempts = 90;      // ~90s ceiling
+  const intervalMs = 1000;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const res = await fetch(`${API_BASE_URL}/status/${jobId}`, { headers });
+    if (!res.ok) {
+      let detail = '';
+      try { detail = JSON.stringify(await res.json()); } catch (_) {}
+      throw new Error(`Status check failed (${res.status}) ${detail}`);
+    }
+    const data = await res.json();
+
+    if (data.status === 'COMPLETED') return data.output;
+    if (data.status === 'FAILED') throw new Error(data.error || 'Job failed on the worker.');
+    if (data.status === 'CANCELLED') throw new Error('Job was cancelled.');
+    if (data.status === 'TIMED_OUT') throw new Error('Job timed out on the RunPod worker.');
+
+    // IN_QUEUE / IN_PROGRESS — keep polling
+    setProgressLabel(el, data.status === 'IN_QUEUE'
+      ? 'Queued on RunPod — waiting for a worker...'
+      : 'Worker is running (routing + generating)...');
+    await new Promise(r => setTimeout(r, intervalMs));
+  }
+  throw new Error('Timed out client-side waiting for the job to complete.');
 }
 
 async function routeQuery() {
@@ -553,21 +623,20 @@ async function routeQuery() {
       body.image_mime_type = imageToSend.mimeType;
     }
 
-    const res = await fetch(`${API_BASE_URL}/api/route`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    const headers = { 'Content-Type': 'application/json' };
+    if (RUNPOD_API_KEY) headers['Authorization'] = `Bearer ${RUNPOD_API_KEY}`;
 
-    if (!res.ok) {
-      throw new Error(`Server returned ${res.status}`);
-    }
+    const submitData = await submitJob(body, headers);
+    if (submitData.error) throw new Error(submitData.error);
 
-    const data = await res.json();
+    // Local test server / a fast worker can occasionally return the
+    // result immediately with status COMPLETED already on the /run call.
+    const data = submitData.status === 'COMPLETED'
+      ? submitData.output
+      : await pollJob(submitData.id, headers, msgEl);
 
-    if (data.error) {
-      throw new Error(data.error);
-    }
+    if (!data) throw new Error('Job completed but returned no output.');
+    if (data.error) throw new Error(data.error);
 
     const roundTripMs = Math.round(performance.now() - clientStart);
     renderResult(msgEl, data, roundTripMs);

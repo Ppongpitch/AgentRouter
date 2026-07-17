@@ -5,3 +5,4 @@ oldcode/
 .env
 .env.*
 dbcode/
+static/

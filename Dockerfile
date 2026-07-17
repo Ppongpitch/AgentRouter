@@ -64,4 +64,16 @@ RUN python -c "from huggingface_hub import hf_hub_download; \
 hf_hub_download(repo_id='tisismark/agent_router_plv3', filename='best.ckpt', local_dir='/app')"
 RUN ls -lh /app/best.ckpt
 
+# Precompute + bake in the seed-embedding cache at BUILD time, instead of
+# eating that cost on every worker cold start. `import handler` runs all of
+# handler.py's module-level init code (embedder load, seed merge, embed all
+# 800+ seeds, write embedding_cache.pkl) but — thanks to the __main__ guard
+# at the bottom of handler.py — stops short of calling
+# runpod.serverless.start(), so the build just exits once init finishes.
+# OPENROUTER_API_KEY only needs to be a non-empty string here: ChatOpenAI's
+# constructor doesn't make a network call, so a placeholder is fine at
+# build time — the real key is injected as a RunPod endpoint env var later.
+RUN OPENROUTER_API_KEY=build-time-placeholder python -c "import handler" \
+    && ls -lh /app/embedding_cache.pkl
+
 CMD ["python", "/app/handler.py"]
