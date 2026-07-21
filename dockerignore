@@ -1,0 +1,21 @@
+# Keep the build context (and the image) free of dev-only cruft when using
+# `COPY . /app` in the Dockerfile.
+
+.git
+.gitignore
+.env
+.env.*
+README.md
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Old local pickle cache from before Postgres — no longer used, don't ship it.
+embedding_cache.pkl
+
+# This repo folder is unrelated to the worker image (it's the separate
+# Postgres-on-VM setup) — don't accidentally pull it in if it ever ends up
+# nested inside this repo.
+buildpostgresinvm/
