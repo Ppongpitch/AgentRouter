@@ -41,15 +41,21 @@ def load_seeds_from_train_jsonl(
     agents_raw: list[dict],
     train_path: str,
     mapping: dict = JSON_TO_CAPABILITY,
+    skip_capabilities: set | None = None,
 ) -> dict:
     """
     Read train.jsonl (rows of {"text": ..., "agent": ...}), map each row's
     "agent" code to a capability name, and append "text" into that agent's
     seeds list in-place.
 
+    skip_capabilities: capabilities to skip entirely (e.g. ones that
+    already have seeds loaded from a persistent store like Postgres —
+    merging train.jsonl again on top would create duplicates).
+
     Returns a stats dict: {"added": int, "skipped": int, "per_agent": {...}}
     instead of printing anything — caller decides how to log it.
     """
+    skip_capabilities = skip_capabilities or set()
     cap_lookup = {ag["capability"]: ag for ag in agents_raw}
     added, skipped = 0, 0
 
@@ -60,7 +66,7 @@ def load_seeds_from_train_jsonl(
                 continue
             row = json.loads(line)
             cap = mapping.get(row.get("agent"))
-            if cap is None or cap not in cap_lookup:
+            if cap is None or cap not in cap_lookup or cap in skip_capabilities:
                 skipped += 1
                 continue
             cap_lookup[cap]["seeds"].append(row["text"])

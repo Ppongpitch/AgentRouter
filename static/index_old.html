@@ -28,8 +28,8 @@
     padding: 24px 16px 8px;
   }
   #router-title h1 {
-    font-size: 3rem;
-    font-weight: 900;
+    font-size: 2.5rem;
+    font-weight: 700;
     text-transform: uppercase;
     color: #e4712a;
     letter-spacing: 2px;
@@ -121,6 +121,7 @@
     font-size: 0.8rem;
     font-weight: 600;
   }
+  .badge.tier-0 { background: #fff3cd; color: #8a6d00; }
   .badge.tier-1 { background: #e6f4ea; color: #1e7a34; }
   .badge.tier-2 { background: #fdecea; color: #b3261e; }
   .badge.tier-3 { background: #f3e8fd; color: #6a1b9a; }
@@ -168,6 +169,24 @@
     border-radius: 14px;
     padding: 10px 12px;
   }
+  #upload-btn {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-size: 1.4rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  #upload-btn:hover:not(:disabled) { color: #1a1a1a; }
+  #upload-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  #upload-btn.has-image { color: #e4712a; }
   #query {
     width: 100%;
     min-height: 50px;
@@ -180,16 +199,59 @@
     box-sizing: border-box;
     background: transparent;
   }
+  #image-attachment-preview {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0 2px 0;
+    padding: 6px 10px;
+    background: #f7f7f8;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #555;
+  }
+  #image-attachment-preview.show { display: flex; }
+  #image-attachment-preview img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  #image-attachment-remove {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0 4px;
+  }
+  #image-attachment-remove:hover { color: #b3261e; }
+
+  .answer-image {
+    max-width: 100%;
+    border-radius: 8px;
+    display: block;
+    margin-top: 8px;
+  }
+  .message-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: block;
+  }
   .composer-controls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 8px;
     margin-top: 8px;
   }
-  #expected-endpoint {
-    flex: 1 1 auto;
-    min-width: 0;
+  .composer-controls #submit {
+    margin-left: auto;
   }
   select {
     padding: 8px 10px;
@@ -256,8 +318,15 @@
 
   <div id="composer">
     <div id="composer-box">
+      <input type="file" id="image-input" accept="image/*" style="display:none">
       <textarea id="query" placeholder="e.g. Write a Python function to parse CSV files"></textarea>
+      <div id="image-attachment-preview">
+        <img id="image-attachment-thumb" src="" alt="attached image">
+        <span id="image-attachment-name"></span>
+        <button id="image-attachment-remove" type="button" title="Remove attached image">✕</button>
+      </div>
       <div class="composer-controls">
+        <button id="upload-btn" type="button" title="Attach an image (for OCR / Vision)">+</button>
         <select id="expected-endpoint">
           <option value="" selected>No expectation</option>
           <option value="general_assistant">General Assistant</option>
@@ -272,26 +341,42 @@
         <button id="submit">Route Query</button>
       </div>
     </div>
-    <div class="hint">Press Enter to send · Shift+Enter for a new line</div>
+    <div class="hint">Press Enter to send · Shift+Enter for a new line · 📎 click + to attach an image for OCR/Vision</div>
   </div>
 
 </div>
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-//  BACKEND API URL — EDIT THIS BEFORE EVERY DEPLOY
+//  RUNPOD SERVERLESS CONFIG — EDIT THIS BEFORE EVERY DEPLOY
 // ══════════════════════════════════════════════════════════════════════
-// Paste your current tunnel URL here (e.g. from `ngrok http 8000`), with
-// no trailing slash. Example: "https://abcd-1234-5678.ngrok-free.app"
-// ══════════════════════════════════════════════════════════════════════
-//  BACKEND API URL — EDIT THIS BEFORE EVERY DEPLOY
-// ══════════════════════════════════════════════════════════════════════
-// For LOCAL testing (visiting http://localhost:8000 directly, served by
-// FastAPI itself), leave this as "" — same-origin relative requests,
-// no tunnel needed. Before deploying to a SEPARATE static host, change
-// this to your tunnel/pod URL, e.g. "https://abcd-1234.ngrok-free.app"
-// or "https://your-pod-id-8000.proxy.runpod.net" (no trailing slash).
-const API_BASE_URL = "";
+// Your RunPod Serverless endpoint ID — the segment right after "/v2/" in
+// your endpoint's API URL, shown on the endpoint's page in the RunPod
+// console. Leave this "" to hit a LOCAL test server instead (see below).
+const RUNPOD_ENDPOINT_ID = "";              // e.g. "abcd1234efgh5678"
+
+// Your RunPod API key: RunPod console → Settings → API Keys.
+//
+// ⚠️ SECURITY WARNING — read this before deploying anywhere public:
+// This is a static HTML file. If you publish it (GitHub Pages, S3,
+// Netlify, etc.) with a real key baked in here, anyone who views the
+// page source can copy your key and run (paid) jobs on YOUR account.
+// That's fine for local testing or a private/internal demo, but for a
+// real public deployment, put a small proxy server between the browser
+// and RunPod so the key lives server-side, never in client JS.
+const RUNPOD_API_KEY = "";                  // e.g. "rpa_XXXXXXXXXXXXXXXXXXXX"
+
+// Local testing: run `python handler.py` on your machine (no RunPod
+// account needed). The runpod Python SDK spins up a local mock server
+// that speaks the exact same /run + /status protocol as the real cloud
+// endpoint on this URL, so the SAME client code below works unchanged
+// whether you're testing locally or hitting the deployed endpoint.
+const LOCAL_TEST_URL = "http://localhost:8000";
+
+const USING_LOCAL = !RUNPOD_ENDPOINT_ID;
+const API_BASE_URL = USING_LOCAL
+  ? LOCAL_TEST_URL
+  : `https://api.runpod.ai/v2/${RUNPOD_ENDPOINT_ID}`;
 // ══════════════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════════════
 
@@ -301,13 +386,22 @@ const modeSelect = document.getElementById('mode');
 const expectedEndpointSelect = document.getElementById('expected-endpoint');
 const chatHistory = document.getElementById('chat-history');
 const chatEmpty = document.getElementById('chat-empty');
+const uploadBtn = document.getElementById('upload-btn');
+const imageInput = document.getElementById('image-input');
+const attachmentPreview = document.getElementById('image-attachment-preview');
+const attachmentThumb = document.getElementById('image-attachment-thumb');
+const attachmentName = document.getElementById('image-attachment-name');
+const attachmentRemoveBtn = document.getElementById('image-attachment-remove');
 
 let isSubmitting = false;
+let attachedImage = null; // { base64, mimeType, filename, dataUrl }
 
-if (API_BASE_URL.includes("YOUR-TUNNEL-URL-HERE")) {
-  chatEmpty.textContent = "⚠️ API_BASE_URL is not set — edit the constant near the top of the <script> tag in this file, then reload.";
+if (!USING_LOCAL && !RUNPOD_API_KEY) {
+  chatEmpty.textContent = "⚠️ RUNPOD_ENDPOINT_ID is set but RUNPOD_API_KEY is empty — edit the constants near the top of the <script> tag in this file, then reload.";
   chatEmpty.style.color = "#b3261e";
   submitBtn.disabled = true;
+} else if (USING_LOCAL) {
+  chatEmpty.textContent = "Using local test server at " + LOCAL_TEST_URL + " — make sure `python handler.py` is running. No queries yet — ask something below.";
 }
 
 function scrollToBottom() {
@@ -320,10 +414,49 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function buildMessageEl(queryText) {
+// ── Image attachment (for Vision/OCR agent input) ──────────────────────
+uploadBtn.addEventListener('click', () => imageInput.click());
+
+imageInput.addEventListener('change', () => {
+  const file = imageInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    // reader.result is a full data: URL — split off just the base64 payload
+    const dataUrl = reader.result;
+    const base64 = dataUrl.split(',')[1];
+
+    attachedImage = {
+      base64,
+      mimeType: file.type || 'image/png',
+      filename: file.name,
+      dataUrl,
+    };
+
+    attachmentThumb.src = dataUrl;
+    attachmentName.textContent = file.name;
+    attachmentPreview.classList.add('show');
+    uploadBtn.classList.add('has-image');
+  };
+  reader.readAsDataURL(file);
+});
+
+attachmentRemoveBtn.addEventListener('click', () => {
+  attachedImage = null;
+  imageInput.value = '';
+  attachmentPreview.classList.remove('show');
+  uploadBtn.classList.remove('has-image');
+});
+
+function buildMessageEl(queryText, imageDataUrl) {
   const el = document.createElement('div');
   el.className = 'message';
+  const thumbHtml = imageDataUrl
+    ? `<img class="message-thumb" src="${imageDataUrl}" alt="attached image">`
+    : '';
   el.innerHTML = `
+    ${thumbHtml}
     <div class="query-bubble">${escapeHtml(queryText)}</div>
     <div class="progress-wrap">
       <div class="progress-label">Routing query and calling the agent endpoint...</div>
@@ -336,13 +469,45 @@ function buildMessageEl(queryText) {
 function renderResult(el, data, roundTripMs) {
   el.querySelector('.progress-wrap').remove();
 
-  const answerDiv = document.createElement('div');
-  answerDiv.className = 'answer-box';
-  answerDiv.textContent = data.answer;
-  el.appendChild(answerDiv);
+  const hasText = data.answer && data.answer.trim().length > 0;
+  const images = data.answer_images || [];
+  const hasImages = images.length > 0;
+
+  if (hasText || hasImages) {
+    const answerDiv = document.createElement('div');
+    answerDiv.className = 'answer-box';
+
+    if (hasText) {
+      const textSpan = document.createElement('div');
+      textSpan.textContent = data.answer;
+      answerDiv.appendChild(textSpan);
+    }
+
+    for (const imgUrl of images) {
+      const img = document.createElement('img');
+      img.className = 'answer-image';
+      img.src = imgUrl;
+      img.alt = 'Generated image';
+      answerDiv.appendChild(img);
+    }
+
+    el.appendChild(answerDiv);
+  } else {
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'message-error';
+    emptyDiv.textContent =
+      'The model returned neither text nor an image for this query. ' +
+      'If you expected a generated image, the model/provider may not ' +
+      'support image output on this route — check "Routing details" below for which model was called.';
+    el.appendChild(emptyDiv);
+  }
 
   const details = document.createElement('details');
   details.className = 'routing-details';
+  const ocrSection = data.ocr_text
+    ? `<div class="scores-title">OCR extracted text (from attached image)</div>
+       <pre>${escapeHtml(data.ocr_text)}</pre>`
+    : '';
   details.innerHTML = `
     <summary>Routing details &amp; timing</summary>
     <div class="row"><span class="label">Routed to</span><span class="value">${escapeHtml(data.capability)}</span></div>
@@ -350,6 +515,7 @@ function renderResult(el, data, roundTripMs) {
     <div class="row"><span class="label">Model</span><span class="value">${escapeHtml(data.model)}</span></div>
     <div class="row"><span class="label">Confidence</span><span class="value">${data.confident}</span></div>
     <div class="row"><span class="label">Seed appended</span><span class="value">${data.seed_appended ? 'yes' : 'no'}</span></div>
+    <div class="row"><span class="label">Images returned</span><span class="value">${images.length}</span></div>
 
     <div class="timing-block">
       <div class="timing-title">Timing breakdown</div>
@@ -358,6 +524,7 @@ function renderResult(el, data, roundTripMs) {
       <div class="timing-row"><strong><span>Total</span></strong><strong><span>${data.total_time_ms} ms (round-trip incl. network: ${roundTripMs} ms)</span></strong></div>
     </div>
 
+    ${ocrSection}
     <div class="scores-title">Semantic scores (all agents)</div>
     <pre>${escapeHtml(JSON.stringify(data.semantic_scores, null, 2))}</pre>
   `;
@@ -365,47 +532,111 @@ function renderResult(el, data, roundTripMs) {
 }
 
 function renderError(el, message) {
-  el.querySelector('.progress-wrap').remove();
+  const progressWrap = el.querySelector('.progress-wrap');
+  if (progressWrap) progressWrap.remove();
   const errDiv = document.createElement('div');
   errDiv.className = 'message-error';
   errDiv.textContent = `Error: ${message}`;
   el.appendChild(errDiv);
 }
 
+function setProgressLabel(el, text) {
+  const label = el.querySelector('.progress-label');
+  if (label) label.textContent = text;
+}
+
+// ── RunPod submit-then-poll helpers ─────────────────────────────────────
+// RunPod serverless jobs are async: POST /run returns a job id right away
+// (status IN_QUEUE), and you poll GET /status/{id} until it flips to
+// COMPLETED (or FAILED / CANCELLED / TIMED_OUT). This routing job takes a
+// few seconds (embedding + LLM generation), so we poll rather than assume
+// an instant response.
+async function submitJob(body, headers) {
+  const res = await fetch(`${API_BASE_URL}/run`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ input: body }),
+  });
+  if (!res.ok) {
+    let detail = '';
+    try { detail = JSON.stringify(await res.json()); } catch (_) {}
+    throw new Error(`Submit failed (${res.status}) ${detail}`);
+  }
+  return res.json();
+}
+
+async function pollJob(jobId, headers, el) {
+  const maxAttempts = 90;      // ~90s ceiling
+  const intervalMs = 1000;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const res = await fetch(`${API_BASE_URL}/status/${jobId}`, { headers });
+    if (!res.ok) {
+      let detail = '';
+      try { detail = JSON.stringify(await res.json()); } catch (_) {}
+      throw new Error(`Status check failed (${res.status}) ${detail}`);
+    }
+    const data = await res.json();
+
+    if (data.status === 'COMPLETED') return data.output;
+    if (data.status === 'FAILED') throw new Error(data.error || 'Job failed on the worker.');
+    if (data.status === 'CANCELLED') throw new Error('Job was cancelled.');
+    if (data.status === 'TIMED_OUT') throw new Error('Job timed out on the RunPod worker.');
+
+    // IN_QUEUE / IN_PROGRESS — keep polling
+    setProgressLabel(el, data.status === 'IN_QUEUE'
+      ? 'Queued on RunPod — waiting for a worker...'
+      : 'Worker is running (routing + generating)...');
+    await new Promise(r => setTimeout(r, intervalMs));
+  }
+  throw new Error('Timed out client-side waiting for the job to complete.');
+}
+
 async function routeQuery() {
   const query = queryBox.value.trim();
   if (!query || isSubmitting) return;
   const mode = modeSelect.value;
+  const imageToSend = attachedImage;
 
   chatEmpty.style.display = 'none';
-  const msgEl = buildMessageEl(query);
+  const msgEl = buildMessageEl(query, imageToSend ? imageToSend.dataUrl : null);
   chatHistory.appendChild(msgEl);
   scrollToBottom();
 
   queryBox.value = '';
+  attachedImage = null;
+  imageInput.value = '';
+  attachmentPreview.classList.remove('show');
+  uploadBtn.classList.remove('has-image');
+
   isSubmitting = true;
   submitBtn.disabled = true;
   modeSelect.disabled = true;
   expectedEndpointSelect.disabled = true;
+  uploadBtn.disabled = true;
 
   const clientStart = performance.now();
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/route`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, mode })
-    });
-
-    if (!res.ok) {
-      throw new Error(`Server returned ${res.status}`);
+    const body = { query, mode };
+    if (imageToSend) {
+      body.image_base64 = imageToSend.base64;
+      body.image_mime_type = imageToSend.mimeType;
     }
 
-    const data = await res.json();
+    const headers = { 'Content-Type': 'application/json' };
+    if (RUNPOD_API_KEY) headers['Authorization'] = `Bearer ${RUNPOD_API_KEY}`;
 
-    if (data.error) {
-      throw new Error(data.error);
-    }
+    const submitData = await submitJob(body, headers);
+    if (submitData.error) throw new Error(submitData.error);
+
+    // Local test server / a fast worker can occasionally return the
+    // result immediately with status COMPLETED already on the /run call.
+    const data = submitData.status === 'COMPLETED'
+      ? submitData.output
+      : await pollJob(submitData.id, headers, msgEl);
+
+    if (!data) throw new Error('Job completed but returned no output.');
+    if (data.error) throw new Error(data.error);
 
     const roundTripMs = Math.round(performance.now() - clientStart);
     renderResult(msgEl, data, roundTripMs);
@@ -416,6 +647,7 @@ async function routeQuery() {
     submitBtn.disabled = false;
     modeSelect.disabled = false;
     expectedEndpointSelect.disabled = false;
+    uploadBtn.disabled = false;
     scrollToBottom();
   }
 }

@@ -40,7 +40,7 @@ AGENT2MODEL = {
     "general_assistant": "openai/gpt-4o-mini-search-preview",
     "code_agent": "anthropic/claude-opus-4.8-fast",
     "translation_agent": "google/gemini-3.5-flash",
-    "research_agent": "perplexity/sonar-deep-research",
+    "research_agent": "openai/o4-mini-deep-research",
     "reasoning_agent": "deepseek/deepseek-r1",
     "vision_agent": "google/gemma-4-31b-it",
     "image_generation_agent": "google/gemini-3.1-flash-image",

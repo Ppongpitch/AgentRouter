@@ -22,7 +22,9 @@ RUN pip install --no-cache-dir \
     langchain-openai \
     requests \
     runpod \
-    huggingface_hub
+    huggingface_hub \
+    psycopg2-binary \
+    python-dotenv
 
 # Pre-download the embedding model at build time → zero cold-start model
 # download. model_kwargs={"use_safetensors": True} avoids transformers'
@@ -43,6 +45,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY handler.py /app/handler.py
+COPY config.py /app/config.py
+COPY db.py /app/db.py
+COPY agent_store.py /app/agent_store.py
+COPY embedder.py /app/embedder.py
+COPY router.py /app/router.py
+COPY llm_router.py /app/llm_router.py
+COPY xlmr_router.py /app/xlmr_router.py
 COPY capability_agents.json /app/capability_agents.json
 
 # Optional: your seed dataset for bootstrapping the agents' seed buckets.
@@ -64,16 +73,19 @@ RUN python -c "from huggingface_hub import hf_hub_download; \
 hf_hub_download(repo_id='tisismark/agent_router_plv3', filename='best.ckpt', local_dir='/app')"
 RUN ls -lh /app/best.ckpt
 
-# Precompute + bake in the seed-embedding cache at BUILD time, instead of
-# eating that cost on every worker cold start. `import handler` runs all of
-# handler.py's module-level init code (embedder load, seed merge, embed all
-# 800+ seeds, write embedding_cache.pkl) but — thanks to the __main__ guard
-# at the bottom of handler.py — stops short of calling
-# runpod.serverless.start(), so the build just exits once init finishes.
-# OPENROUTER_API_KEY only needs to be a non-empty string here: ChatOpenAI's
-# constructor doesn't make a network call, so a placeholder is fine at
-# build time — the real key is injected as a RunPod endpoint env var later.
-RUN OPENROUTER_API_KEY=build-time-placeholder python -c "import handler" \
-    && ls -lh /app/embedding_cache.pkl
+# Seed embeddings are no longer baked into the image at build time — they
+# now live in Postgres (see db.py), shared across every worker/region/
+# rebuild instead of frozen into one image. Postgres isn't reachable at
+# `docker build` time anyway (external managed DB, no build-time secrets),
+# so this step is deliberately gone. The FIRST real cold start after a
+# fresh Postgres bootstraps every seed's embedding once; every cold start
+# after that — anywhere — just reads them back out. See handler.py's
+# "COLD-START INIT" section for the load-from-DB / bootstrap-if-missing logic.
+#
+# IMPORTANT: set POSTGRES_DSN as a RunPod endpoint environment variable
+# (RunPod console -> your endpoint -> Environment Variables), NOT baked in
+# here — it must point at a Postgres reachable from RunPod's network (a
+# managed host like Neon/Supabase/RDS/etc., not "localhost"), e.g.:
+#   postgresql://user:password@your-host.example.com:5432/agentrouter?sslmode=require
 
 CMD ["python", "/app/handler.py"]
