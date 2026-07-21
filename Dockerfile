@@ -47,6 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
 COPY handler.py /app/handler.py
 COPY config.py /app/config.py
 COPY db.py /app/db.py
+COPY embedding_cache.py /app/embedding_cache.py
 COPY agent_store.py /app/agent_store.py
 COPY embedder.py /app/embedder.py
 COPY router.py /app/router.py
