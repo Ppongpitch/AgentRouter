@@ -44,46 +44,40 @@ RUN python -c "from transformers import AutoTokenizer; \
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the WHOLE repo in one shot instead of naming files one by one — this
-# is what actually fixes the recurring "ModuleNotFoundError" pattern: any
-# .py file your code imports from (router.py, agent_store.py, taxonomy.py,
-# xlmr_model.py, semantic_router.py, agent_executor.py, embedding_cache.py,
-# etc.) gets included automatically, even ones added later, instead of
-# needing a matching COPY line added by hand every time.
-# .dockerignore (same folder) excludes .git, __pycache__, the old
-# embedding_cache.pkl, etc. so this doesn't bloat the image.
-COPY . /app
+COPY handler.py /app/handler.py
+COPY capability_agents.json /app/capability_agents.json
+
+# Optional: your seed dataset for bootstrapping the agents' seed buckets.
+# Comment out if you don't have one — handler.py falls back to the inline
+# seeds in capability_agents.json when train.jsonl is missing.
+COPY train.jsonl /app/train.jsonl
 
 # XLM-R classifier checkpoint (Tier 3 routing mode) — downloaded from
 # Hugging Face at BUILD time instead of copied from the repo, since it's
 # 3.33GB and can't be committed to GitHub (well over the 100MB hard limit,
 # and would blow through Git LFS's free bandwidth/storage quota fast too).
-# Saved at model/checkpoints/best.ckpt to match config.py's
-# XLMR_CHECKPOINT_PATH default exactly ("model/checkpoints/best.ckpt") —
-# this was previously mismatched (saved to /app/best.ckpt instead), which
-# would have made 'xlmr_classifier' mode silently unavailable.
+# Saved at repo root (same level as handler.py) — matches
+# XLMR_CHECKPOINT_PATH's default of "best.ckpt" in handler.py.
 #
 # If you don't have a checkpoint yet, comment out this line — the build
 # still succeeds, and handler.py just skips loading it at cold start
 # ('xlmr_classifier' mode will return a clean error if selected).
-RUN mkdir -p /app/model/checkpoints \
-    && python -c "from huggingface_hub import hf_hub_download; \
-hf_hub_download(repo_id='tisismark/agent_router_plv3', filename='best.ckpt', local_dir='/app/model/checkpoints')"
-RUN ls -lh /app/model/checkpoints/best.ckpt
+RUN python -c "from huggingface_hub import hf_hub_download; \
+hf_hub_download(repo_id='tisismark/agent_router_plv3', filename='best.ckpt', local_dir='/app')"
+RUN ls -lh /app/best.ckpt
 
 # Seed embeddings are no longer baked into the image at build time — they
-# now live in Postgres (see db.py), shared across every worker/region/
-# rebuild instead of frozen into one image. Postgres isn't reachable at
-# `docker build` time anyway (external managed DB, no build-time secrets),
-# so this step is deliberately gone. The FIRST real cold start after a
-# fresh Postgres bootstraps every seed's embedding once; every cold start
-# after that — anywhere — just reads them back out. See handler.py's
-# "COLD-START INIT" section for the load-from-DB / bootstrap-if-missing logic.
+# now live in Postgres (see handler.py's DB helpers), shared across every
+# worker/region/rebuild instead of frozen into one image. Postgres isn't
+# reachable at `docker build` time anyway (external DB, no build-time
+# secrets), so this step is deliberately gone. The FIRST real cold start
+# after a fresh Postgres bootstraps every seed's embedding once; every cold
+# start after that — anywhere — just reads them back out.
 #
 # IMPORTANT: set POSTGRES_DSN as a RunPod endpoint environment variable
 # (RunPod console -> your endpoint -> Environment Variables), NOT baked in
-# here — it must point at a Postgres reachable from RunPod's network (a
-# managed host like Neon/Supabase/RDS/etc., not "localhost"), e.g.:
+# here — it must point at a Postgres reachable from RunPod's network (your
+# VM, or a managed host like Neon/Supabase/RDS), not "localhost", e.g.:
 #   postgresql://user:password@your-host.example.com:5432/agentrouter?sslmode=require
 
 CMD ["python", "/app/handler.py"]

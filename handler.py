@@ -1,134 +1,707 @@
-"""
-handler.py
-──────────
-RunPod serverless entrypoint. This is the RunPod-flavored twin of main.py —
-same startup sequence, same modules (config / db / agent_store / embedder /
-router / llm_router / xlmr_router), just wrapped as a `handler(job)`
-function instead of FastAPI routes. Keeping the logic in those shared
-modules (not duplicated here) means main.py (local/FastAPI) and this file
-(RunPod) can never silently drift apart.
-
-Persistence model (this replaces the old local embedding_cache.pkl file):
-  - Postgres is the ONLY persistence layer now. On cold start, every seed's
-    text + embedding for the current EMBED_MODEL is loaded from the `seeds`
-    table. Only seeds NOT already in Postgres get embedded here.
-  - Because Postgres is shared across every worker (any region, any cold
-    start, any image rebuild), this is strictly better than the old
-    image-baked pickle cache: the FIRST cold start anywhere bootstraps it,
-    and every worker after that — forever, across deploys — just reads.
-  - Every request is logged to query_log: the prompt, the user's stated
-    expectation, what actually got routed, and the answer.
-  - A Tier-2 (LLM-routed) query that grows an agent's seed bucket gets that
-    new seed + embedding written back into Postgres immediately.
-
-Expected environment variables:
-  - OPENROUTER_API_KEY : required for any generation / LLM-fallback call
-  - POSTGRES_DSN        : required — external reachable Postgres (RunPod
-                          containers have no local DB of their own).
-                          e.g. "postgresql://user:pass@host:5432/db?sslmode=require"
-  - EMBED_MODEL, LLM_ROUTER_MODEL, XLMR_CHECKPOINT_PATH, etc. — optional,
-    see config.py for defaults.
-"""
-
 import os
-import traceback
+import time
+import warnings
+
+import numpy as np
+import psycopg2
+import psycopg2.pool
+import requests
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.cluster import KMeans
+from sentence_transformers import SentenceTransformer
+
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
 
 import runpod
 
-import config
-import db
-from agent_store import AgentStore, load_agents_json, load_seeds_from_train_jsonl
-from embedder import load_embedder
-from llm_router import build_llm_client
-from router import adaptive_route
-from xlmr_router import XLMRClassifier
+# ─── 1. GLOBAL COLD-START INITIALIZATION ───────────────────────────────────
+# Everything in this section runs ONCE when the container boots. RunPod
+# reuses this same warm process across multiple jobs (flashboot), so the
+# embedder + seed embeddings stay in memory across jobs for free either way.
+# Seed embeddings themselves now persist in Postgres (see _db_connect and
+# the DB helpers below) — the FIRST cold start anywhere embeds+stores them,
+# every cold start after that (this worker, a new one, a different region,
+# a rebuilt image) just loads them back out. Every request is also logged
+# to Postgres's query_log table: the prompt, the user's stated expectation,
+# what actually got routed, and the answer.
 
-# ─── COLD-START INIT (runs once per worker boot) ────────────────────────
+EMBED_MODEL = os.environ.get("EMBED_MODEL", "BAAI/bge-m3")
+AGENTS_JSON_PATH = os.environ.get("AGENTS_JSON_PATH", "capability_agents.json")
+TRAIN_JSONL_PATH = os.environ.get("TRAIN_JSONL_PATH", "train.jsonl")
 
-print(f"[init] Loading embedder: {config.EMBED_MODEL} ...")
-embedder = load_embedder(config.EMBED_MODEL)
-print("[init] Embedder ready.")
+# Postgres — required. Persists seed embeddings (so they never need to be
+# re-embedded after the first cold start anywhere) and a log of every
+# request (prompt, user's stated expectation, what got routed, the answer).
+# Point this at a Postgres reachable from RunPod's network — e.g. the one
+# on your VM — NOT "localhost" (the RunPod container has no DB of its own):
+#   postgresql://user:password@your-host.example.com:5432/agentrouter?sslmode=require
+POSTGRES_DSN = os.environ.get("POSTGRES_DSN", "")
+
+XLMR_CHECKPOINT_PATH = os.environ.get("XLMR_CHECKPOINT_PATH", "best.ckpt")
+XLMR_TOKENIZER_NAME = os.environ.get("XLMR_TOKENIZER_NAME", "xlm-roberta-base")
+XLMR_TOP_K = int(os.environ.get("XLMR_TOP_K", "3"))
+
+N_CLUSTERS_PER_AGENT = int(os.environ.get("N_CLUSTERS_PER_AGENT", "3"))
+KMEANS_RANDOM_STATE = 42
+
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+OPENROUTER_IMAGES_URL = "https://openrouter.ai/api/v1/images"
+LLM_ROUTER_MODEL = os.environ.get("LLM_ROUTER_MODEL", "google/gemini-2.5-flash")
+
+ROUTING_MODES = ["per_seed", "single_centroid", "multi_centroid", "xlmr_classifier"]
+DEFAULT_ROUTING_MODE = os.environ.get("DEFAULT_ROUTING_MODE", "single_centroid")
+
+OCR_CAPABILITY = "Vision / OCR Agent"
+
+AGENT_THRESHOLDS = {
+    "General Assistant": 0.38,
+    "Code Agent": 0.57,
+    "Translation / Multilingual Agent": 0.50,
+    "Research & Long-document Agent": 0.48,
+    "Reasoning Agent": 0.50,
+    "Vision / OCR Agent": 0.58,
+    "Image Generation Agent": 0.62,
+    "Creative Writing Agent": 0.42,
+}
+DEFAULT_THRESHOLD = 0.50
+
+JSON_TO_CAPABILITY = {
+    "image_generation_agent": "Image Generation Agent",
+    "reasoning_agent": "Reasoning Agent",
+    "research_agent": "Research & Long-document Agent",
+    "code_agent": "Code Agent",
+    "general_assistant": "General Assistant",
+    "creative_writing_agent": "Creative Writing Agent",
+    "translation_agent": "Translation / Multilingual Agent",
+    "vision_agent": "Vision / OCR Agent",
+}
+
+# XLM-R classifier class-index -> agent code. MUST match training order —
+# see the warning in AgentRouterModel.load_from_checkpoint below.
+AGENT_CLASSES = [
+    "general_assistant", "code_agent", "translation_agent", "research_agent",
+    "reasoning_agent", "vision_agent", "image_generation_agent", "creative_writing_agent",
+]
+ID2AGENT = {i: agent for i, agent in enumerate(AGENT_CLASSES)}
+
+import json as _json
+
+
+def _load_agents_json(path: str) -> list:
+    with open(path, encoding="utf-8") as f:
+        return _json.load(f)
+
+
+def _load_seeds_from_train_jsonl(agents_raw: list, train_path: str) -> None:
+    cap_lookup = {ag["capability"]: ag for ag in agents_raw}
+    with open(train_path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            row = _json.loads(line)
+            cap = JSON_TO_CAPABILITY.get(row.get("agent"))
+            if cap in cap_lookup:
+                cap_lookup[cap]["seeds"].append(row["text"])
+
+
+_SEEDS_SCHEMA = """
+CREATE TABLE IF NOT EXISTS seeds (
+    id SERIAL PRIMARY KEY,
+    capability TEXT NOT NULL,
+    seed_text TEXT NOT NULL,
+    embed_model TEXT NOT NULL,
+    embedding DOUBLE PRECISION[] NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (capability, seed_text, embed_model)
+);
+
+CREATE TABLE IF NOT EXISTS query_log (
+    id SERIAL PRIMARY KEY,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    user_prompt TEXT NOT NULL,
+    user_expectation TEXT,
+    routed_capability TEXT NOT NULL,
+    routed_model TEXT NOT NULL,
+    answer TEXT,
+    tier INT,
+    confidence DOUBLE PRECISION,
+    mode TEXT
+);
+"""
+
+
+def _db_connect() -> "psycopg2.pool.ThreadedConnectionPool":
+    if not POSTGRES_DSN:
+        raise RuntimeError(
+            "POSTGRES_DSN is not set. Set it as a RunPod endpoint environment "
+            "variable, e.g. postgresql://user:password@host:5432/agentrouter?sslmode=require"
+        )
+    pool = psycopg2.pool.ThreadedConnectionPool(1, 5, POSTGRES_DSN)
+    conn = pool.getconn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(_SEEDS_SCHEMA)
+        conn.commit()
+    finally:
+        pool.putconn(conn)
+    return pool
+
+
+def _load_embedding_cache_from_db(pool, embed_model: str) -> dict:
+    """Every seed's embedding for the current EMBED_MODEL, keyed by seed
+    text — same shape as the old pickle-based embedding_cache dict, just
+    backed by Postgres so it's shared across every worker/region/rebuild
+    instead of frozen into one image."""
+    conn = pool.getconn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT seed_text, embedding FROM seeds WHERE embed_model = %s",
+                (embed_model,),
+            )
+            rows = cur.fetchall()
+    finally:
+        pool.putconn(conn)
+    cache = {text: np.array(embedding) for text, embedding in rows}
+    print(f"[init] Loaded {len(cache)} cached seed embeddings from Postgres "
+          f"(embed_model={embed_model!r}) — no re-embedding needed for these.")
+    return cache
+
+
+def _save_new_seed_embeddings_to_db(pool, agents_raw: list, cache: dict,
+                                     embed_model: str, already_in_db: set) -> None:
+    """Bulk-insert any (capability, seed_text) pair not already in Postgres.
+    Idempotent (ON CONFLICT DO NOTHING), so safe to call every cold start —
+    on a full cache hit this is just a no-op empty insert."""
+    rows = []
+    for ag in agents_raw:
+        cap = ag["capability"]
+        for seed_text in ag["seeds"]:
+            if seed_text not in already_in_db and seed_text in cache:
+                rows.append((cap, seed_text, embed_model, list(map(float, cache[seed_text]))))
+    if not rows:
+        return
+    conn = pool.getconn()
+    try:
+        with conn.cursor() as cur:
+            cur.executemany(
+                """
+                INSERT INTO seeds (capability, seed_text, embed_model, embedding)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (capability, seed_text, embed_model) DO NOTHING
+                """,
+                rows,
+            )
+        conn.commit()
+    finally:
+        pool.putconn(conn)
+    print(f"[init] Persisted {len(rows)} new seed embeddings to Postgres.")
+
+
+def _insert_seed_to_db(pool, capability: str, seed_text: str, embedding: np.ndarray, embed_model: str) -> None:
+    conn = pool.getconn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO seeds (capability, seed_text, embed_model, embedding)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (capability, seed_text, embed_model) DO NOTHING
+                """,
+                (capability, seed_text, embed_model, list(map(float, embedding))),
+            )
+        conn.commit()
+    finally:
+        pool.putconn(conn)
+
+
+def _insert_query_log(pool, user_prompt: str, user_expectation, routed_capability: str,
+                       routed_model: str, answer: str, tier: int, confidence: float, mode: str) -> None:
+    conn = pool.getconn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO query_log
+                    (user_prompt, user_expectation, routed_capability,
+                     routed_model, answer, tier, confidence, mode)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+                (user_prompt, user_expectation or None, routed_capability,
+                 routed_model, answer, tier, confidence, mode),
+            )
+        conn.commit()
+    finally:
+        pool.putconn(conn)
+
 
 print("[init] Connecting to PostgreSQL ...")
-db_pool = db.create_pool(config.POSTGRES_DSN)
-db.init_schema(db_pool)
+db_pool = _db_connect()
 print("[init] PostgreSQL connected, schema ready.")
 
-if os.path.exists(config.AGENTS_JSON_PATH):
-    agents_raw = load_agents_json(config.AGENTS_JSON_PATH)
-    print(f"[init] Loaded {len(agents_raw)} agents from '{config.AGENTS_JSON_PATH}'.")
+
+print(f"[init] Loading embedder '{EMBED_MODEL}' ...")
+embedder = SentenceTransformer(EMBED_MODEL, model_kwargs={"use_safetensors": False})
+print("[init] Embedder ready.")
+
+print(f"[init] Loading agents from '{AGENTS_JSON_PATH}' ...")
+AGENTS_RAW = _load_agents_json(AGENTS_JSON_PATH)
+
+if os.path.exists(TRAIN_JSONL_PATH):
+    _load_seeds_from_train_jsonl(AGENTS_RAW, TRAIN_JSONL_PATH)
+    print(f"[init] Merged seeds from '{TRAIN_JSONL_PATH}'.")
 else:
-    raise FileNotFoundError(
-        f"Agents JSON not found at '{config.AGENTS_JSON_PATH}'. "
-        f"Set AGENTS_JSON_PATH env var or bake the file into the image next to handler.py."
-    )
+    print(f"[init] No '{TRAIN_JSONL_PATH}' found — using inline seeds only.")
 
-# ── Load seeds + their embeddings from Postgres (replaces embedding_cache.pkl) ──
-db_seeds = db.load_all_seeds(db_pool, config.EMBED_MODEL)
-seed_embedding_cache: dict = {}
-already_in_db = set()
 
-for ag in agents_raw:
-    cap = ag["capability"]
-    rows = db_seeds.get(cap)
-    if rows:
-        # Postgres is the source of truth for this agent once it has rows —
-        # replace the inline seeds from capability_agents.json entirely so
-        # we don't re-embed or duplicate anything already stored.
-        ag["seeds"] = [text for text, _ in rows]
-        for text, embedding in rows:
-            seed_embedding_cache[text] = embedding
-        already_in_db.add(cap)
-        print(f"[init]    {cap:<40} loaded {len(rows)} seeds from Postgres")
-    else:
-        print(f"[init]    {cap:<40} nothing in Postgres yet — will bootstrap")
+# ─── 2. IN-MEMORY SEED STORE (AgentStore-lite) ─────────────────────────────
+# Keeps ONE mutable seed list per agent + all three representations
+# (per-seed embeddings, single centroid, k-means sub-centroids), all
+# derived from the same in-memory embedding cache — switching routing
+# mode is just picking a different pre-built array, never re-embedding.
 
-# For any capability NOT yet in Postgres, merge in train.jsonl seeds too —
-# skip capabilities already loaded from the DB to avoid duplicating/re-merging.
-if os.path.exists(config.TRAIN_JSONL_PATH):
-    stats = load_seeds_from_train_jsonl(
-        agents_raw, config.TRAIN_JSONL_PATH, skip_capabilities=already_in_db
-    )
-    print(f"[init] Merged '{config.TRAIN_JSONL_PATH}' for not-yet-bootstrapped agents: "
-          f"+{stats['added']} added, {stats['skipped']} skipped.")
-else:
-    print(f"[init] No '{config.TRAIN_JSONL_PATH}' found — bootstrapping from inline seeds only.")
+import copy
 
-print("[init] Building AgentStore (embedding only seeds not already cached)...")
-store = AgentStore(agents_raw, embedder, seed_embedding_cache)
-print(f"[init] AgentStore built with {len(store.agents)} agents, "
-      f"{store.cache_stats()['cached_embeddings']} seed embeddings in memory.")
+embedding_cache: dict = _load_embedding_cache_from_db(db_pool, EMBED_MODEL)  # seed_text -> np.ndarray
+_already_in_db = set(embedding_cache.keys())  # to detect which seeds are genuinely new this run
 
-# One-time bootstrap write: any capability that had nothing in Postgres yet
-# gets its freshly-embedded seeds written now, so every future cold start —
-# on this worker or any other — loads them straight from the DB instead of
-# re-embedding. This is the whole fix for the "re-embeds 800 seeds every
-# cold start" problem, and unlike a local file it survives image rebuilds too.
-bootstrap_rows = []
-for ag in store.agents:
-    if ag["capability"] not in already_in_db:
-        for seed_text in ag["seeds"]:
-            bootstrap_rows.append(
-                (ag["capability"], seed_text, seed_embedding_cache[seed_text])
+
+def _embed_texts(texts: list) -> np.ndarray:
+    return embedder.encode(texts, normalize_embeddings=True)
+
+
+def _get_or_compute_embeddings(texts: list) -> np.ndarray:
+    missing = [t for t in texts if t not in embedding_cache]
+    if missing:
+        new_embs = _embed_texts(missing)
+        for t, emb in zip(missing, new_embs):
+            embedding_cache[t] = emb
+    return np.vstack([embedding_cache[t] for t in texts])
+
+
+def _mean_centroid(seed_embeddings: np.ndarray) -> np.ndarray:
+    centroid = seed_embeddings.mean(axis=0)
+    centroid = centroid / (np.linalg.norm(centroid) + 1e-10)
+    return centroid.reshape(1, -1)
+
+
+def _kmeans_centroids(seed_embeddings: np.ndarray) -> np.ndarray:
+    n = len(seed_embeddings)
+    k = min(N_CLUSTERS_PER_AGENT, n)
+    if k <= 1:
+        return _mean_centroid(seed_embeddings)
+    km = KMeans(n_clusters=k, random_state=KMEANS_RANDOM_STATE, n_init=10)
+    km.fit(seed_embeddings)
+    centers = km.cluster_centers_
+    norms = np.linalg.norm(centers, axis=1, keepdims=True) + 1e-10
+    return centers / norms
+
+
+def _refresh_agent_representations(agent_record: dict) -> None:
+    seed_embeddings = _get_or_compute_embeddings(agent_record["seeds"])
+    agent_record["seed_embeddings"] = seed_embeddings
+    agent_record["centroid"] = _mean_centroid(seed_embeddings)
+    agent_record["centroids"] = _kmeans_centroids(seed_embeddings)
+
+
+def build_agent_store(raw_agents: list) -> list:
+    agents = []
+    for ag in raw_agents:
+        record = copy.deepcopy(ag)
+        _refresh_agent_representations(record)
+        record["threshold"] = AGENT_THRESHOLDS.get(record["capability"], DEFAULT_THRESHOLD)
+        agents.append(record)
+    return agents
+
+
+def get_agent(agents: list, capability: str):
+    return next((ag for ag in agents if ag["capability"] == capability), None)
+
+
+def update_agent_seeds(agents: list, capability: str, new_seed: str) -> bool:
+    """Append new_seed and refresh representations. In-memory only — does
+    NOT persist across a cold restart in this no-DB version."""
+    ag = get_agent(agents, capability)
+    if ag is None:
+        return False
+    ag["seeds"].append(new_seed)
+    _refresh_agent_representations(ag)
+    return True
+
+
+print("[init] Building agent store...")
+AGENTS = build_agent_store(AGENTS_RAW)
+print(f"[init] Agent store built with {len(AGENTS)} agents, "
+      f"{len(embedding_cache)} seed embeddings cached in memory.")
+
+# Persist any embedding that's newly appeared since the DB load above (i.e.
+# a seed that wasn't already in Postgres) — on a full cache hit this is a
+# no-op, so warm-but-already-fresh cold starts don't re-insert every time.
+_save_new_seed_embeddings_to_db(db_pool, AGENTS_RAW, embedding_cache, EMBED_MODEL, _already_in_db)
+
+
+# ─── 3. LLM ROUTER (Tier 2 fallback) ────────────────────────────────────────
+
+_LLM_SYSTEM = """You are an expert agent router. Given a user query, decide which agent should handle it.
+
+Available agents:
+{capabilities}
+
+Rules:
+1. Choose EXACTLY ONE capability name from the list above.
+2. The capability field must match one of the names EXACTLY (case-sensitive).
+3. Estimate confidence as a float 0.00-1.00.
+4. Write a one-sentence intent.
+5. Respond ONLY with valid JSON - no markdown, no extra text.
+
+Format:
+{{"capability": "<exact capability name>", "intent": "<one sentence>", "confident": <float>}}"""
+
+_LLM_PROMPT = ChatPromptTemplate.from_messages([("system", _LLM_SYSTEM), ("human", "{query}")])
+
+llm_client = ChatOpenAI(
+    model=LLM_ROUTER_MODEL,
+    api_key=OPENROUTER_API_KEY,
+    base_url=OPENROUTER_BASE_URL,
+    temperature=0.0,
+    max_tokens=256,
+    default_headers={"HTTP-Referer": "http://localhost", "X-Title": "Adaptive Agent Router"},
+)
+print(f"[init] LLM router ready -> {LLM_ROUTER_MODEL} (called only when semantic routing misses)")
+
+
+def _get_capabilities_str(agents: list) -> str:
+    return "\n".join(f"  - {ag['capability']}: {ag['description']}" for ag in agents)
+
+
+def llm_route(query: str) -> dict:
+    import re
+
+    chain = _LLM_PROMPT | llm_client | StrOutputParser()
+    raw = chain.invoke({"capabilities": _get_capabilities_str(AGENTS), "query": query})
+
+    clean = re.sub(r"```(?:json)?", "", raw).strip().strip("`")
+    try:
+        data = _json.loads(clean)
+    except _json.JSONDecodeError:
+        match = re.search(r"\{.*\}", clean, re.DOTALL)
+        data = _json.loads(match.group()) if match else {}
+
+    valid_caps = [ag["capability"] for ag in AGENTS]
+    cap = data.get("capability", "")
+    if cap not in valid_caps:
+        lower_map = {c.lower(): c for c in valid_caps}
+        cap = lower_map.get(cap.lower(), valid_caps[0])
+
+    try:
+        confident = round(max(0.0, min(1.0, float(data.get("confident", 0.5)))), 4)
+    except (TypeError, ValueError):
+        confident = 0.5
+
+    agent = get_agent(AGENTS, cap)
+    model = agent["model"] if agent else AGENTS[0]["model"]
+
+    return {
+        "capability": cap,
+        "model": model,
+        "confident": confident,
+        "intent": data.get("intent", "General request"),
+        "router_used": "llm",
+    }
+
+
+# ─── 4. SEMANTIC ROUTING (Tier 1 — 3 selectable modes) ─────────────────────
+
+def _score_agent(q_emb, ag: dict, mode: str) -> float:
+    if mode == "per_seed":
+        return float(cosine_similarity(q_emb, ag["seed_embeddings"])[0].max())
+    elif mode == "single_centroid":
+        return float(cosine_similarity(q_emb, ag["centroid"])[0][0])
+    elif mode == "multi_centroid":
+        return float(cosine_similarity(q_emb, ag["centroids"])[0].max())
+    raise ValueError(f"Unknown semantic mode: {mode!r}")
+
+
+def semantic_route(query: str, mode: str):
+    q_emb = embedder.encode([query], normalize_embeddings=True)
+    scores = []
+    for ag in AGENTS:
+        sim = _score_agent(q_emb, ag, mode)
+        scores.append({"capability": ag["capability"], "model": ag["model"],
+                        "sim": sim, "threshold": ag["threshold"]})
+    scores.sort(key=lambda x: x["sim"], reverse=True)
+    best = scores[0]
+    if best["sim"] >= best["threshold"]:
+        return {
+            "capability": best["capability"], "model": best["model"],
+            "confident": round(best["sim"], 4), "router_used": "semantic",
+        }, scores
+    return None, scores
+
+
+# ─── 5. XLM-R CLASSIFIER (Tier 3, optional) ────────────────────────────────
+
+xlmr_classifier = None
+
+if os.path.exists(XLMR_CHECKPOINT_PATH):
+    import torch
+    import torch.nn as nn
+    from transformers import AutoModel, AutoTokenizer
+
+    class AgentRouterModel(nn.Module):
+        def __init__(self, model_name, num_agents, top_k=3):
+            super().__init__()
+            self.top_k = top_k
+            self.encoder = AutoModel.from_pretrained(model_name)
+            hidden_size = self.encoder.config.hidden_size
+            self.gating_net = nn.Sequential(
+                nn.Linear(hidden_size, 256), nn.ReLU(), nn.Dropout(0.1),
+                nn.Linear(256, num_agents),
             )
-if bootstrap_rows:
-    db.insert_seeds_bulk(db_pool, bootstrap_rows, config.EMBED_MODEL)
-    print(f"[init] Bootstrapped {len(bootstrap_rows)} seeds into Postgres for the first time.")
 
-llm_client = build_llm_client()
-print(f"[init] LLM router ready -> {config.LLM_ROUTER_MODEL} (called only when semantic routing misses)")
+        def forward(self, input_ids, attention_mask):
+            cls = self.encoder(input_ids=input_ids, attention_mask=attention_mask).last_hidden_state[:, 0, :]
+            logits = self.gating_net(cls)
+            probs = torch.softmax(logits, dim=1)
+            topk_probs, topk_indices = torch.topk(probs, k=self.top_k, dim=1)
+            return logits, probs, topk_probs, topk_indices
 
-if os.path.exists(config.XLMR_CHECKPOINT_PATH):
-    print(f"[init] Loading XLM-R classifier from '{config.XLMR_CHECKPOINT_PATH}' ...")
-    xlmr_classifier = XLMRClassifier(config.XLMR_CHECKPOINT_PATH, config.XLMR_TOKENIZER_NAME)
+        @classmethod
+        def load_from_checkpoint(cls, checkpoint_path, map_location="cpu"):
+            ckpt = torch.load(checkpoint_path, map_location=map_location, weights_only=False)
+            hparams = ckpt["hyper_parameters"]
+            model = cls(model_name=hparams["model_name"], num_agents=hparams["num_agents"],
+                         top_k=hparams.get("top_k", 3))
+            # strict=False: training-only keys (e.g. a loss-weighting tensor
+            # like "agent_weights") aren't part of this inference-only
+            # architecture and are safe to ignore. Missing keys (parts of
+            # encoder/gating_net NOT found in the checkpoint) are the real
+            # red flag — those would load with random weights.
+            incompatible = model.load_state_dict(ckpt["state_dict"], strict=False)
+            if incompatible.missing_keys:
+                warnings.warn(f"XLM-R checkpoint MISSING keys: {incompatible.missing_keys}")
+            if incompatible.unexpected_keys:
+                warnings.warn(f"XLM-R checkpoint UNEXPECTED keys (ignored): {incompatible.unexpected_keys}")
+            return model
+
+    print(f"[init] Loading XLM-R classifier from '{XLMR_CHECKPOINT_PATH}' ...")
+    _xlmr_tokenizer = AutoTokenizer.from_pretrained(XLMR_TOKENIZER_NAME)
+    _xlmr_model = AgentRouterModel.load_from_checkpoint(XLMR_CHECKPOINT_PATH, map_location="cpu")
+    _xlmr_model.eval()
+    for p in _xlmr_model.parameters():
+        p.requires_grad = False
+
+    @torch.no_grad()
+    def _xlmr_predict(prompt: str, top_k: int = None) -> list:
+        k = top_k or _xlmr_model.top_k or XLMR_TOP_K
+        inputs = _xlmr_tokenizer(prompt, return_tensors="pt", truncation=True, max_length=128, padding=True)
+        _, probs, topk_probs, topk_indices = _xlmr_model(inputs["input_ids"], inputs["attention_mask"])
+        return [
+            {"agent_code": ID2AGENT[idx.item()], "confidence": round(prob.item(), 4)}
+            for prob, idx in zip(topk_probs[0][:k], topk_indices[0][:k])
+        ]
+
+    def xlmr_route(query: str):
+        predictions = _xlmr_predict(query)
+        top1 = predictions[0]
+        capability = JSON_TO_CAPABILITY.get(top1["agent_code"])
+        agent = get_agent(AGENTS, capability) if capability else None
+        if agent is None:
+            agent = AGENTS[0]
+            capability = agent["capability"]
+        result = {"capability": capability, "model": agent["model"],
+                  "confident": top1["confidence"], "router_used": "xlmr_classifier"}
+        scores = [{"capability": JSON_TO_CAPABILITY.get(p["agent_code"], p["agent_code"]),
+                    "sim": p["confidence"]} for p in predictions]
+        return result, scores
+
+    xlmr_classifier = True  # sentinel: xlmr_route is defined and usable
     print("[init] XLM-R classifier ready -> mode='xlmr_classifier' (Tier 3) is available.")
 else:
-    xlmr_classifier = None
-    print(f"[init] No XLM-R checkpoint found at '{config.XLMR_CHECKPOINT_PATH}' — "
-          f"'xlmr_classifier' mode will return an error if selected.")
+    def xlmr_route(query: str):
+        raise RuntimeError(
+            f"mode='xlmr_classifier' but no checkpoint found at '{XLMR_CHECKPOINT_PATH}'."
+        )
+    print(f"[init] No XLM-R checkpoint at '{XLMR_CHECKPOINT_PATH}' — 'xlmr_classifier' mode will error if selected.")
 
 
-# ─── RUNPOD SERVERLESS HANDLER ───────────────────────────────────────────
+# ─── 6. AGENT EXECUTION (chat completions + dedicated Image API) ──────────
+
+_AGENT_SYSTEM = """You are a specialized AI agent with the following role:
+{description}
+
+Answer the user's query directly and helpfully, staying within your role."""
+_AGENT_PROMPT = ChatPromptTemplate.from_messages([("system", _AGENT_SYSTEM), ("human", "{query}")])
+
+
+def _build_agent_client(model: str) -> ChatOpenAI:
+    return ChatOpenAI(
+        model=model, api_key=OPENROUTER_API_KEY, base_url=OPENROUTER_BASE_URL,
+        temperature=0.7, max_tokens=1024,
+        default_headers={"HTTP-Referer": "http://localhost", "X-Title": "Adaptive Agent Router"},
+    )
+
+
+def _extract_text_and_images(message) -> tuple:
+    text_parts, images = [], []
+    content = message.content
+    if isinstance(content, str):
+        text_parts.append(content)
+    elif isinstance(content, list):
+        for block in content:
+            if isinstance(block, str):
+                text_parts.append(block)
+            elif isinstance(block, dict):
+                if block.get("type") == "text":
+                    text_parts.append(block.get("text", ""))
+                elif block.get("type") in ("image_url", "image"):
+                    image_url = block.get("image_url")
+                    url = image_url.get("url") if isinstance(image_url, dict) else image_url
+                    if url:
+                        images.append(url)
+    for img in (getattr(message, "additional_kwargs", {}).get("images") or []):
+        if isinstance(img, dict):
+            image_url = img.get("image_url")
+            url = image_url.get("url") if isinstance(image_url, dict) else img.get("url")
+            if url:
+                images.append(url)
+        elif isinstance(img, str):
+            images.append(img)
+    return "\n".join(t for t in text_parts if t), images
+
+
+def run_agent(query: str, model: str, description: str = "",
+              image_base64: str = None, image_mime_type: str = None) -> dict:
+    client = _build_agent_client(model)
+    if image_base64:
+        mime = image_mime_type or "image/png"
+        messages = [
+            SystemMessage(content=description or "General assistant."),
+            HumanMessage(content=[
+                {"type": "text", "text": query},
+                {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{image_base64}"}},
+            ]),
+        ]
+        response = client.invoke(messages)
+    else:
+        chain = _AGENT_PROMPT | client
+        response = chain.invoke({"description": description or "General assistant.", "query": query})
+
+    text, images = _extract_text_and_images(response)
+    if not text and not images:
+        warnings.warn(f"run_agent: model '{model}' returned neither text nor images.")
+    return {"text": text, "images": images}
+
+
+def generate_image(prompt: str, model: str) -> dict:
+    """Dedicated OpenRouter Image API — NOT the chat-completions path.
+    Chat completions + LangChain wasn't reliably surfacing image output
+    for image-generation models (missing "modalities" field, and
+    non-standard response fields silently dropped by parsing)."""
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "http://localhost",
+        "X-Title": "Adaptive Agent Router",
+    }
+    resp = requests.post(OPENROUTER_IMAGES_URL, json={"model": model, "prompt": prompt},
+                          headers=headers, timeout=120)
+    resp.raise_for_status()
+    data = resp.json()
+    images = []
+    for item in data.get("data", []):
+        if item.get("b64_json"):
+            images.append(f"data:image/png;base64,{item['b64_json']}")
+        elif item.get("url"):
+            images.append(item["url"])
+    if not images:
+        warnings.warn(f"generate_image: model '{model}' returned no images. Raw: {data!r}")
+    return {"text": "", "images": images}
+
+
+# ─── 7. ADAPTIVE ROUTE (OCR-first pipeline + tier dispatch + generation) ───
+
+TIER_LABELS = {1: "Tier 1 — Semantic", 2: "Tier 2 — LLM Route", 3: "Tier 3 — XLM-R Classifier"}
+
+
+def adaptive_route(query: str, mode: str = DEFAULT_ROUTING_MODE,
+                    image_base64: str = None, image_mime_type: str = None) -> dict:
+    ocr_text = None
+    ocr_answer = None
+    ocr_generation_ms = 0.0
+
+    if image_base64:
+        vision_agent = get_agent(AGENTS, OCR_CAPABILITY)
+        if vision_agent is None:
+            raise RuntimeError(f"An image was attached but no '{OCR_CAPABILITY}' exists.")
+        t0 = time.perf_counter()
+        ocr_answer = run_agent(query, vision_agent["model"], vision_agent["description"],
+                                image_base64, image_mime_type)
+        ocr_generation_ms = round((time.perf_counter() - t0) * 1000, 1)
+        ocr_text = ocr_answer["text"]
+
+    routing_start = time.perf_counter()
+    if mode == "xlmr_classifier":
+        result, sem_scores = xlmr_route(query)
+        result.setdefault("intent", f"Route to {result['capability']}")
+        tier = 3
+    else:
+        sem_result, sem_scores = semantic_route(query, mode)
+        if sem_result is not None:
+            result = sem_result
+            result.setdefault("intent", f"Route to {result['capability']}")
+            tier = 1
+        else:
+            result = llm_route(query)
+            tier = 2
+    routing_time_ms = round((time.perf_counter() - routing_start) * 1000, 1)
+
+    seed_appended = False
+    if result["router_used"] == "llm":
+        seed_appended = update_agent_seeds(AGENTS, result["capability"], query)
+
+    agent = get_agent(AGENTS, result["capability"])
+    description = agent["description"] if agent else ""
+
+    generation_start = time.perf_counter()
+    if image_base64 and result["capability"] == OCR_CAPABILITY:
+        answer_data = ocr_answer
+        result.setdefault("intent", "OCR request — returning extracted text directly")
+    elif image_base64:
+        combined_query = f"{query}\n\n[Text extracted from the attached image via OCR]:\n{ocr_text}"
+        answer_data = run_agent(combined_query, result["model"], description)
+    elif result["capability"] == "Image Generation Agent":
+        answer_data = generate_image(query, result["model"])
+    else:
+        answer_data = run_agent(query, result["model"], description)
+    generation_time_ms = round((time.perf_counter() - generation_start) * 1000 + ocr_generation_ms, 1)
+
+    return {
+        "capability": result["capability"],
+        "model": result["model"],
+        "intent": result.get("intent", ""),
+        "confident": result["confident"],
+        "router_used": result["router_used"],
+        "tier": tier,
+        "tier_label": TIER_LABELS[tier],
+        "mode": mode,
+        "seed_appended": seed_appended,
+        "semantic_scores": {s["capability"]: round(s["sim"], 4) for s in sem_scores},
+        "answer": answer_data["text"],
+        "answer_images": answer_data["images"],
+        "ocr_text": ocr_text,
+        "routing_time_ms": routing_time_ms,
+        "generation_time_ms": generation_time_ms,
+        "total_time_ms": round(routing_time_ms + generation_time_ms, 1),
+    }
+
+
+# ─── 8. RUNPOD SERVERLESS HANDLER ──────────────────────────────────────────
 
 def handler(job):
     """
@@ -136,12 +709,18 @@ def handler(job):
     {
         "input": {
             "query": "Write a Python function to parse CSV files",
-            "mode": "single_centroid",        # optional, one of config.ROUTING_MODES
-            "user_expectation": "code_agent", # optional — now actually persisted, in query_log
+            "mode": "single_centroid",       # optional, one of ROUTING_MODES
+            "user_expectation": "code_agent", # optional — now persisted to Postgres query_log
             "image_base64": "...",            # optional, for OCR/Vision input
             "image_mime_type": "image/png"    # optional
         }
     }
+
+    Expected environment variables:
+    - OPENROUTER_API_KEY  (required for any generation/LLM-fallback call)
+    - POSTGRES_DSN         (required — external reachable Postgres, e.g. your VM)
+    - EMBED_MODEL, LLM_ROUTER_MODEL, XLMR_CHECKPOINT_PATH, etc. — all optional,
+      see the constants section at the top of this file for defaults.
     """
     job_input = job.get("input", {})
 
@@ -149,52 +728,40 @@ def handler(job):
     if not query:
         return {"error": "Missing required input 'query'."}
 
-    mode = job_input.get("mode", config.DEFAULT_ROUTING_MODE)
-    if mode not in config.ROUTING_MODES:
-        mode = config.DEFAULT_ROUTING_MODE
+    mode = job_input.get("mode", DEFAULT_ROUTING_MODE)
+    if mode not in ROUTING_MODES:
+        mode = DEFAULT_ROUTING_MODE
 
     if mode == "xlmr_classifier" and xlmr_classifier is None:
         return {"error": f"mode='xlmr_classifier' requested but no checkpoint was loaded "
-                          f"at cold start (looked for '{config.XLMR_CHECKPOINT_PATH}')."}
+                          f"at cold start (looked for '{XLMR_CHECKPOINT_PATH}')."}
 
     image_base64 = job_input.get("image_base64")
     image_mime_type = job_input.get("image_mime_type")
-    user_expectation = job_input.get("user_expectation")
+    user_expectation = job_input.get("user_expectation")  # not persisted anywhere in this version
 
     try:
-        result = adaptive_route(
-            query,
-            embedder,
-            store,
-            llm_client,
-            mode=mode,
-            xlmr_classifier=xlmr_classifier,
-            image_base64=image_base64,
-            image_mime_type=image_mime_type,
-        )
+        result = adaptive_route(query, mode=mode, image_base64=image_base64, image_mime_type=image_mime_type)
     except Exception as e:
-        # Surface the real error in the job output instead of a bare crash,
-        # and print the full traceback so it's visible in RunPod's logs too.
-        print(f"[route] ERROR on query={query!r} mode={mode}: {e}")
-        traceback.print_exc()
         return {"error": f"{type(e).__name__}: {e}"}
 
+    result["user_expectation"] = user_expectation
     print(f"[route] query={query!r} mode={mode} -> {result['capability']} "
           f"({result['tier_label']}, confident={result['confident']}, "
-          f"routing={result['routing_time_ms']}ms, generation={result['generation_time_ms']}ms, "
-          f"images_returned={len(result.get('answer_images', []))})")
+          f"routing={result['routing_time_ms']}ms, generation={result['generation_time_ms']}ms)")
 
     # Only a Tier-2 (LLM-routed) query grows the seed bucket. When that
     # happens, persist the new seed + its embedding into Postgres immediately
-    # (the in-memory cache was already updated inside adaptive_route/AgentStore).
+    # (the in-memory embedding_cache was already updated inside adaptive_route
+    # via update_agent_seeds -> _refresh_agent_representations).
     if result["seed_appended"]:
-        embedding = store.embedding_cache.get(query)
+        embedding = embedding_cache.get(query)
         if embedding is not None:
-            db.insert_seed(db_pool, result["capability"], query, embedding, config.EMBED_MODEL)
+            _insert_seed_to_db(db_pool, result["capability"], query, embedding, EMBED_MODEL)
             print(f"[db] seed persisted to Postgres for capability={result['capability']!r}")
 
     # Log every request: what was asked, what the user expected, what happened.
-    db.insert_query_log(
+    _insert_query_log(
         db_pool,
         user_prompt=query,
         user_expectation=user_expectation,
@@ -206,7 +773,6 @@ def handler(job):
         mode=mode,
     )
 
-    result["user_expectation"] = user_expectation
     return result
 
 
