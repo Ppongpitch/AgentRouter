@@ -17,10 +17,10 @@ No print() anywhere — pure library code; main.py decides what to log.
 import torch
 from transformers import AutoTokenizer
 
-from agent_store import AgentStore
-from config import JSON_TO_CAPABILITY, XLMR_CHECKPOINT_PATH, XLMR_TOKENIZER_NAME, XLMR_TOP_K
-from taxonomy import ID2AGENT
-from xlmr_model import AgentRouterModel
+from .agent_store import AgentStore
+from .config import JSON_TO_CAPABILITY, XLMR_CHECKPOINT_PATH, XLMR_TOKENIZER_NAME, XLMR_TOP_K
+from .taxonomy import ID2AGENT
+from .xlmr_model import AgentRouterModel
 
 
 class XLMRClassifier:

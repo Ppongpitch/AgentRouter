@@ -34,13 +34,13 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-import config
-import db
-from agent_store import AgentStore, load_agents_json, load_seeds_from_train_jsonl
-from embedder import load_embedder
-from llm_router import build_llm_client
-from router import adaptive_route
-from xlmr_router import XLMRClassifier
+from app import config
+from app import db
+from app.agent_store import AgentStore, load_agents_json, load_seeds_from_train_jsonl
+from app.embedder import load_embedder
+from app.llm_router import build_llm_client
+from app.router import adaptive_route
+from app.xlmr_router import XLMRClassifier
 
 # ── Startup: build everything once ──────────────────────────────────────
 print(f"Loading embedder: {config.EMBED_MODEL} ...")

@@ -14,9 +14,9 @@ picking a different array, not recomputing embeddings. No print().
 
 from sklearn.metrics.pairwise import cosine_similarity
 
-from agent_store import AgentStore
-from config import DEFAULT_ROUTING_MODE
-from embedder import embed_one
+from .agent_store import AgentStore
+from .config import DEFAULT_ROUTING_MODE
+from .embedder import embed_one
 
 
 def _score_agent(q_emb, ag: dict, mode: str) -> float:

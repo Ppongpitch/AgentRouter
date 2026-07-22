@@ -17,7 +17,7 @@ import torch
 import torch.nn as nn
 from transformers import AutoModel
 
-from taxonomy import AGENT2MODEL, ID2AGENT
+from .taxonomy import AGENT2MODEL, ID2AGENT
 
 
 class AgentRouterModel(nn.Module):

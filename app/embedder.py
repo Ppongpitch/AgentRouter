@@ -9,7 +9,7 @@ decides how to surface them.
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-from config import EMBED_MODEL
+from .config import EMBED_MODEL
 
 
 def load_embedder(model_name: str = EMBED_MODEL) -> SentenceTransformer:

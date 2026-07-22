@@ -60,8 +60,8 @@ XLMR_TOKENIZER_NAME = os.environ.get("XLMR_TOKENIZER_NAME", "xlm-roberta-base")
 XLMR_TOP_K = int(os.environ.get("XLMR_TOP_K", "3"))
 
 # ─── File paths ───────────────────────────────────────────────────────────
-AGENTS_JSON_PATH = os.environ.get("AGENTS_JSON_PATH", "capability_agents.json")
-TRAIN_JSONL_PATH = os.environ.get("TRAIN_JSONL_PATH", "train.jsonl")
+AGENTS_JSON_PATH = os.environ.get("AGENTS_JSON_PATH", "data/capability_agents.json")
+TRAIN_JSONL_PATH = os.environ.get("TRAIN_JSONL_PATH", "data/train.jsonl")
 # ─── PostgreSQL (persistent store for seeds + their embeddings, and the
 # query log — replaces the old local embedding_cache.pkl file entirely) ────
 POSTGRES_DSN = os.environ.get(

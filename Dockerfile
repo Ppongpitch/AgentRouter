@@ -45,12 +45,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY handler.py /app/handler.py
-COPY capability_agents.json /app/capability_agents.json
+COPY data/capability_agents.json /app/capability_agents.json
 
 # Optional: your seed dataset for bootstrapping the agents' seed buckets.
 # Comment out if you don't have one — handler.py falls back to the inline
 # seeds in capability_agents.json when train.jsonl is missing.
-COPY train.jsonl /app/train.jsonl
+COPY data/train.jsonl /app/train.jsonl
 
 # XLM-R classifier checkpoint (Tier 3 routing mode) — downloaded from
 # Hugging Face at BUILD time instead of copied from the repo, since it's

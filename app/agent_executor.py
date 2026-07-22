@@ -30,7 +30,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-from config import OPENROUTER_API_KEY, OPENROUTER_BASE_URL
+from .config import OPENROUTER_API_KEY, OPENROUTER_BASE_URL
 
 OPENROUTER_IMAGES_URL = "https://openrouter.ai/api/v1/images"
 

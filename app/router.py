@@ -37,12 +37,12 @@ since it's a real model call, not a routing decision.
 
 import time
 
-from agent_executor import generate_image, run_agent
-from agent_store import AgentStore
-from config import DEFAULT_ROUTING_MODE
-from llm_router import llm_route
-from semantic_router import semantic_route
-from xlmr_router import XLMRClassifier, xlmr_route
+from .agent_executor import generate_image, run_agent
+from .agent_store import AgentStore
+from .config import DEFAULT_ROUTING_MODE
+from .llm_router import llm_route
+from .semantic_router import semantic_route
+from .xlmr_router import XLMRClassifier, xlmr_route
 
 TIER_LABELS = {
     1: "Tier 1 — Semantic",

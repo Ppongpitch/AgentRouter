@@ -13,8 +13,8 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-from agent_store import AgentStore
-from config import LLM_ROUTER_MODEL, OPENROUTER_API_KEY, OPENROUTER_BASE_URL
+from .agent_store import AgentStore
+from .config import LLM_ROUTER_MODEL, OPENROUTER_API_KEY, OPENROUTER_BASE_URL
 
 LLM_SYSTEM = """You are an expert agent router. Given a user query, decide which agent should handle it.
 

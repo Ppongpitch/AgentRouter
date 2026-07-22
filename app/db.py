@@ -21,7 +21,7 @@ import numpy as np
 import psycopg2
 import psycopg2.pool
  
-from config import EMBED_MODEL, POSTGRES_DSN
+from .config import EMBED_MODEL, POSTGRES_DSN
  
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS seeds (
