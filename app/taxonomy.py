@@ -37,7 +37,7 @@ ID2AGENT = {i: agent for i, agent in enumerate(AGENT_CLASSES)}
 # does NOT use this — it resolves the model via AgentStore/capability_agents.json
 # instead, so there's a single source of truth for agent -> model mapping.
 AGENT2MODEL = {
-    "general_assistant": "openai/gpt-4o-mini-search-preview",
+    "general_assistant": "openai/gpt-4o-mini",
     "code_agent": "anthropic/claude-opus-4.8-fast",
     "translation_agent": "google/gemini-3.5-flash",
     "research_agent": "google/gemini-3.6-flash",

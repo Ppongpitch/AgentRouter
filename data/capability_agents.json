@@ -1,7 +1,7 @@
 [
   {
     "capability": "General Assistant",
-    "model": "openai/gpt-4o-mini-search-preview",
+    "model": "openai/gpt-4o-mini",
     "description": "Handles general conversations, Q&A, recommendations, explanations, and everyday assistance across many topics.",
     "seeds": [
       "วันนี้อากาศดีไหม แล้วควรเตรียมตัวยังไงถ้าจะออกไปข้างนอก",
