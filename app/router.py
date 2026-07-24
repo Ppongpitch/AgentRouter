@@ -1,10 +1,10 @@
 """
 router.py
 ─────────
-adaptive_route(): the single entry point that combines FOUR routing modes,
-an OCR pre-processing step for attached images, and actually calling the
-winning agent's model to get a real answer. No print() anywhere — this is
-a library function, not a program. main.py decides what to log.
+adaptive_route(): the single entry point that combines FOUR routing modes
+and actually calling the winning agent's model to get a real answer.
+No print() anywhere — this is a library function, not a program.
+main.py decides what to log.
 
 Modes / tiers:
   per_seed / single_centroid / multi_centroid  -> semantic routing (Tier 1),
@@ -13,26 +13,34 @@ Modes / tiers:
   xlmr_classifier                                -> XLM-R local model routing
                                                     (Tier 3), no fallback
 
-Image handling (when image_base64 is provided):
-  1. ALWAYS call the Vision/OCR Agent first to extract text from the image.
-  2. Route the user's TEXT query alone (image ignored for this decision)
-     through the normal tier system above, to find out what the user
-     actually wants done.
-  3. If that routing lands on Vision/OCR Agent itself, the user's prompt
-     WAS an OCR-type request — the OCR call from step 1 already IS the
-     answer, so it's reused directly (no second model call).
-  4. Otherwise, the OCR'd text is appended to the user's original prompt,
-     and that combined text (no image — OCR already extracted what was
-     needed) is sent to whichever agent step 2 picked.
+Routing ALWAYS happens on the text query alone — an attached image never
+affects which agent gets picked, only what happens once an agent is
+already chosen. This also means routing happens BEFORE any OCR call, so
+a prompt that routes to Image Generation Agent never pays for an
+unnecessary OCR call it was never going to use.
+
+Image handling, once the target agent is known:
+  - Image Generation Agent + image attached  -> generate_image() as an
+    IMAGE-TO-IMAGE EDIT (the attached image is passed via OpenRouter's
+    `input_references` field). Without this, an edit-style prompt like
+    "change the style of this image to watercolor" has nothing to
+    actually edit, which is why that case previously returned nothing.
+  - Image Generation Agent + no image        -> generate_image() as
+    ordinary text-to-image.
+  - Vision/OCR Agent + image attached         -> run_agent() with the
+    image, once. That IS the answer directly — no second call needed.
+  - Anything else + image attached            -> OCR the image first,
+    append the extracted text to the original prompt, send that combined
+    TEXT (no image needed anymore) to whichever agent routing picked.
+  - Anything else + no image                  -> run_agent() as normal.
 
 Seed growth policy: seeds are appended to the winning agent's bucket
-ONLY when the LLM router (Tier 2) handled the TEXT routing decision.
-Semantic hits (Tier 1) and XLM-R hits (Tier 3) never grow the seed bucket.
-The one-time OCR call itself never grows seeds either.
+ONLY when the LLM router (Tier 2) handled the routing decision. Semantic
+hits (Tier 1) and XLM-R hits (Tier 3) never grow the seed bucket.
 
-Timing: routing_time_ms covers only the text-routing decision. The OCR
-call's time (when an image is attached) is folded into generation_time_ms,
-since it's a real model call, not a routing decision.
+Timing: routing_time_ms covers only the text-routing decision. Any OCR
+call's time (when one happens) is folded into generation_time_ms, since
+it's a real model call, not a routing decision.
 """
 
 import time
@@ -51,6 +59,7 @@ TIER_LABELS = {
 }
 
 OCR_CAPABILITY = "Vision / OCR Agent"
+IMAGE_GEN_CAPABILITY = "Image Generation Agent"
 
 
 def adaptive_route(
@@ -64,42 +73,17 @@ def adaptive_route(
     image_mime_type: str | None = None,
 ) -> dict:
     """
-    1. If an image is attached, OCR it first (always).
-    2. Route the TEXT query (image ignored) using the selected mode:
+    1. Route the TEXT query (image ignored) using the selected mode:
        - per_seed / single_centroid / multi_centroid -> semantic_route()
          (Tier 1), falling back to llm_route() (Tier 2) if not confident.
        - xlmr_classifier -> xlmr_route() (Tier 3), always trusts top-1.
-    3. Append the query to the winning agent's seed bucket ONLY if Tier 2
+    2. Append the query to the winning agent's seed bucket ONLY if Tier 2
        (LLM router) handled it.
-    4. Get the final answer:
-       - Image Generation Agent -> generate_image() (dedicated Image API)
-       - Image was attached AND routed to Vision/OCR Agent -> reuse the
-         OCR result from step 1 directly, no second call
-       - Image was attached AND routed elsewhere -> combine OCR text +
-         original prompt, send that combined text to the picked agent
-       - No image -> run_agent() as normal
-    5. Return a JSON-serializable routing + answer + timing result.
+    3. Get the final answer, dispatched on the winning capability AND
+       whether an image is attached — see the module docstring above for
+       the full dispatch table.
+    4. Return a JSON-serializable routing + answer + timing result.
     """
-    ocr_text = None
-    ocr_answer = None
-    ocr_generation_ms = 0.0
-
-    if image_base64:
-        vision_agent = store.get_agent(OCR_CAPABILITY)
-        if vision_agent is None:
-            raise RuntimeError(
-                f"An image was attached but no '{OCR_CAPABILITY}' exists in "
-                f"capability_agents.json — check the capability name matches exactly."
-            )
-        ocr_call_start = time.perf_counter()
-        ocr_answer = run_agent(
-            query, vision_agent["model"], vision_agent["description"], image_base64, image_mime_type
-        )
-        ocr_generation_ms = round((time.perf_counter() - ocr_call_start) * 1000, 1)
-        ocr_text = ocr_answer["text"]
-
-    # ── Route the TEXT query alone — the image's content is already
-    # captured in ocr_text above (if any), so routing doesn't need it.
     routing_start = time.perf_counter()
 
     if mode == "xlmr_classifier":
@@ -131,28 +115,45 @@ def adaptive_route(
     agent = store.get_agent(result["capability"])
     description = agent["description"] if agent else ""
 
-    # ── Get the final answer ────────────────────────────────────────────
+    # ── Get the final answer — dispatch on capability + image presence ──
     generation_start = time.perf_counter()
+    ocr_text = None
 
-    if image_base64 and result["capability"] == OCR_CAPABILITY:
-        # The user's prompt itself was an OCR-type request — the OCR call
-        # made above already IS the answer. No second model call needed.
-        answer_data = ocr_answer
-        result.setdefault("intent", "OCR request — returning extracted text directly")
+    if result["capability"] == IMAGE_GEN_CAPABILITY:
+        # Text-to-image (no attachment) OR image-to-image edit (attachment
+        # present) — both go through the dedicated Image API. The image,
+        # if any, rides along via input_references so an edit prompt has
+        # something to actually edit.
+        answer_data = generate_image(
+            query, result["model"],
+            input_image_base64=image_base64,
+            input_image_mime_type=image_mime_type,
+        )
+    elif image_base64 and result["capability"] == OCR_CAPABILITY:
+        # The user's prompt itself was an OCR-type request — one call,
+        # its result IS the answer.
+        answer_data = run_agent(query, result["model"], description, image_base64, image_mime_type)
+        ocr_text = answer_data["text"]
     elif image_base64:
-        # Not an OCR-type request — combine the OCR'd text with the user's
-        # original prompt, then send that combined TEXT (no image needed
-        # anymore) to whichever agent the routing above picked.
+        # Not OCR, not image-gen — OCR the image first, then combine the
+        # extracted text with the user's original prompt, then send that
+        # combined TEXT (no image needed anymore) to the picked agent.
+        vision_agent = store.get_agent(OCR_CAPABILITY)
+        if vision_agent is None:
+            raise RuntimeError(
+                f"An image was attached but no '{OCR_CAPABILITY}' exists in "
+                f"capability_agents.json — check the capability name matches exactly."
+            )
+        ocr_answer = run_agent(
+            query, vision_agent["model"], vision_agent["description"], image_base64, image_mime_type
+        )
+        ocr_text = ocr_answer["text"]
         combined_query = f"{query}\n\n[Text extracted from the attached image via OCR]:\n{ocr_text}"
         answer_data = run_agent(combined_query, result["model"], description)
-    elif result["capability"] == "Image Generation Agent":
-        # Dedicated Image API — chat completions + LangChain wasn't
-        # reliably surfacing image output (see generate_image()'s docstring).
-        answer_data = generate_image(query, result["model"])
     else:
         answer_data = run_agent(query, result["model"], description)
 
-    generation_time_ms = round((time.perf_counter() - generation_start) * 1000 + ocr_generation_ms, 1)
+    generation_time_ms = round((time.perf_counter() - generation_start) * 1000, 1)
 
     return {
         "capability": result["capability"],

@@ -34,7 +34,7 @@
   },
   {
     "capability": "Research & Long-document Agent",
-    "model": "openai/o4-mini-deep-research",
+    "model": "google/gemini-3.5-flash",
     "description": "Searches and summarizes long documents.",
     "seeds": [
       "สรุปรายงานวิจัยนี้ให้เหลือ 10 ประเด็น",
